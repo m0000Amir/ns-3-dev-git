@@ -32,8 +32,11 @@ NS_LOG_COMPONENT_DEFINE("FirstScriptExample");
 
 int
 main(int argc, char* argv[])
-{
+{   
+    uint32_t nPackets = 1;
+
     CommandLine cmd(__FILE__);
+    cmd.AddValue("nPackets", "Number of packets to echo", nPackets);
     cmd.Parse(argc, argv);
 
     Time::SetResolution(Time::NS);
@@ -67,7 +70,7 @@ main(int argc, char* argv[])
     serverApps.Stop(Seconds(10.0));
 
     UdpEchoClientHelper echoClient(interfaces.GetAddress(1), 9);
-    echoClient.SetAttribute("MaxPackets", UintegerValue(1));
+    echoClient.SetAttribute("MaxPackets", UintegerValue(nPackets));
     echoClient.SetAttribute("Interval", TimeValue(Seconds(1.0)));
     echoClient.SetAttribute("PacketSize", UintegerValue(1024));
 
