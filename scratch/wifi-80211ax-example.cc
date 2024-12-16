@@ -99,17 +99,18 @@ int main (int argc, char *argv[])
   echoClient.SetAttribute("PacketSize", UintegerValue(1024));
 
 
+  // // enable PCAP tracing for packets
+  // phy.SetPcapDataLinkType(WifiPhyHelper::DLT_IEEE802_11_RADIO);
+  // phy.EnablePcap("wifi-80211ax", apDevice.Get(0));
+
   ApplicationContainer clientApp = echoClient.Install(wifiStaNode.Get(0));
   clientApp.Start(Seconds(2.0));
   clientApp.Stop(Seconds(10.0));
 
-  // enable PCAP tracing for packets
-  phy.SetPcapDataLinkType(WifiPhyHelper::DLT_IEEE802_11_RADIO);
-  phy.EnablePcap("wifi-80211ax", apDevice.Get(0));
-
   // run simulation
   Simulator::Run();
   Simulator::Destroy();
+
 
   return 0;
 }
