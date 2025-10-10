@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2024 Tokushima University, Tokushima, Japan.
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Author: Alberto Gallegos Ramonet <alramonet@is.tokushima-u.ac.jp>
  */
@@ -32,9 +21,9 @@
   (0,0,0)     Move Right    (10,0,0)   Move Right   (20,0,0)   Move Right   (30,0,0)
 */
 
-#include <ns3/mobility-module.h>
-#include <ns3/node.h>
-#include <ns3/simulator.h>
+#include "ns3/mobility-module.h"
+#include "ns3/node.h"
+#include "ns3/simulator.h"
 
 using namespace ns3;
 
@@ -91,11 +80,11 @@ main(int argc, char* argv[])
     mob1->TraceConnectWithoutContext("CourseChange", MakeBoundCallback(&CourseChangeCallback));
 
     // Schedule movements to node n1
-    Simulator::ScheduleWithContext(n1->GetId(), Seconds(2.0), &MoveNode, n1, Vector(10, 0, 0));
+    Simulator::ScheduleWithContext(n1->GetId(), Seconds(2), &MoveNode, n1, Vector(10, 0, 0));
 
-    Simulator::ScheduleWithContext(n1->GetId(), Seconds(4.0), &MoveNode, n1, Vector(20, 0, 0));
+    Simulator::ScheduleWithContext(n1->GetId(), Seconds(4), &MoveNode, n1, Vector(20, 0, 0));
 
-    Simulator::ScheduleWithContext(n1->GetId(), Seconds(6.0), &MoveNode, n1, Vector(30, 0, 0));
+    Simulator::ScheduleWithContext(n1->GetId(), Seconds(6), &MoveNode, n1, Vector(30, 0, 0));
 
     Simulator::Stop(Seconds(10));
     Simulator::Run();

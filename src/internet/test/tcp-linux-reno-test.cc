@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2019 Apoorva Bhargava <apoorvabhargava13@gmail.com>
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  */
 #include "tcp-general-test.h"
@@ -30,7 +19,7 @@ using namespace ns3;
 NS_LOG_COMPONENT_DEFINE("TcpLinuxRenoTest");
 
 /**
- * \ingroup internet-test
+ * @ingroup internet-test
  *
  * This unit test checks that the slow start and congestion avoidance
  * behavior matches Linux behavior as follows:
@@ -47,15 +36,15 @@ class TcpLinuxRenoSSTest : public TcpGeneralTest
 {
   public:
     /**
-     * \brief Constructor.
-     * \param segmentSize Segment size.
-     * \param packetSize Size of the packets.
-     * \param packets Number of packets.
-     * \param initialCwnd Initial congestion window
-     * \param delayedAck Delayed Acknowledgement
-     * \param expectedCwnd Expected value of m_cWnd
-     * \param congControl Type of congestion control.
-     * \param desc The test description.
+     * @brief Constructor.
+     * @param segmentSize Segment size.
+     * @param packetSize Size of the packets.
+     * @param packets Number of packets.
+     * @param initialCwnd Initial congestion window
+     * @param delayedAck Delayed Acknowledgement
+     * @param expectedCwnd Expected value of m_cWnd
+     * @param congControl Type of congestion control.
+     * @param desc The test description.
      */
     TcpLinuxRenoSSTest(uint32_t segmentSize,
                        uint32_t packetSize,
@@ -193,7 +182,7 @@ TcpLinuxRenoSSTest::DoTeardown()
 }
 
 /**
- * \ingroup internet-test
+ * @ingroup internet-test
  *
  * This unit test checks that the slow start and congestion avoidance
  * behavior matches Linux behavior as follows:
@@ -210,16 +199,16 @@ class TcpLinuxRenoCongAvoidTest : public TcpGeneralTest
 {
   public:
     /**
-     * \brief Constructor.
-     * \param segmentSize Segment size.
-     * \param packetSize Size of the packets.
-     * \param packets Number of packets.
-     * \param initialCwnd Initial congestion window (segments)
-     * \param initialSSThresh Initial slow start threshold (bytes)
-     * \param delayedAck Delayed Acknowledgement
-     * \param expectedCwnd Expected final m_cWnd value
-     * \param congControl Type of congestion control.
-     * \param desc The test description.
+     * @brief Constructor.
+     * @param segmentSize Segment size.
+     * @param packetSize Size of the packets.
+     * @param packets Number of packets.
+     * @param initialCwnd Initial congestion window (segments)
+     * @param initialSSThresh Initial slow start threshold (bytes)
+     * @param delayedAck Delayed Acknowledgement
+     * @param expectedCwnd Expected final m_cWnd value
+     * @param congControl Type of congestion control.
+     * @param desc The test description.
      */
     TcpLinuxRenoCongAvoidTest(uint32_t segmentSize,
                               uint32_t packetSize,
@@ -369,9 +358,9 @@ TcpLinuxRenoCongAvoidTest::DoTeardown()
 }
 
 /**
- * \ingroup internet-test
+ * @ingroup internet-test
  *
- * \brief TestSuite for the behavior of Linux Reno
+ * @brief TestSuite for the behavior of Linux Reno
  */
 class TcpLinuxRenoTestSuite : public TestSuite
 {

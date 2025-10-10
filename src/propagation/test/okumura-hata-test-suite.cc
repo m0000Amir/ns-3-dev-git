@@ -1,39 +1,28 @@
 /*
  * Copyright (c) 2011,2012 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Author: Marco Miozzo <marco.miozzo@cttc.es>
  *         Nicola Baldo <nbaldo@cttc.es>
  */
 
-#include <ns3/constant-position-mobility-model.h>
-#include <ns3/double.h>
-#include <ns3/enum.h>
-#include <ns3/log.h>
-#include <ns3/okumura-hata-propagation-loss-model.h>
-#include <ns3/string.h>
-#include <ns3/test.h>
+#include "ns3/constant-position-mobility-model.h"
+#include "ns3/double.h"
+#include "ns3/enum.h"
+#include "ns3/log.h"
+#include "ns3/okumura-hata-propagation-loss-model.h"
+#include "ns3/string.h"
+#include "ns3/test.h"
 
 using namespace ns3;
 
 NS_LOG_COMPONENT_DEFINE("OkumuraHataPropagationLossModelTest");
 
 /**
- * \ingroup propagation-tests
+ * @ingroup propagation-tests
  *
- * \brief OkumuraHataPropagationLossModel Test Case
+ * @brief OkumuraHataPropagationLossModel Test Case
  */
 class OkumuraHataPropagationLossModelTestCase : public TestCase
 {
@@ -41,14 +30,14 @@ class OkumuraHataPropagationLossModelTestCase : public TestCase
     /**
      * Constructor
      *
-     * \param freq carrier frequency in Hz
-     * \param dist 2D distance between UT and BS in meters
-     * \param hb height of BS in meters
-     * \param hm height of UT in meters
-     * \param env environment type
-     * \param city city type
-     * \param refValue reference loss value
-     * \param name TestCase name
+     * @param freq carrier frequency in Hz
+     * @param dist 2D distance between UT and BS in meters
+     * @param hb height of BS in meters
+     * @param hm height of UT in meters
+     * @param env environment type
+     * @param city city type
+     * @param refValue reference loss value
+     * @param name TestCase name
      */
     OkumuraHataPropagationLossModelTestCase(double freq,
                                             double dist,
@@ -65,8 +54,8 @@ class OkumuraHataPropagationLossModelTestCase : public TestCase
 
     /**
      * Create a MobilityModel
-     * \param index mobility model index
-     * \return a new MobilityModel
+     * @param index mobility model index
+     * @return a new MobilityModel
      */
     Ptr<MobilityModel> CreateMobilityModel(uint16_t index);
 
@@ -129,9 +118,9 @@ OkumuraHataPropagationLossModelTestCase::DoRun()
 }
 
 /**
- * \ingroup propagation-tests
+ * @ingroup propagation-tests
  *
- * \brief OkumuraHataPropagationLossModel TestSuite
+ * @brief OkumuraHataPropagationLossModel TestSuite
  *
  * This TestSuite tests the following cases:
  *   - UrbanEnvironment - Large City (original OH and COST231 OH)
@@ -185,7 +174,7 @@ OkumuraHataPropagationLossModelTestSuite::OkumuraHataPropagationLossModelTestSui
                                                             1,
                                                             OpenAreasEnvironment,
                                                             LargeCity,
-                                                            110.21,
+                                                            109.66,
                                                             "original OH OpenAreas"),
                 TestCase::Duration::QUICK);
 

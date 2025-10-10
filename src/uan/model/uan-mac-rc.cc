@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2009 University of Washington
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Author: Leonard Tracy <lentracy@gmail.com>
  */
@@ -361,7 +350,7 @@ UanMacRc::ReceiveOkFromPhy(Ptr<Packet> pkt, double /* sinr */, UanTxMode mode)
 
         Time winDelay = ctsg.GetWindowTime();
 
-        if (winDelay > Time(0))
+        if (winDelay.IsStrictlyPositive())
         {
             m_rtsBlocked = false;
             Simulator::Schedule(winDelay, &UanMacRc::BlockRtsing, this);
@@ -450,7 +439,7 @@ UanMacRc::ScheduleData(const UanHeaderRcCts& ctsh,
 
     Time startDelay = txTime - Simulator::Now();
 
-    Time frameDelay = Seconds(0);
+    Time frameDelay;
 
     const std::list<std::pair<Ptr<Packet>, Mac8Address>> l = it->GetPktList();
     auto pit = l.begin();
@@ -471,7 +460,7 @@ UanMacRc::ScheduleData(const UanHeaderRcCts& ctsh,
 
         pkt->AddHeader(ch);
         Time eventTime = startDelay + frameDelay;
-        if (eventTime < Time(0))
+        if (eventTime.IsStrictlyNegative())
         {
             NS_FATAL_ERROR(
                 "Scheduling error resulted in very negative data transmission time! eventTime = "

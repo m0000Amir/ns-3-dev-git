@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2011 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Author: Marco Miozzo <marco.miozzo@cttc.es>
  * Modification: Dizhi Zhou <dizhi.zhou@gmail.com>    // modify codes related to downlink scheduler
@@ -23,12 +12,12 @@
 #include "lte-amc.h"
 #include "lte-vendor-specific-parameters.h"
 
-#include <ns3/boolean.h>
-#include <ns3/integer.h>
-#include <ns3/log.h>
-#include <ns3/math.h>
-#include <ns3/pointer.h>
-#include <ns3/simulator.h>
+#include "ns3/boolean.h"
+#include "ns3/integer.h"
+#include "ns3/log.h"
+#include "ns3/math.h"
+#include "ns3/pointer.h"
+#include "ns3/simulator.h"
 
 #include <cfloat>
 #include <set>
@@ -38,13 +27,13 @@ namespace ns3
 
 NS_LOG_COMPONENT_DEFINE("TdTbfqFfMacScheduler");
 
-/// TDTBFQ type 0 allocation RBG
+/// TDTBFQ type 0 allocation RBG (see table 7.1.6.1-1 of 36.213)
 static const int TdTbfqType0AllocationRbg[4] = {
     10,  // RBG size 1
     26,  // RBG size 2
     63,  // RBG size 3
     110, // RBG size 4
-};       // see table 7.1.6.1-1 of 36.213
+};
 
 NS_OBJECT_ENSURE_REGISTERED(TdTbfqFfMacScheduler);
 
@@ -705,16 +694,16 @@ TdTbfqFfMacScheduler::DoSchedDlTriggerReq(
         NS_LOG_INFO(this << " Processing DLHARQ feedback");
         if (nLayers == 1)
         {
-            retx.push_back(m_dlInfoListBuffered.at(i).m_harqStatus.at(0) ==
-                           DlInfoListElement_s::NACK);
-            retx.push_back(false);
+            retx.emplace_back(m_dlInfoListBuffered.at(i).m_harqStatus.at(0) ==
+                              DlInfoListElement_s::NACK);
+            retx.emplace_back(false);
         }
         else
         {
-            retx.push_back(m_dlInfoListBuffered.at(i).m_harqStatus.at(0) ==
-                           DlInfoListElement_s::NACK);
-            retx.push_back(m_dlInfoListBuffered.at(i).m_harqStatus.at(1) ==
-                           DlInfoListElement_s::NACK);
+            retx.emplace_back(m_dlInfoListBuffered.at(i).m_harqStatus.at(0) ==
+                              DlInfoListElement_s::NACK);
+            retx.emplace_back(m_dlInfoListBuffered.at(i).m_harqStatus.at(1) ==
+                              DlInfoListElement_s::NACK);
         }
         if (retx.at(0) || retx.at(1))
         {
@@ -1053,7 +1042,7 @@ TdTbfqFfMacScheduler::DoSchedDlTriggerReq(
             metricMax = metric;
             itMax = it;
         }
-    } // end for m_flowStatsDl
+    }
 
     if (itMax == m_flowStatsDl.end())
     {
@@ -1273,7 +1262,7 @@ TdTbfqFfMacScheduler::DoSchedDlTriggerReq(
         ret.m_buildDataList.push_back(newEl);
 
         itMap++;
-    }                               // end while allocation
+    }
     ret.m_nrOfPdcchOfdmSymbols = 1; /// \todo check correct value according the DCIs txed
 
     m_schedSapUser->SchedDlConfigInd(ret);

@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2011 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Author: Marco Miozzo <marco.miozzo@cttc.es>
  * Modification: Dizhi Zhou <dizhi.zhou@gmail.com>    // modify codes related to downlink scheduler
@@ -23,11 +12,11 @@
 #include "lte-amc.h"
 #include "lte-vendor-specific-parameters.h"
 
-#include <ns3/boolean.h>
-#include <ns3/log.h>
-#include <ns3/math.h>
-#include <ns3/pointer.h>
-#include <ns3/simulator.h>
+#include "ns3/boolean.h"
+#include "ns3/log.h"
+#include "ns3/math.h"
+#include "ns3/pointer.h"
+#include "ns3/simulator.h"
 
 #include <cfloat>
 #include <set>
@@ -37,13 +26,13 @@ namespace ns3
 
 NS_LOG_COMPONENT_DEFINE("FdBetFfMacScheduler");
 
-/// FdBetType0AllocationRbg array
+/// FdBetType0AllocationRbg array (see table 7.1.6.1-1 of 36.213)
 static const int FdBetType0AllocationRbg[4] = {
     10,  // RBG size 1
     26,  // RBG size 2
     63,  // RBG size 3
     110, // RBG size 4
-};       // see table 7.1.6.1-1 of 36.213
+};
 
 NS_OBJECT_ENSURE_REGISTERED(FdBetFfMacScheduler);
 
@@ -999,17 +988,15 @@ FdBetFfMacScheduler::DoSchedDlTriggerReq(
                         itMax = it;
                         metricMax = metric;
                     }
-                } // end for estAveThr
+                }
 
                 rbgMap.at(i) = true;
-
-            } // end for free RBGs
+            }
 
             i++;
 
         } while (i < rbgNum); // end for RBGs
-
-    } // end if estAveThr
+    }
 
     // reset TTI stats of users
     for (auto itStats = m_flowStatsDl.begin(); itStats != m_flowStatsDl.end(); itStats++)
@@ -1158,7 +1145,7 @@ FdBetFfMacScheduler::DoSchedDlTriggerReq(
         }
 
         itMap++;
-    }                               // end while allocation
+    }
     ret.m_nrOfPdcchOfdmSymbols = 1; /// \todo check correct value according the DCIs txed
 
     // update UEs stats

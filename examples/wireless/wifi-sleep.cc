@@ -2,18 +2,7 @@
  * Copyright (c) 2009 The Boeing Company
  *               2014 Universita' degli Studi di Napoli "Federico II"
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  */
 
@@ -69,9 +58,9 @@ NS_LOG_COMPONENT_DEFINE("WifiSleep");
 /**
  * Remaining energy trace sink
  *
- * \tparam node The node ID this trace belongs to.
- * \param oldValue Old value.
- * \param newValue New value.
+ * @tparam node The node ID this trace belongs to.
+ * @param oldValue Old value.
+ * @param newValue New value.
  */
 template <int node>
 void
@@ -88,11 +77,11 @@ RemainingEnergyTrace(double oldValue, double newValue)
 /**
  * PHY state trace sink
  *
- * \tparam node The node ID this trace belongs to.
- * \param context The context
- * \param start Start time for the current state
- * \param duration Duratio of the current state
- * \param state State
+ * @tparam node The node ID this trace belongs to.
+ * @param context The context
+ * @param start Start time for the current state
+ * @param duration Duratio of the current state
+ * @param state State
  */
 template <int node>
 void
@@ -113,14 +102,14 @@ main(int argc, char* argv[])
     DataRate dataRate{"1Mb/s"};
     uint32_t packetSize{1000}; // bytes
     Time duration{"10s"};
-    double initialEnergy{7.5}; // joule
-    double voltage{3.0};       // volts
-    double txPowerStart{0.0};  // dbm
-    double txPowerEnd{15.0};   // dbm
+    joule_u initialEnergy{7.5};
+    volt_u voltage{3.0};
+    dBm_u txPowerStart{0.0};
+    dBm_u txPowerEnd{15.0};
     uint32_t nTxPowerLevels{16};
     uint32_t txPowerLevel{0};
-    double idleCurrent{0.273}; // Ampere
-    double txCurrent{0.380};   // Ampere
+    ampere_u idleCurrent{0.273};
+    ampere_u txCurrent{0.380};
     bool verbose{false};
 
     CommandLine cmd(__FILE__);
@@ -256,7 +245,7 @@ main(int argc, char* argv[])
     Config::Connect("/NodeList/0/DeviceList/*/Phy/State/State", MakeCallback(&PhyStateTrace<0>));
     Config::Connect("/NodeList/1/DeviceList/*/Phy/State/State", MakeCallback(&PhyStateTrace<1>));
 
-    Simulator::Stop(duration + Seconds(1.0));
+    Simulator::Stop(duration + Seconds(1));
 
     Simulator::Run();
     Simulator::Destroy();

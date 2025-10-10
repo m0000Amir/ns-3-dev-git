@@ -2,18 +2,7 @@
  * Copyright (c) 2022 Universita' degli Studi di Napoli Federico II
 
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Author: Stefano Avallone <stavallo@unina.it>
  */
@@ -21,8 +10,10 @@
 #include "wifi-assoc-manager.h"
 
 #include "sta-wifi-mac.h"
+#include "wifi-phy.h"
 
 #include "ns3/attribute-container.h"
+#include "ns3/boolean.h"
 #include "ns3/eht-configuration.h"
 #include "ns3/enum.h"
 #include "ns3/log.h"
@@ -78,7 +69,15 @@ WifiAssocManager::GetTypeId()
                 "set are processed. An empty set is equivalent to the set of all links.",
                 AttributeContainerValue<UintegerValue>(),
                 MakeAttributeContainerAccessor<UintegerValue>(&WifiAssocManager::m_allowedLinks),
-                MakeAttributeContainerChecker<UintegerValue>(MakeUintegerChecker<uint8_t>()));
+                MakeAttributeContainerChecker<UintegerValue>(MakeUintegerChecker<uint8_t>()))
+            .AddAttribute("AllowAssocAllChannelWidths",
+                          "If set to true, it bypasses the check on channel width compatibility "
+                          "with the candidate AP. A channel width is compatible if the STA can "
+                          "advertise it to the AP, or AP operates on a channel width that is equal "
+                          "or lower than that channel width.",
+                          BooleanValue(false),
+                          MakeBooleanAccessor(&WifiAssocManager::m_allowAssocAllChannelWidths),
+                          MakeBooleanChecker());
     return tid;
 }
 
@@ -247,6 +246,10 @@ WifiAssocManager::ScanningTimeout()
         m_apListIt.erase(bestAp.m_bssid);
     } while (!CanBeReturned(bestAp));
 
+    NS_ABORT_MSG_IF(!m_allowAssocAllChannelWidths && !IsChannelWidthCompatible(bestAp),
+                    "Channel width of STA is not part of the channel width set that can be "
+                    "advertised to the AP");
+
     m_mac->ScanningTimeout(std::move(bestAp));
 }
 
@@ -261,7 +264,7 @@ WifiAssocManager::CanSetupMultiLink(OptMleConstRef& mle, OptRnrConstRef& rnr)
 {
     NS_LOG_FUNCTION(this);
 
-    if (m_mac->GetNLinks() == 1 || GetSortedList().empty())
+    if (m_mac->GetAssocType() == WifiAssocType::LEGACY || GetSortedList().empty())
     {
         return false;
     }
@@ -305,8 +308,6 @@ WifiAssocManager::CanSetupMultiLink(OptMleConstRef& mle, OptRnrConstRef& rnr)
     {
         auto ehtConfig = m_mac->GetEhtConfiguration();
         NS_ASSERT(ehtConfig);
-        EnumValue<WifiTidToLinkMappingNegSupport> negSupport;
-        ehtConfig->GetAttributeFailSafe("TidToLinkMappingNegSupport", negSupport);
 
         // A non-AP MLD that performs multi-link (re)setup on at least two links with an AP MLD
         // that sets the TID-To-Link Mapping Negotiation Support subfield of the MLD Capabilities
@@ -315,7 +316,7 @@ WifiAssocManager::CanSetupMultiLink(OptMleConstRef& mle, OptRnrConstRef& rnr)
         // MLD Capabilities field of the Basic Multi-Link element it transmits to at least 1.
         // (Sec. 35.3.7.1.1 of 802.11be D3.1)
         if (mldCapabilities->tidToLinkMappingSupport > 0 &&
-            negSupport.Get() == WifiTidToLinkMappingNegSupport::NOT_SUPPORTED)
+            ehtConfig->m_tidLinkMappingSupport == WifiTidToLinkMappingNegSupport::NOT_SUPPORTED)
         {
             NS_LOG_DEBUG("AP MLD supports TID-to-Link Mapping negotiation, while we don't");
             return false;
@@ -341,7 +342,7 @@ WifiAssocManager::GetNextAffiliatedAp(const ReducedNeighborReport& rnr, std::siz
 
         std::size_t tbttInfoFieldIndex = 0;
         while (tbttInfoFieldIndex < rnr.GetNTbttInformationFields(nbrApInfoId) &&
-               rnr.GetMldId(nbrApInfoId, tbttInfoFieldIndex) != 0)
+               rnr.GetMldParameters(nbrApInfoId, tbttInfoFieldIndex).apMldId != 0)
         {
             tbttInfoFieldIndex++;
         }
@@ -372,6 +373,16 @@ WifiAssocManager::GetAllAffiliatedAps(const ReducedNeighborReport& rnr)
     }
 
     return apList;
+}
+
+bool
+WifiAssocManager::IsChannelWidthCompatible(const StaWifiMac::ApInfo& apInfo) const
+{
+    auto phy = m_mac->GetWifiPhy(apInfo.m_linkId);
+    return GetSupportedChannelWidthSet(phy->GetStandard(), apInfo.m_channel.band)
+               .contains(phy->GetChannelWidth()) ||
+           (phy->GetChannelWidth() >= m_mac->GetWifiRemoteStationManager(apInfo.m_linkId)
+                                          ->GetChannelWidthSupported(apInfo.m_bssid));
 }
 
 } // namespace ns3

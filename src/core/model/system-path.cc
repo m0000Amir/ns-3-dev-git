@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2008 INRIA
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Authors: Mathieu Lacage <mathieu.lacage@sophia.inria.fr>
  */
@@ -61,8 +50,8 @@ constexpr auto SYSTEM_PATH_SEP = "/";
 #endif
 
 /**
- * \file
- * \ingroup systempath
+ * @file
+ * @ingroup systempath
  * ns3::SystemPath implementation.
  */
 
@@ -75,11 +64,11 @@ NS_LOG_COMPONENT_DEFINE("SystemPath");
 namespace
 {
 /**
- * \ingroup systempath
+ * @ingroup systempath
  * Get the list of files located in a file system directory with error.
  *
- * \param [in] path A path which identifies a directory
- * \return Tuple with a list of the filenames which are located in the input directory or error flag
+ * @param [in] path A path which identifies a directory
+ * @return Tuple with a list of the filenames which are located in the input directory or error flag
  * \c true if directory doesn't exist.
  */
 std::tuple<std::list<std::string>, bool>
@@ -107,14 +96,14 @@ namespace SystemPath
 {
 
 /**
- * \ingroup systempath
- * \brief Get the directory path for a file.
+ * @ingroup systempath
+ * @brief Get the directory path for a file.
  *
  * This is an internal function (by virtue of not being
  * declared in a \c .h file); the public API is FindSelfDirectory().
  *
- * \param [in] path The full path to a file.
- * \returns The full path to the containing directory.
+ * @param [in] path The full path to a file.
+ * @returns The full path to the containing directory.
  */
 std::string
 Dirname(std::string path)
@@ -362,7 +351,7 @@ Exists(const std::string path)
 
     // Check if the file itself exists
     auto tokens = Split(path);
-    std::string file = tokens.back();
+    const std::string& file = tokens.back();
 
     if (file.empty())
     {
@@ -385,8 +374,7 @@ Exists(const std::string path)
 
     NS_LOG_LOGIC("file itself exists: " << file);
     return true;
-
-} // Exists()
+}
 
 std::string
 CreateValidSystemPath(const std::string path)
@@ -403,7 +391,7 @@ CreateValidSystemPath(const std::string path)
                        incompatible_characters,
                        "_");
     return valid_path;
-} // CreateValidSystemPath
+}
 
 } // namespace SystemPath
 

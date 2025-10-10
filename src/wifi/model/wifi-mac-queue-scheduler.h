@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2022 Universita' degli Studi di Napoli Federico II
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Author: Stefano Avallone <stavallo@unina.it>
  */
@@ -35,7 +24,7 @@ class WifiMpdu;
 class WifiMac;
 
 /**
- * \ingroup wifi
+ * @ingroup wifi
  *
  * Enumeration of the reasons to block container queues.
  */
@@ -50,11 +39,11 @@ enum class WifiQueueBlockedReason : uint8_t
 };
 
 /**
- * \brief Stream insertion operator.
+ * @brief Stream insertion operator.
  *
- * \param os the stream
- * \param reason the reason to block container queues
- * \returns a reference to the stream
+ * @param os the stream
+ * @param reason the reason to block container queues
+ * @returns a reference to the stream
  */
 inline std::ostream&
 operator<<(std::ostream& os, WifiQueueBlockedReason reason)
@@ -80,7 +69,7 @@ operator<<(std::ostream& os, WifiQueueBlockedReason reason)
 }
 
 /**
- * \ingroup wifi
+ * @ingroup wifi
  *
  * WifiMacQueueScheduler is an abstract base class defining the public interface
  * for a wifi MAC queue scheduler.
@@ -89,54 +78,60 @@ class WifiMacQueueScheduler : public Object
 {
   public:
     /**
-     * \brief Get the type ID.
-     * \return the object TypeId
+     * @brief Get the type ID.
+     * @return the object TypeId
      */
     static TypeId GetTypeId();
 
     /**
      * Set the wifi MAC.
      *
-     * \param mac the wifi MAC
+     * @param mac the wifi MAC
      */
     virtual void SetWifiMac(Ptr<WifiMac> mac);
 
     /**
-     * Get the next queue to serve, which is guaranteed to contain at least an MPDU
-     * whose lifetime has not expired. Queues containing MPDUs that cannot be sent
-     * over the given link (if any) are ignored.
+     * Get the next queue to serve, which is guaranteed to contain at least an MPDU whose lifetime
+     * has not expired. Queues containing MPDUs that cannot be sent over the given link, if any, or
+     * on any link, otherwise, are ignored if and only if <i>skipBlockedQueues</i> is true.
      *
-     * \param ac the Access Category that we want to serve
-     * \param linkId the ID of the link on which MPDUs contained in the returned queue must be
+     * @param ac the Access Category that we want to serve
+     * @param linkId the ID of the link on which MPDUs contained in the returned queue must be
      *               allowed to be sent
-     * \return the ID of the selected container queue (if any)
+     * @param skipBlockedQueues whether queues containing MPDUs that cannot be sent over the given
+     *                          link, if any, or on any link, otherwise, must be ignored
+     * @return the ID of the selected container queue (if any)
      */
     virtual std::optional<WifiContainerQueueId> GetNext(AcIndex ac,
-                                                        std::optional<uint8_t> linkId) = 0;
+                                                        std::optional<uint8_t> linkId,
+                                                        bool skipBlockedQueues = true) = 0;
     /**
-     * Get the next queue to serve after the given one. The returned queue is
-     * guaranteed to contain at least an MPDU whose lifetime has not expired.
-     * Queues containing MPDUs that cannot be sent over the given link (if any) are ignored.
+     * Get the next queue to serve after the given one. The returned queue is guaranteed to contain
+     * at least an MPDU whose lifetime has not expired. Queues containing MPDUs that cannot be sent
+     * over the given link, if any, or on any link, otherwise, are ignored if and only if
+     * <i>skipBlockedQueues</i> is true.
      *
-     * \param ac the Access Category that we want to serve
-     * \param linkId the ID of the link on which MPDUs contained in the returned queue must be
+     * @param ac the Access Category that we want to serve
+     * @param linkId the ID of the link on which MPDUs contained in the returned queue must be
      *               allowed to be sent
-     * \param prevQueueId the ID of the container queue served previously
-     * \return the ID of the selected container queue (if any)
+     * @param prevQueueId the ID of the container queue served previously
+     * @param skipBlockedQueues whether queues containing MPDUs that cannot be sent over the given
+     *                          link, if any, or on any link, otherwise, must be ignored
+     * @return the ID of the selected container queue (if any)
      */
-    virtual std::optional<WifiContainerQueueId> GetNext(
-        AcIndex ac,
-        std::optional<uint8_t> linkId,
-        const WifiContainerQueueId& prevQueueId) = 0;
+    virtual std::optional<WifiContainerQueueId> GetNext(AcIndex ac,
+                                                        std::optional<uint8_t> linkId,
+                                                        const WifiContainerQueueId& prevQueueId,
+                                                        bool skipBlockedQueues = true) = 0;
 
     /**
      * Get the list of the IDs of the links the given MPDU (belonging to the given
      * Access Category) can be sent over.
      *
-     * \param ac the given Access Category
-     * \param mpdu the given MPDU
-     * \param ignoredReasons list of reasons for blocking a link that are ignored
-     * \return the list of the IDs of the links the given MPDU can be sent over
+     * @param ac the given Access Category
+     * @param mpdu the given MPDU
+     * @param ignoredReasons list of reasons for blocking a link that are ignored
+     * @return the list of the IDs of the links the given MPDU can be sent over
      */
     virtual std::list<uint8_t> GetLinkIds(
         AcIndex ac,
@@ -149,13 +144,13 @@ class WifiMacQueueScheduler : public Object
      * Transmitter Address (TA) and TID (if needed) for the given reason, such that
      * frames in these queues are not transmitted on the given set of links.
      *
-     * \param reason the reason for blocking the queues
-     * \param ac the given Access Category
-     * \param types the types of the queues to block
-     * \param rxAddress the Receiver Address (RA) of the frames
-     * \param txAddress the Transmitter Address (TA) of the frames
-     * \param tids the TIDs optionally identifying the queues to block
-     * \param linkIds set of links to block (empty to block all setup links)
+     * @param reason the reason for blocking the queues
+     * @param ac the given Access Category
+     * @param types the types of the queues to block
+     * @param rxAddress the Receiver Address (RA) of the frames
+     * @param txAddress the Transmitter Address (TA) of the frames
+     * @param tids the TIDs optionally identifying the queues to block
+     * @param linkIds set of links to block (empty to block all setup links)
      */
     virtual void BlockQueues(WifiQueueBlockedReason reason,
                              AcIndex ac,
@@ -170,13 +165,13 @@ class WifiMacQueueScheduler : public Object
      * Transmitter Address (TA) and TID (if needed) for the given reason, such that
      * frames in these queues can be transmitted on the given set of links.
      *
-     * \param reason the reason for unblocking the queues
-     * \param ac the given Access Category
-     * \param types the types of the queues to unblock
-     * \param rxAddress the Receiver Address (RA) of the frames
-     * \param txAddress the Transmitter Address (TA) of the frames
-     * \param tids the TIDs optionally identifying the queues to unblock
-     * \param linkIds set of links to unblock (empty to unblock all setup links)
+     * @param reason the reason for unblocking the queues
+     * @param ac the given Access Category
+     * @param types the types of the queues to unblock
+     * @param rxAddress the Receiver Address (RA) of the frames
+     * @param txAddress the Transmitter Address (TA) of the frames
+     * @param tids the TIDs optionally identifying the queues to unblock
+     * @param linkIds set of links to unblock (empty to unblock all setup links)
      */
     virtual void UnblockQueues(WifiQueueBlockedReason reason,
                                AcIndex ac,
@@ -186,6 +181,36 @@ class WifiMacQueueScheduler : public Object
                                const std::set<uint8_t>& tids = {},
                                const std::set<uint8_t>& linkIds = {}) = 0;
 
+    /**
+     * Block the given set of links for all the container queues for the given reason.
+     *
+     * @param reason the reason for blocking the queues
+     * @param linkIds set of links to block (empty to block all setup links)
+     */
+    virtual void BlockAllQueues(WifiQueueBlockedReason reason,
+                                const std::set<uint8_t>& linkIds = {}) = 0;
+
+    /**
+     * Unblock the given set of links for all the container queues for the given reason.
+     *
+     * @param reason the reason for unblocking the queues
+     * @param linkIds set of links to unblock (empty to unblock all setup links)
+     */
+    virtual void UnblockAllQueues(WifiQueueBlockedReason reason,
+                                  const std::set<uint8_t>& linkIds = {}) = 0;
+
+    /**
+     * Return whether all the container queues are blocked for the given link for the given
+     * reason, if different than REASONS_COUNT, or for any reason, otherwise.
+     *
+     * @param linkId the ID of the given link
+     * @param reason the reason to check (if different than REASONS_COUNT)
+     * @return whether all the container queues are blocked for the given link
+     */
+    virtual bool GetAllQueuesBlockedOnLink(
+        uint8_t linkId,
+        WifiQueueBlockedReason reason = WifiQueueBlockedReason::REASONS_COUNT) = 0;
+
     /// Bitset identifying the reasons to block individual links for a container queue
     using Mask = std::bitset<static_cast<std::size_t>(WifiQueueBlockedReason::REASONS_COUNT)>;
 
@@ -194,10 +219,10 @@ class WifiMacQueueScheduler : public Object
      * is blocked and for which reason, provided that the given container queue exists and has
      * a mask for the given link.
      *
-     * \param ac the given Access Category
-     * \param queueId the ID of the given container queue
-     * \param linkId the ID of the given link
-     * \return the mask associated with the given container queue for the given link
+     * @param ac the given Access Category
+     * @param queueId the ID of the given container queue
+     * @param linkId the ID of the given link
+     * @return the mask associated with the given container queue for the given link
      */
     virtual std::optional<Mask> GetQueueLinkMask(AcIndex ac,
                                                  const WifiContainerQueueId& queueId,
@@ -206,9 +231,9 @@ class WifiMacQueueScheduler : public Object
     /**
      * Check whether an MPDU has to be dropped before enqueuing the given MPDU.
      *
-     * \param ac the Access Category of the MPDU being enqueued
-     * \param mpdu the MPDU to enqueue
-     * \return a pointer to the MPDU to drop, if any, or a null pointer, otherwise
+     * @param ac the Access Category of the MPDU being enqueued
+     * @param mpdu the MPDU to enqueue
+     * @return a pointer to the MPDU to drop, if any, or a null pointer, otherwise
      */
     virtual Ptr<WifiMpdu> HasToDropBeforeEnqueue(AcIndex ac, Ptr<WifiMpdu> mpdu) = 0;
     /**
@@ -216,8 +241,8 @@ class WifiMacQueueScheduler : public Object
      * Category. The container queue in which the MPDU has been enqueued must be
      * assigned a priority value.
      *
-     * \param ac the Access Category of the enqueued MPDU
-     * \param mpdu the enqueued MPDU
+     * @param ac the Access Category of the enqueued MPDU
+     * @param mpdu the enqueued MPDU
      */
     virtual void NotifyEnqueue(AcIndex ac, Ptr<WifiMpdu> mpdu) = 0;
     /**
@@ -225,8 +250,8 @@ class WifiMacQueueScheduler : public Object
      * given Access Category. The container queues which became empty after dequeuing
      * the MPDUs are removed from the sorted list of queues.
      *
-     * \param ac the Access Category of the dequeued MPDUs
-     * \param mpdus the list of dequeued MPDUs
+     * @param ac the Access Category of the dequeued MPDUs
+     * @param mpdus the list of dequeued MPDUs
      */
     virtual void NotifyDequeue(AcIndex ac, const std::list<Ptr<WifiMpdu>>& mpdus) = 0;
     /**
@@ -234,8 +259,8 @@ class WifiMacQueueScheduler : public Object
      * given Access Category. The container queues which became empty after removing
      * the MPDUs are removed from the sorted list of queues.
      *
-     * \param ac the Access Category of the removed MPDUs
-     * \param mpdus the list of removed MPDUs
+     * @param ac the Access Category of the removed MPDUs
+     * @param mpdus the list of removed MPDUs
      */
     virtual void NotifyRemove(AcIndex ac, const std::list<Ptr<WifiMpdu>>& mpdus) = 0;
 
@@ -245,7 +270,7 @@ class WifiMacQueueScheduler : public Object
     /**
      * Get the wifi MAC.
      *
-     * \return the wifi MAC
+     * @return the wifi MAC
      */
     Ptr<WifiMac> GetMac() const;
 

@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2016 ResiliNets, ITTC, University of Kansas
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Authors: Truc Anh N. Nguyen <annguyen@ittc.ku.edu>
 
@@ -35,19 +24,19 @@ using namespace ns3;
 NS_LOG_COMPONENT_DEFINE("TcpScalableTestSuite");
 
 /**
- * \ingroup internet-test
+ * @ingroup internet-test
  *
- * \brief Testing the congestion avoidance increment on TcpScalable
+ * @brief Testing the congestion avoidance increment on TcpScalable
  */
 class TcpScalableIncrementTest : public TestCase
 {
   public:
     /**
-     * \brief Constructor.
-     * \param cWnd Congestion window.
-     * \param segmentSize Segment size.
-     * \param segmentsAcked Segments ACKed.
-     * \param name Test description.
+     * @brief Constructor.
+     * @param cWnd Congestion window.
+     * @param segmentSize Segment size.
+     * @param segmentsAcked Segments ACKed.
+     * @param name Test description.
      */
     TcpScalableIncrementTest(uint32_t cWnd,
                              uint32_t segmentSize,
@@ -104,18 +93,18 @@ TcpScalableIncrementTest::DoRun()
 }
 
 /**
- * \ingroup internet-test
+ * @ingroup internet-test
  *
- * \brief Testing the multiplicative decrease on TcpScalable
+ * @brief Testing the multiplicative decrease on TcpScalable
  */
 class TcpScalableDecrementTest : public TestCase
 {
   public:
     /**
-     * \brief Constructor.
-     * \param cWnd Congestion window.
-     * \param segmentSize Segment size.
-     * \param name Test description.
+     * @brief Constructor.
+     * @param cWnd Congestion window.
+     * @param segmentSize Segment size.
+     * @param name Test description.
      */
     TcpScalableDecrementTest(uint32_t cWnd, uint32_t segmentSize, const std::string& name);
 
@@ -162,9 +151,9 @@ TcpScalableDecrementTest::DoRun()
 }
 
 /**
- * \ingroup internet-test
+ * @ingroup internet-test
  *
- * \brief TcpScalable TestSuite.
+ * @brief TcpScalable TestSuite.
  */
 class TcpScalableTestSuite : public TestSuite
 {

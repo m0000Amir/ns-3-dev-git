@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2022 University of Padova, Dep. of Information Engineering, SIGNET lab.
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Author: Mattia Sandri <mattia.sandri@unipd.it>
  */
@@ -27,15 +16,16 @@
 
 #include "antenna-model.h"
 
-#include <ns3/double.h>
-#include <ns3/log.h>
+#include "ns3/boolean.h"
+#include "ns3/double.h"
+#include "ns3/log.h"
 
-#include <math.h>
+#include <cmath>
 
 /**
- *  \file
- *  \ingroup antenna
- *  Class CircularApertureAntennaModel implementation.
+ * @file
+ * @ingroup antenna
+ * Class CircularApertureAntennaModel implementation.
  */
 
 namespace
@@ -76,7 +66,12 @@ CircularApertureAntennaModel::GetTypeId()
                           "The maximum gain value in dB of the antenna",
                           DoubleValue(1),
                           MakeDoubleAccessor(&CircularApertureAntennaModel::SetMaxGain),
-                          MakeDoubleChecker<double>(0.0));
+                          MakeDoubleChecker<double>(0.0))
+            .AddAttribute("ForceGainBounds",
+                          "Force GetGainDb to [AntennaMinGainDb, AntennaMaxGainDb] range",
+                          BooleanValue(true),
+                          MakeBooleanAccessor(&CircularApertureAntennaModel::m_forceGainBounds),
+                          MakeBooleanChecker());
     return tid;
 }
 
@@ -185,6 +180,10 @@ CircularApertureAntennaModel::GetGainDb(Angles a)
         gain = std::cyl_bessel_j(1, kasintheta) / kasintheta;
 #endif
         gain = 10 * log10(4 * gain * gain) + m_maxGain;
+        if (m_forceGainBounds)
+        {
+            gain = std::min(std::max(gain, m_minGain), m_maxGain);
+        }
     }
 
     return gain;

@@ -1,17 +1,6 @@
 # Copyright (c) 2023 Universidade de Brasília
 #
-# This program is free software; you can redistribute it and/or modify it under
-# the terms of the GNU General Public License version 2 as published by the Free
-# Software Foundation;
-#
-# This program is distributed in the hope that it will be useful, but WITHOUT
-# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-# FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
-# details.
-#
-# You should have received a copy of the GNU General Public License along with
-# this program; if not, write to the Free Software Foundation, Inc., 59 Temple
-# Place, Suite 330, Boston, MA  02111-1307 USA
+# SPDX-License-Identifier: GPL-2.0-only
 #
 # Author: Gabriel Ferreira <gabrielcarvfer@gmail.com>
 
@@ -111,6 +100,9 @@ function(find_external_library)
       # directories
       $ENV{PATH} # Search for libraries in PATH directories
   )
+  if(library_search_paths)
+    list(REMOVE_DUPLICATES library_search_paths)
+  endif()
   enable_cmake_warnings()
   # cmake-format: off
     #
@@ -170,22 +162,6 @@ function(find_external_library)
         # cmake-format: on
     # Or enable NS3_VERBOSE to print the searched paths
 
-    # Print tested paths to the searched library and if it was found
-    if(${NS3_VERBOSE} AND (${CMAKE_VERSION} VERSION_LESS "3.17.0"))
-      log_find_searched_paths(
-        TARGET_TYPE
-        Library
-        TARGET_NAME
-        ${library}
-        SEARCH_RESULT
-        ${name}_library_internal_${library}
-        SEARCH_PATHS
-        ${library_search_paths}
-        SEARCH_SUFFIXES
-        ${suffixes}
-      )
-    endif()
-
     # After searching the library, the internal variable should have either the
     # absolute path to the library or the name of the variable appended with
     # -NOTFOUND
@@ -223,6 +199,9 @@ function(find_external_library)
       # ns-3-dev/build
       ${CMAKE_INSTALL_PREFIX} # Search for headers in the install
   )
+  if(header_search_paths)
+    list(REMOVE_DUPLICATES header_search_paths)
+  endif()
 
   set(not_found_headers)
   set(include_dirs)
@@ -264,22 +243,6 @@ function(find_external_library)
               HINTS ${header_search_paths} # directory (e.g. /usr/)
               PATH_SUFFIXES ${suffixes}
     )
-
-    # Print tested paths to the searched header and if it was found
-    if(${NS3_VERBOSE} AND (${CMAKE_VERSION} VERSION_LESS "3.17.0"))
-      log_find_searched_paths(
-        TARGET_TYPE
-        Header
-        TARGET_NAME
-        ${header}
-        SEARCH_RESULT
-        ${name}_header_internal_${header}
-        SEARCH_PATHS
-        ${header_search_paths}
-        SEARCH_SUFFIXES
-        ${suffixes}
-      )
-    endif()
 
     # If the header file was not found, append to the not-found list
     if("${${name}_header_internal_${header}}" STREQUAL

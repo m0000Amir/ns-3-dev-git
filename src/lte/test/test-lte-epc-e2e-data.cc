@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2011 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Author: Nicola Baldo <nbaldo@cttc.es>
  */
@@ -23,6 +12,8 @@
 #include "ns3/inet-socket-address.h"
 #include "ns3/internet-stack-helper.h"
 #include "ns3/ipv4-address-helper.h"
+#include "ns3/ipv4-static-routing-helper.h"
+#include "ns3/ipv4-static-routing.h"
 #include "ns3/log.h"
 #include "ns3/lte-helper.h"
 #include "ns3/mobility-helper.h"
@@ -35,15 +26,13 @@
 #include "ns3/udp-client-server-helper.h"
 #include "ns3/udp-echo-helper.h"
 #include "ns3/uinteger.h"
-#include <ns3/ipv4-static-routing-helper.h>
-#include <ns3/ipv4-static-routing.h>
 
 using namespace ns3;
 
 NS_LOG_COMPONENT_DEFINE("LteEpcE2eData");
 
 /**
- * \ingroup lte-test
+ * @ingroup lte-test
  */
 
 /// BearerTestData structure
@@ -52,9 +41,9 @@ struct BearerTestData
     /**
      * Constructor
      *
-     * \param n the number of packets
-     * \param s the packet size
-     * \param i the inter packet interval in seconds
+     * @param n the number of packets
+     * @param s the packet size
+     * @param i the inter packet interval in seconds
      */
     BearerTestData(uint32_t n, uint32_t s, double i);
 
@@ -89,9 +78,9 @@ struct EnbTestData
 };
 
 /**
- * \ingroup lte-test
+ * @ingroup lte-test
  *
- * \brief Test that e2e packet flow is correct. Compares the data send and the
+ * @brief Test that e2e packet flow is correct. Compares the data send and the
  * data received. Test uses mostly the PDCP stats to check the performance.
  */
 
@@ -101,8 +90,8 @@ class LteEpcE2eDataTestCase : public TestCase
     /**
      * Constructor
      *
-     * \param name the reference name
-     * \param v the ENB test data
+     * @param name the reference name
+     * @param v the ENB test data
      */
     LteEpcE2eDataTestCase(std::string name, std::vector<EnbTestData> v);
     ~LteEpcE2eDataTestCase() override;
@@ -127,6 +116,7 @@ void
 LteEpcE2eDataTestCase::DoRun()
 {
     NS_LOG_FUNCTION(this << GetName());
+    SetDataDir(NS_TEST_SOURCEDIR);
     Config::Reset();
     Config::SetDefault("ns3::LteSpectrumPhy::CtrlErrorModelEnabled", BooleanValue(false));
     Config::SetDefault("ns3::LteSpectrumPhy::DataErrorModelEnabled", BooleanValue(false));
@@ -368,9 +358,9 @@ LteEpcE2eDataTestCase::DoRun()
 }
 
 /**
- * \ingroup lte-test
+ * @ingroup lte-test
  *
- * \brief Test that the S1-U interface implementation works correctly
+ * @brief Test that the S1-U interface implementation works correctly
  */
 class LteEpcE2eDataTestSuite : public TestSuite
 {

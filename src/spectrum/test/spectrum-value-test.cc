@@ -1,29 +1,17 @@
 /*
  * Copyright (c) 2009 CTTC
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Author: Nicola Baldo <nbaldo@cttc.es>
  */
 
-#include "spectrum-test.h"
-
-#include <ns3/log.h>
-#include <ns3/object.h>
-#include <ns3/spectrum-converter.h>
-#include <ns3/spectrum-value.h>
-#include <ns3/test.h>
+#include "ns3/log.h"
+#include "ns3/object.h"
+#include "ns3/spectrum-converter.h"
+#include "ns3/spectrum-test.h"
+#include "ns3/spectrum-value.h"
+#include "ns3/test.h"
 
 #include <cmath>
 #include <iostream>
@@ -35,18 +23,18 @@ using namespace ns3;
 #define TOLERANCE 1e-6
 
 /**
- * \ingroup spectrum-tests
+ * @ingroup spectrum-tests
  *
- * \brief Spectrum Value Test
+ * @brief Spectrum Value Test
  */
 class SpectrumValueTestCase : public TestCase
 {
   public:
     /**
      * Constructor
-     * \param a first SpectrumValue
-     * \param b second SpectrumValue
-     * \param name test name
+     * @param a first SpectrumValue
+     * @param b second SpectrumValue
+     * @param name test name
      */
     SpectrumValueTestCase(SpectrumValue a, SpectrumValue b, std::string name);
     ~SpectrumValueTestCase() override;
@@ -55,9 +43,9 @@ class SpectrumValueTestCase : public TestCase
   private:
     /**
      * Check that two SpectrumValue are equal within a tolerance
-     * \param x first SpectrumValue
-     * \param y second SpectrumValue
-     * \return true if the two values are within the tolerance
+     * @param x first SpectrumValue
+     * @param y second SpectrumValue
+     * @return true if the two values are within the tolerance
      */
     bool MoreOrLessEqual(SpectrumValue x, SpectrumValue y);
 
@@ -94,9 +82,9 @@ SpectrumValueTestCase::DoRun()
 }
 
 /**
- * \ingroup spectrum-tests
+ * @ingroup spectrum-tests
  *
- * \brief Spectrum Value TestSuite
+ * @brief Spectrum Value TestSuite
  */
 class SpectrumValueTestSuite : public TestSuite
 {
@@ -279,9 +267,9 @@ SpectrumValueTestSuite::SpectrumValueTestSuite()
 }
 
 /**
- * \ingroup spectrum-tests
+ * @ingroup spectrum-tests
  *
- * \brief Spectrum Converter TestSuite
+ * @brief Spectrum Converter TestSuite
  */
 class SpectrumConverterTestSuite : public TestSuite
 {

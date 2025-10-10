@@ -1,31 +1,20 @@
 /*
  * Copyright (c) 2022 Tokushima University, Japan
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Author: Alberto Gallegos Ramonet <alramonet@is.tokushima-u.ac.jp>
  */
 
-#include <ns3/constant-position-mobility-model.h>
-#include <ns3/core-module.h>
-#include <ns3/log.h>
-#include <ns3/lr-wpan-module.h>
-#include <ns3/packet.h>
-#include <ns3/propagation-delay-model.h>
-#include <ns3/propagation-loss-model.h>
-#include <ns3/simulator.h>
-#include <ns3/single-model-spectrum-channel.h>
+#include "ns3/constant-position-mobility-model.h"
+#include "ns3/core-module.h"
+#include "ns3/log.h"
+#include "ns3/lr-wpan-module.h"
+#include "ns3/packet.h"
+#include "ns3/propagation-delay-model.h"
+#include "ns3/propagation-loss-model.h"
+#include "ns3/simulator.h"
+#include "ns3/single-model-spectrum-channel.h"
 
 #include <iostream>
 
@@ -35,10 +24,10 @@ using namespace ns3::lrwpan;
 NS_LOG_COMPONENT_DEFINE("lr-wpan-mac-test");
 
 /**
- * \ingroup lr-wpan-test
- * \ingroup tests
+ * @ingroup lr-wpan-test
+ * @ingroup tests
  *
- * \brief Test PHY going to TRX_OFF after CSMA failure (MAC->RxOnWhenIdle(false))
+ * @brief Test PHY going to TRX_OFF after CSMA failure (MAC->RxOnWhenIdle(false))
  */
 class TestRxOffWhenIdleAfterCsmaFailure : public TestCase
 {
@@ -49,21 +38,21 @@ class TestRxOffWhenIdleAfterCsmaFailure : public TestCase
   private:
     /**
      * Function called when a Data indication is invoked
-     * \param params MCPS data indication parameters
-     * \param p packet
+     * @param params MCPS data indication parameters
+     * @param p packet
      */
     void DataIndication(McpsDataIndicationParams params, Ptr<Packet> p);
     /**
      * Function called when a Data confirm is invoked (After Tx Attempt)
-     * \param params MCPS data confirm parameters
+     * @param params MCPS data confirm parameters
      */
     void DataConfirm(McpsDataConfirmParams params);
     /**
      * Function called when a the PHY state changes in Dev0 [00:01]
-     * \param context context
-     * \param now time at which the function is called
-     * \param oldState old PHY state
-     * \param newState new PHY state
+     * @param context context
+     * @param now time at which the function is called
+     * @param oldState old PHY state
+     * @param newState new PHY state
      */
     void StateChangeNotificationDev0(std::string context,
                                      Time now,
@@ -71,10 +60,10 @@ class TestRxOffWhenIdleAfterCsmaFailure : public TestCase
                                      PhyEnumeration newState);
     /**
      * Function called when a the PHY state changes in Dev2 [00:03]
-     * \param context context
-     * \param now time at which the function is called
-     * \param oldState old PHY state
-     * \param newState new PHY state
+     * @param context context
+     * @param now time at which the function is called
+     * @param oldState old PHY state
+     * @param newState new PHY state
      */
     void StateChangeNotificationDev2(std::string context,
                                      Time now,
@@ -274,7 +263,7 @@ TestRxOffWhenIdleAfterCsmaFailure::DoRun()
     params.m_dstAddr = Mac16Address("00:02");
 
     Simulator::ScheduleWithContext(2,
-                                   Seconds(0.0),
+                                   Seconds(0),
                                    &LrWpanMac::McpsDataRequest,
                                    dev2->GetMac(),
                                    params,
@@ -291,10 +280,10 @@ TestRxOffWhenIdleAfterCsmaFailure::DoRun()
 }
 
 /**
- * \ingroup lr-wpan-test
- * \ingroup tests
+ * @ingroup lr-wpan-test
+ * @ingroup tests
  *
- * \brief Test MAC Active Scan PAN descriptor reception and check some of its values.
+ * @brief Test MAC Active Scan PAN descriptor reception and check some of its values.
  */
 class TestActiveScanPanDescriptors : public TestCase
 {
@@ -306,14 +295,14 @@ class TestActiveScanPanDescriptors : public TestCase
     /**
      * Function called in response to a MAC scan request.
      *
-     * \param params MLME scan confirm parameters
+     * @param params MLME scan confirm parameters
      */
     void ScanConfirm(MlmeScanConfirmParams params);
 
     /**
      * Function used to notify the reception of a beacon with payload.
      *
-     * \param params The MLME-BEACON-NOTIFY.indication parameters
+     * @param params The MLME-BEACON-NOTIFY.indication parameters
      */
     void BeaconNotifyIndication(MlmeBeaconNotifyIndicationParams params);
 
@@ -448,7 +437,7 @@ TestActiveScanPanDescriptors::DoRun()
     params.m_sfrmOrd = 15;
     params.m_logCh = 12;
     Simulator::ScheduleWithContext(1,
-                                   Seconds(2.0),
+                                   Seconds(2),
                                    &LrWpanMac::MlmeStartRequest,
                                    coord1NetDevice->GetMac(),
                                    params);
@@ -471,7 +460,7 @@ TestActiveScanPanDescriptors::DoRun()
     params2.m_sfrmOrd = 15;
     params2.m_logCh = 14;
     Simulator::ScheduleWithContext(2,
-                                   Seconds(2.0),
+                                   Seconds(2),
                                    &LrWpanMac::MlmeStartRequest,
                                    coord2NetDevice->GetMac(),
                                    params2);
@@ -488,7 +477,7 @@ TestActiveScanPanDescriptors::DoRun()
     scanParams.m_scanDuration = 14;
     scanParams.m_scanType = MLMESCAN_ACTIVE;
     Simulator::ScheduleWithContext(1,
-                                   Seconds(3.0),
+                                   Seconds(3),
                                    &LrWpanMac::MlmeScanRequest,
                                    endNodeNetDevice->GetMac(),
                                    scanParams);
@@ -530,10 +519,10 @@ TestActiveScanPanDescriptors::DoRun()
 }
 
 /**
- * \ingroup lr-wpan-test
- * \ingroup tests
+ * @ingroup lr-wpan-test
+ * @ingroup tests
  *
- * \brief Test MAC Orphan Scan Coordinator Realignment command reception and its values.
+ * @brief Test MAC Orphan Scan Coordinator Realignment command reception and its values.
  */
 class TestOrphanScan : public TestCase
 {
@@ -545,7 +534,7 @@ class TestOrphanScan : public TestCase
     /**
      * Function called in response to a MAC scan request.
      *
-     * \param params MLME scan confirm parameters
+     * @param params MLME scan confirm parameters
      */
     void ScanConfirm(MlmeScanConfirmParams params);
 
@@ -553,7 +542,7 @@ class TestOrphanScan : public TestCase
      * Function called as a result of receiving an orphan notification command
      * on the coordinator
      *
-     * \param params MLME orphan indication parameters
+     * @param params MLME orphan indication parameters
      */
     void OrphanIndicationCoord(MlmeOrphanIndicationParams params);
 
@@ -671,7 +660,7 @@ TestOrphanScan::DoRun()
     params.m_sfrmOrd = 15;
     params.m_logCh = 12;
     Simulator::ScheduleWithContext(1,
-                                   Seconds(2.0),
+                                   Seconds(2),
                                    &LrWpanMac::MlmeStartRequest,
                                    coord1NetDevice->GetMac(),
                                    params);
@@ -690,7 +679,7 @@ TestOrphanScan::DoRun()
     scanParams.m_scanChannels = 0x7800;
     scanParams.m_scanType = MLMESCAN_ORPHAN;
     Simulator::ScheduleWithContext(1,
-                                   Seconds(3.0),
+                                   Seconds(3),
                                    &LrWpanMac::MlmeScanRequest,
                                    endNodeNetDevice->GetMac(),
                                    scanParams);
@@ -715,10 +704,10 @@ TestOrphanScan::DoRun()
 }
 
 /**
- * \ingroup lr-wpan-test
- * \ingroup tests
+ * @ingroup lr-wpan-test
+ * @ingroup tests
  *
- * \brief LrWpan MAC TestSuite
+ * @brief LrWpan MAC TestSuite
  */
 class LrWpanMacTestSuite : public TestSuite
 {

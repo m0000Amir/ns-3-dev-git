@@ -1,25 +1,14 @@
 /*
  * Copyright (c) 2011 CTTC
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Author: Nicola Baldo <nbaldo@cttc.es>
  */
 
-#include <ns3/antenna-model.h>
-#include <ns3/log.h>
-#include <ns3/test.h>
+#include "ns3/antenna-model.h"
+#include "ns3/log.h"
+#include "ns3/test.h"
 
 #include <cmath>
 #include <iostream>
@@ -29,23 +18,23 @@
 using namespace ns3;
 
 /**
- * \ingroup tests
+ * @ingroup tests
  *
- * \brief Test degree to radians conversion
+ * @brief Test degree to radians conversion
  */
 class DegreesToRadiansTestCase : public TestCase
 {
   public:
     /**
      * Build the test name
-     * \param a test param
-     * \return the test name
+     * @param a test param
+     * @return the test name
      */
     static std::string BuildNameString(double a);
     /**
      * Constructor
-     * \param a angle in degrees
-     * \param b expected angle in radians
+     * @param a angle in degrees
+     * @param b expected angle in radians
      */
     DegreesToRadiansTestCase(double a, double b);
 
@@ -78,23 +67,23 @@ DegreesToRadiansTestCase::DoRun()
 }
 
 /**
- * \ingroup tests
+ * @ingroup tests
  *
- * \brief Test radians to degree conversion
+ * @brief Test radians to degree conversion
  */
 class RadiansToDegreesTestCase : public TestCase
 {
   public:
     /**
      * Build the test name
-     * \param a test param
-     * \return the test name
+     * @param a test param
+     * @return the test name
      */
     static std::string BuildNameString(double a);
     /**
      * Constructor
-     * \param a angle in radians
-     * \param b expected angle in degrees
+     * @param a angle in radians
+     * @param b expected angle in degrees
      */
     RadiansToDegreesTestCase(double a, double b);
 
@@ -127,9 +116,9 @@ RadiansToDegreesTestCase::DoRun()
 }
 
 /**
- * \ingroup tests
+ * @ingroup tests
  *
- * \brief TestSuite: degree to radians (and vice-versa) conversions
+ * @brief TestSuite: degree to radians (and vice-versa) conversions
  */
 class DegreesRadiansTestSuite : public TestSuite
 {

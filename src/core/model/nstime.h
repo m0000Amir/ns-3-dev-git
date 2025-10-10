@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2005,2006 INRIA
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Author: Mathieu Lacage <mathieu.lacage@sophia.inria.fr>
  */
@@ -26,6 +15,8 @@
 #include "int64x64.h"
 #include "type-name.h"
 
+#include "ns3/core-export.h"
+
 #include <cmath>
 #include <limits>
 #include <ostream>
@@ -33,8 +24,8 @@
 #include <stdint.h>
 
 /**
- * \file
- * \ingroup time
+ * @file
+ * @ingroup time
  * Declaration of classes ns3::Time and ns3::TimeWithUnit,
  * and the TimeValue implementation classes.
  */
@@ -45,8 +36,8 @@ namespace ns3
 class TimeWithUnit;
 
 /**
- * \ingroup core
- * \defgroup time Virtual Time
+ * @ingroup core
+ * @defgroup time Virtual Time
  *  Management of virtual time in real world units.
  *
  * The underlying simulator is unit agnostic, just dealing with
@@ -61,7 +52,7 @@ class TimeWithUnit;
  * base resolution, before Simulator::Run().
  */
 /**
- * \ingroup time
+ * @ingroup time
  * Simulation virtual time values and global simulation resolution.
  *
  * This class defines all the classic C++ addition/subtraction
@@ -70,12 +61,12 @@ class TimeWithUnit;
  * compare Time objects.
  *
  * For example:
- * \code
+ * @code
  * Time t1 = Seconds (10.0);
  * Time t2 = Seconds (10.0);
  * Time t3 = t1;
  * t3 += t2;
- * \endcode
+ * @endcode
  *
  * You can also use the following non-member functions to manipulate
  * any of these ns3::Time object:
@@ -101,7 +92,7 @@ class TimeWithUnit;
  * if you use picoseconds is 2^64 ps = 2^24 s = 7 months, whereas,
  * had you used nanoseconds, you could have run for 584 years.
  */
-class Time
+class CORE_EXPORT Time
 {
   public:
     /**
@@ -125,8 +116,8 @@ class Time
 
     /**
      *  Assignment operator
-     * \param [in] o Time to assign.
-     * \return The Time.
+     * @param [in] o Time to assign.
+     * @return The Time.
      */
     inline Time& operator=(const Time& o)
     {
@@ -138,7 +129,7 @@ class Time
     inline Time()
         : m_data()
     {
-        if (g_markingTimes)
+        if (MarkingTimes())
         {
             Mark(this);
         }
@@ -147,12 +138,12 @@ class Time
     /**
      *  Copy constructor
      *
-     * \param [in] o Time to copy
+     * @param [in] o Time to copy
      */
     inline Time(const Time& o)
         : m_data(o.m_data)
     {
-        if (g_markingTimes)
+        if (MarkingTimes())
         {
             Mark(this);
         }
@@ -161,31 +152,31 @@ class Time
     /**
      * Move constructor
      *
-     * \param [in] o Time from which take the data
+     * @param [in] o Time from which take the data
      */
     Time(Time&& o)
         : m_data(o.m_data)
     {
-        if (g_markingTimes)
+        if (MarkingTimes())
         {
             Mark(this);
         }
     }
 
     /**
-     * \name Numeric constructors
+     * @name Numeric constructors
      * Construct from a numeric value.
      * @{
      */
     /**
      * Construct from a numeric value.
      * The current time resolution will be assumed as the unit.
-     * \param [in] v The value.
+     * @param [in] v The value.
      */
     explicit inline Time(double v)
         : m_data(llround(v))
     {
-        if (g_markingTimes)
+        if (MarkingTimes())
         {
             Mark(this);
         }
@@ -194,7 +185,7 @@ class Time
     explicit inline Time(int v)
         : m_data(v)
     {
-        if (g_markingTimes)
+        if (MarkingTimes())
         {
             Mark(this);
         }
@@ -203,7 +194,7 @@ class Time
     explicit inline Time(long int v)
         : m_data(v)
     {
-        if (g_markingTimes)
+        if (MarkingTimes())
         {
             Mark(this);
         }
@@ -212,7 +203,7 @@ class Time
     explicit inline Time(long long int v)
         : m_data(v)
     {
-        if (g_markingTimes)
+        if (MarkingTimes())
         {
             Mark(this);
         }
@@ -221,7 +212,7 @@ class Time
     explicit inline Time(unsigned int v)
         : m_data(v)
     {
-        if (g_markingTimes)
+        if (MarkingTimes())
         {
             Mark(this);
         }
@@ -230,7 +221,7 @@ class Time
     explicit inline Time(unsigned long int v)
         : m_data(v)
     {
-        if (g_markingTimes)
+        if (MarkingTimes())
         {
             Mark(this);
         }
@@ -239,7 +230,7 @@ class Time
     explicit inline Time(unsigned long long int v)
         : m_data(v)
     {
-        if (g_markingTimes)
+        if (MarkingTimes())
         {
             Mark(this);
         }
@@ -248,7 +239,7 @@ class Time
     explicit inline Time(const int64x64_t& v)
         : m_data(v.Round())
     {
-        if (g_markingTimes)
+        if (MarkingTimes())
         {
             Mark(this);
         }
@@ -275,14 +266,14 @@ class Time
      * and the unit. If the string only contains a number, it is treated as seconds.
      * Any otherwise malformed string causes a fatal error to occur.
      *
-     * \param [in] s The string to parse into a Time
+     * @param [in] s The string to parse into a Time
      */
     explicit Time(const std::string& s);
 
     /**
      * Minimum representable Time
      * Not to be confused with Min(Time,Time).
-     * \returns the minimum representable Time.
+     * @returns the minimum representable Time.
      */
     static Time Min()
     {
@@ -292,7 +283,7 @@ class Time
     /**
      * Maximum representable Time
      * Not to be confused with Max(Time,Time).
-     * \returns the maximum representable Time.
+     * @returns the maximum representable Time.
      */
     static Time Max()
     {
@@ -302,7 +293,7 @@ class Time
     /** Destructor */
     ~Time()
     {
-        if (g_markingTimes)
+        if (MarkingTimes())
         {
             Clear(this);
         }
@@ -310,7 +301,7 @@ class Time
 
     /**
      * Exactly equivalent to `t == 0`.
-     * \return \c true if the time is zero, \c false otherwise.
+     * @return \c true if the time is zero, \c false otherwise.
      */
     inline bool IsZero() const
     {
@@ -319,7 +310,7 @@ class Time
 
     /**
      * Exactly equivalent to `t <= 0`.
-     * \return \c true if the time is negative or zero, \c false otherwise.
+     * @return \c true if the time is negative or zero, \c false otherwise.
      */
     inline bool IsNegative() const
     {
@@ -328,7 +319,7 @@ class Time
 
     /**
      * Exactly equivalent to `t >= 0`.
-     * \return \c true if the time is positive or zero, \c false otherwise.
+     * @return \c true if the time is positive or zero, \c false otherwise.
      */
     inline bool IsPositive() const
     {
@@ -337,7 +328,7 @@ class Time
 
     /**
      * Exactly equivalent to `t < 0`.
-     * \return \c true if the time is strictly negative, \c false otherwise.
+     * @return \c true if the time is strictly negative, \c false otherwise.
      */
     inline bool IsStrictlyNegative() const
     {
@@ -346,7 +337,7 @@ class Time
 
     /**
      * Exactly equivalent to `t > 0`.
-     * \return \c true if the time is strictly positive, \c false otherwise.
+     * @return \c true if the time is strictly positive, \c false otherwise.
      */
     inline bool IsStrictlyPositive() const
     {
@@ -356,8 +347,8 @@ class Time
     /**
      *  Compare \pname{this} to another Time
      *
-     * \param [in] o The other Time
-     * \return -1,0,+1 if `this < o`, `this == o`, or `this > o`
+     * @param [in] o The other Time
+     * @return -1,0,+1 if `this < o`, `this == o`, or `this > o`
      */
     inline int Compare(const Time& o) const
     {
@@ -365,7 +356,7 @@ class Time
     }
 
     /**
-     * \name Convert to Number in a Unit
+     * @name Convert to Number in a Unit
      * Convert a Time to number, in indicated units.
      *
      * Conversions to seconds and larger will return doubles, with
@@ -378,7 +369,7 @@ class Time
      * Get an approximation of the time stored in this instance
      * in the indicated unit.
      *
-     * \return An approximate value in the indicated unit.
+     * @return An approximate value in the indicated unit.
      */
     inline double GetYears() const
     {
@@ -433,14 +424,14 @@ class Time
     /**@}*/ // Convert to Number in a Unit.
 
     /**
-     * \name Convert to Raw Value
+     * @name Convert to Raw Value
      * Convert a Time to a number in the current resolution units.
      *
      * @{
      */
     /**
      * Get the raw time value, in the current resolution unit.
-     * \returns The raw time value
+     * @returns The raw time value
      */
     inline int64_t GetTimeStep() const
     {
@@ -460,7 +451,7 @@ class Time
     /**@}*/ // Convert to Raw Value
 
     /**
-     * \param [in] resolution The new resolution to use
+     * @param [in] resolution The new resolution to use
      *
      * Change the global resolution used to convert all
      * user-provided time values in Time objects and Time objects
@@ -468,15 +459,15 @@ class Time
      */
     static void SetResolution(Unit resolution);
     /**
-     * \returns The current global resolution.
+     * @returns The current global resolution.
      */
     static Unit GetResolution();
 
     /**
      * Create a Time in the current unit.
      *
-     * \param [in] value The value of the new Time.
-     * \return A Time with \pname{value} in the current time unit.
+     * @param [in] value The value of the new Time.
+     * @return A Time with \pname{value} in the current time unit.
      */
     inline static Time From(const int64x64_t& value)
     {
@@ -484,7 +475,7 @@ class Time
     }
 
     /**
-     * \name Create Times from Values and Units
+     * @name Create Times from Values and Units
      * Create Times from values given in the indicated units.
      *
      * @{
@@ -492,12 +483,18 @@ class Time
     /**
      * Create a Time equal to \pname{value}  in unit \c unit
      *
-     * \param [in] value The new Time value, expressed in \c unit
-     * \param [in] unit The unit of \pname{value}
-     * \return The Time representing \pname{value} in \c unit
+     * @param [in] value The new Time value, expressed in \c unit
+     * @param [in] unit The unit of \pname{value}
+     * @return The Time representing \pname{value} in \c unit
      */
     inline static Time FromInteger(uint64_t value, Unit unit)
     {
+        // Optimization: if value is 0, don't process the unit
+        if (value == 0)
+        {
+            return Time();
+        }
+
         Information* info = PeekInformation(unit);
 
         NS_ASSERT_MSG(info->isValid, "Attempted a conversion from an unavailable unit.");
@@ -515,11 +512,23 @@ class Time
 
     inline static Time FromDouble(double value, Unit unit)
     {
+        // Optimization: if value is 0, don't process the unit nor cast to int64x64_t
+        if (value == 0)
+        {
+            return Time();
+        }
+
         return From(int64x64_t(value), unit);
     }
 
     inline static Time From(const int64x64_t& value, Unit unit)
     {
+        // Optimization: if value is 0, don't process the unit
+        if (value == 0)
+        {
+            return Time();
+        }
+
         Information* info = PeekInformation(unit);
 
         NS_ASSERT_MSG(info->isValid, "Attempted a conversion from an unavailable unit.");
@@ -541,7 +550,7 @@ class Time
     /**@}*/ // Create Times from Values and Units
 
     /**
-     * \name Get Times as Numbers in Specified Units
+     * @name Get Times as Numbers in Specified Units
      * Get the Time as integers or doubles in the indicated unit.
      *
      * @{
@@ -549,11 +558,17 @@ class Time
     /**
      * Get the Time value expressed in a particular unit.
      *
-     * \param [in] unit The desired unit
-     * \return The Time expressed in \pname{unit}
+     * @param [in] unit The desired unit
+     * @return The Time expressed in \pname{unit}
      */
     inline int64_t ToInteger(Unit unit) const
     {
+        // Optimization: if value is 0, don't process the unit
+        if (m_data == 0)
+        {
+            return 0;
+        }
+
         Information* info = PeekInformation(unit);
 
         NS_ASSERT_MSG(info->isValid, "Attempted a conversion to an unavailable unit.");
@@ -572,11 +587,23 @@ class Time
 
     inline double ToDouble(Unit unit) const
     {
+        // Optimization: if value is 0, don't process the unit nor cast from int64x64_t
+        if (m_data == 0)
+        {
+            return 0;
+        }
+
         return To(unit).GetDouble();
     }
 
     inline int64x64_t To(Unit unit) const
     {
+        // Optimization: if value is 0, don't process the unit
+        if (m_data == 0)
+        {
+            return 0;
+        }
+
         Information* info = PeekInformation(unit);
 
         NS_ASSERT_MSG(info->isValid, "Attempted a conversion to an unavailable unit.");
@@ -598,8 +625,8 @@ class Time
     /**
      * Round a Time to a specific unit.
      * Rounding is to nearest integer.
-     * \param [in] unit The unit to round to.
-     * \return The Time rounded to the specific unit.
+     * @param [in] unit The unit to round to.
+     * @return The Time rounded to the specific unit.
      */
     Time RoundTo(Unit unit) const
     {
@@ -610,21 +637,21 @@ class Time
      * Attach a unit to a Time, to facilitate output in a specific unit.
      *
      * For example,
-     * \code
+     * @code
      *   Time t (3.14e9);  // Pi seconds
      *   std::cout << t.As (Time::MS) << std::endl;
-     * \endcode
+     * @endcode
      * will print ``+3140.0ms``
      *
-     * \param [in] unit The unit to use.
-     * \return The Time with embedded unit.
+     * @param [in] unit The unit to use.
+     * @return The Time with embedded unit.
      */
     TimeWithUnit As(const Unit unit = Time::AUTO) const;
 
     /**
      * TracedCallback signature for Time
      *
-     * \param [in] value Current value of Time
+     * @param [in] value Current value of Time
      */
     typedef void (*TracedCallback)(Time value);
 
@@ -650,7 +677,7 @@ class Time
     /**
      *  Get the current Resolution
      *
-     *  \return A pointer to the current Resolution
+     *  @return A pointer to the current Resolution
      */
     static inline Resolution* PeekResolution()
     {
@@ -661,8 +688,8 @@ class Time
     /**
      *  Get the Information record for \pname{timeUnit} for the current Resolution
      *
-     *  \param [in] timeUnit The Unit to get Information for
-     *  \return The Information for \pname{timeUnit}
+     *  @param [in] timeUnit The Unit to get Information for
+     *  @return The Information for \pname{timeUnit}
      */
     static inline Information* PeekInformation(Unit timeUnit)
     {
@@ -672,15 +699,15 @@ class Time
     /**
      *  Set the default resolution
      *
-     *  \return The Resolution object for the default resolution.
+     *  @return The Resolution object for the default resolution.
      */
     static Resolution& SetDefaultNsResolution();
     /**
      *  Set the current Resolution.
      *
-     *  \param [in] unit The unit to use as the new resolution.
-     *  \param [in,out] resolution The Resolution record to update.
-     *  \param [in] convert Whether to convert existing Time objects to the new resolution.
+     *  @param [in] unit The unit to use as the new resolution.
+     *  @param [in,out] resolution The Resolution record to update.
+     *  @param [in] convert Whether to convert existing Time objects to the new resolution.
      */
     static void SetResolution(Unit unit, Resolution* resolution, const bool convert = true);
 
@@ -688,7 +715,7 @@ class Time
      *  Record all instances of Time, so we can rescale them when
      *  the resolution changes.
      *
-     *  \internal
+     *  @internal
      *
      *  We use a std::set so we can remove the record easily when
      *  ~Time() is called.
@@ -709,7 +736,7 @@ class Time
      *  Record of outstanding Time objects which will need conversion
      *  when the resolution is set.
      *
-     *  \internal
+     *  @internal
      *
      *  Use a classic static variable so we can check in Time ctors
      *  without a function call.
@@ -721,52 +748,67 @@ class Time
      */
     static MarkedTimes* g_markingTimes;
 
+    /**
+     *  Null check for g_markingTimes from outside time.cc
+     *
+     *  @return \c true if g_markingTimes is not null
+     *
+     *  @internal
+     *
+     *  The inline Time ctors need to check if g_markingTimes is allocated
+     *  before calling Mark(). Likewise, the dtor also needs to check before
+     *  calling Clear(). On Windows, attempting to access g_markingTimes
+     *  directly from outside the compilation unit is an access violation so
+     *  this method is provided to work around that limitation.
+     */
+    static bool MarkingTimes();
+
   public:
     /**
      *  Function to force static initialization of Time.
      *
-     * \return \c true on the first call
+     * @return \c true on the first call
      */
     static bool StaticInit();
 
   private:
     /**
-     * \cond HIDE_FROM_DOXYGEN
+     * @cond HIDE_FROM_DOXYGEN
      * Doxygen bug throws a warning here, so hide from Doxygen.
      *
      * Friend the Simulator class so it can call the private function
      * ClearMarkedTimes ()
      */
     friend class Simulator;
-    /** \endcond */
+    /** @endcond */
 
     /**
      *  Remove all MarkedTimes.
      *
-     *  \internal
+     *  @internal
      *  Has to be visible to the Simulator class, hence the friending.
      */
     static void ClearMarkedTimes();
     /**
      *  Record a Time instance with the MarkedTimes.
-     *  \param [in] time The Time instance to record.
+     *  @param [in] time The Time instance to record.
      */
     static void Mark(Time* const time);
     /**
      *  Remove a Time instance from the MarkedTimes, called by ~Time().
-     *  \param [in] time The Time instance to remove.
+     *  @param [in] time The Time instance to remove.
      */
     static void Clear(Time* const time);
     /**
      *  Convert existing Times to the new unit.
-     *  \param [in] unit The Unit to convert existing Times to.
+     *  @param [in] unit The Unit to convert existing Times to.
      */
     static void ConvertTimes(const Unit unit);
 
     // Operator and related functions which need access
 
     /**
-     * \name Comparison operators
+     * @name Comparison operators
      * @{
      */
     friend bool operator==(const Time& lhs, const Time& rhs);
@@ -779,7 +821,7 @@ class Time
     /**@}*/ // Comparison operators
 
     /**
-     * \name Arithmetic operators
+     * @name Arithmetic operators
      * @{
      */
     friend Time operator+(const Time& lhs, const Time& rhs);
@@ -816,7 +858,7 @@ class Time
     friend std::enable_if_t<std::is_floating_point_v<T>, Time> operator/(const Time& lhs, T rhs);
 
     /**
-     * \name Compound assignment operators
+     * @name Compound assignment operators
      * @{
      */
     friend Time& operator+=(Time& lhs, const Time& rhs);
@@ -825,7 +867,8 @@ class Time
 
     int64_t m_data; //!< Virtual time value, in the current unit.
 
-}; // class Time
+    // end of class Time
+};
 
 namespace TracedValueCallback
 {
@@ -833,18 +876,25 @@ namespace TracedValueCallback
 /**
  * TracedValue callback signature for Time
  *
- * \param [in] oldValue Original value of the traced variable
- * \param [in] newValue New value of the traced variable
+ * @param [in] oldValue Original value of the traced variable
+ * @param [in] newValue New value of the traced variable
  */
 typedef void (*Time)(Time oldValue, Time newValue);
 
 } // namespace TracedValueCallback
 
 /**
+ * Force static initialization order of Time in each compilation unit.
+ * This is internal to the Time implementation.
+ * @relates Time
+ */
+static bool g_TimeStaticInit [[maybe_unused]] = Time::StaticInit();
+
+/**
  * Equality operator for Time.
- * \param [in] lhs The first value
- * \param [in] rhs The second value
- * \returns \c true if the two input values are equal.
+ * @param [in] lhs The first value
+ * @param [in] rhs The second value
+ * @returns \c true if the two input values are equal.
  */
 inline bool
 operator==(const Time& lhs, const Time& rhs)
@@ -854,9 +904,9 @@ operator==(const Time& lhs, const Time& rhs)
 
 /**
  * Inequality operator for Time.
- * \param [in] lhs The first value
- * \param [in] rhs The second value
- * \returns \c true if the two input values not are equal.
+ * @param [in] lhs The first value
+ * @param [in] rhs The second value
+ * @returns \c true if the two input values not are equal.
  */
 inline bool
 operator!=(const Time& lhs, const Time& rhs)
@@ -866,9 +916,9 @@ operator!=(const Time& lhs, const Time& rhs)
 
 /**
  * Less than or equal operator for Time.
- * \param [in] lhs The first value
- * \param [in] rhs The second value
- * \returns \c true if the first input value is less than or equal to the second input value.
+ * @param [in] lhs The first value
+ * @param [in] rhs The second value
+ * @returns \c true if the first input value is less than or equal to the second input value.
  */
 inline bool
 operator<=(const Time& lhs, const Time& rhs)
@@ -878,9 +928,9 @@ operator<=(const Time& lhs, const Time& rhs)
 
 /**
  * Greater than or equal operator for Time.
- * \param [in] lhs The first value
- * \param [in] rhs The second value
- * \returns \c true if the first input value is greater than or equal to the second input value.
+ * @param [in] lhs The first value
+ * @param [in] rhs The second value
+ * @returns \c true if the first input value is greater than or equal to the second input value.
  */
 inline bool
 operator>=(const Time& lhs, const Time& rhs)
@@ -890,9 +940,9 @@ operator>=(const Time& lhs, const Time& rhs)
 
 /**
  * Less than operator for Time.
- * \param [in] lhs The first value
- * \param [in] rhs The second value
- * \returns \c true if the first input value is less than the second input value.
+ * @param [in] lhs The first value
+ * @param [in] rhs The second value
+ * @returns \c true if the first input value is less than the second input value.
  */
 inline bool
 operator<(const Time& lhs, const Time& rhs)
@@ -902,9 +952,9 @@ operator<(const Time& lhs, const Time& rhs)
 
 /**
  * Greater than operator for Time.
- * \param [in] lhs The first value
- * \param [in] rhs The second value
- * \returns \c true if the first input value is greater than the second input value.
+ * @param [in] lhs The first value
+ * @param [in] rhs The second value
+ * @returns \c true if the first input value is greater than the second input value.
  */
 inline bool
 operator>(const Time& lhs, const Time& rhs)
@@ -924,9 +974,9 @@ operator>(const Time& lhs, const Time& rhs)
  *
  *     if (when < m_event) ...
  *
- * \param [in] time The Time operand.
- * \param [in] event The EventId
- * \returns \c true if \p time is before (less than) the
+ * @param [in] time The Time operand.
+ * @param [in] event The EventId
+ * @returns \c true if \p time is before (less than) the
  *          time stamp of the EventId.
  */
 inline bool
@@ -943,9 +993,9 @@ operator<(const Time& time, const EventId& event)
 
 /**
  * Addition operator for Time.
- * \param [in] lhs The first value
- * \param [in] rhs The second value
- * \returns The sum of the two input values.
+ * @param [in] lhs The first value
+ * @param [in] rhs The second value
+ * @returns The sum of the two input values.
  */
 inline Time
 operator+(const Time& lhs, const Time& rhs)
@@ -955,9 +1005,9 @@ operator+(const Time& lhs, const Time& rhs)
 
 /**
  * Subtraction operator for Time.
- * \param [in] lhs The first value
- * \param [in] rhs The second value
- * \returns The difference of the two input values.
+ * @param [in] lhs The first value
+ * @param [in] rhs The second value
+ * @returns The difference of the two input values.
  */
 inline Time
 operator-(const Time& lhs, const Time& rhs)
@@ -967,9 +1017,9 @@ operator-(const Time& lhs, const Time& rhs)
 
 /**
  * Scale a Time by a numeric value.
- * \param [in] lhs The first value
- * \param [in] rhs The second value
- * \returns The Time scaled by the other operand.
+ * @param [in] lhs The first value
+ * @param [in] rhs The second value
+ * @returns The Time scaled by the other operand.
  */
 inline Time
 operator*(const Time& lhs, const int64x64_t& rhs)
@@ -981,9 +1031,9 @@ operator*(const Time& lhs, const int64x64_t& rhs)
 
 /**
  * Scale a Time by a numeric value.
- * \param [in] lhs The first value
- * \param [in] rhs The second value
- * \returns The Time scaled by the other operand.
+ * @param [in] lhs The first value
+ * @param [in] rhs The second value
+ * @returns The Time scaled by the other operand.
  */
 inline Time
 operator*(const int64x64_t& lhs, const Time& rhs)
@@ -994,11 +1044,11 @@ operator*(const int64x64_t& lhs, const Time& rhs)
 /**
  * Scale a Time by an integer value.
  *
- * \tparam T Integer data type (int, long, etc.)
+ * @tparam T Integer data type (int, long, etc.)
  *
- * \param [in] lhs The Time instance to scale
- * \param [in] rhs The scale value
- * \returns A new Time instance containing the scaled value
+ * @param [in] lhs The Time instance to scale
+ * @param [in] rhs The scale value
+ * @returns A new Time instance containing the scaled value
  */
 template <class T>
 std::enable_if_t<std::is_integral_v<T>, Time>
@@ -1024,11 +1074,11 @@ operator*(const Time& lhs, T rhs)
  * value.  It swaps the arguments so that the Time argument comes first
  * and calls the appropriate overload of operator*
  *
- * \tparam T Arithmetic data type (int, long, float, etc.)
+ * @tparam T Arithmetic data type (int, long, float, etc.)
  *
- * \param [in] lhs The scale value
- * \param [in] rhs The Time instance to scale
- * \returns A new Time instance containing the scaled value
+ * @param [in] lhs The scale value
+ * @param [in] rhs The Time instance to scale
+ * @returns A new Time instance containing the scaled value
  */
 template <class T>
 std::enable_if_t<std::is_arithmetic_v<T>, Time>
@@ -1043,17 +1093,17 @@ operator*(T lhs, const Time& rhs)
  * This can be truncated to integer, or converted to double
  * (with loss of precision).  Assuming `ta` and `tb` are Times:
  *
- * \code
+ * @code
  *     int64x64_t ratio = ta / tb;
  *
  *     int64_t i = ratio.GetHigh ();      // Get just the integer part, resulting in truncation
  *
  *     double ratioD = double (ratio);    // Convert to double, with loss of precision
- * \endcode
+ * @endcode
  *
- * \param [in] lhs The first value
- * \param [in] rhs The second value
- * \returns The exact ratio of the two operands.
+ * @param [in] lhs The first value
+ * @param [in] rhs The second value
+ * @returns The exact ratio of the two operands.
  */
 inline int64x64_t
 operator/(const Time& lhs, const Time& rhs)
@@ -1065,9 +1115,9 @@ operator/(const Time& lhs, const Time& rhs)
 
 /**
  * Scale a Time by a numeric value.
- * \param [in] lhs The first value
- * \param [in] rhs The second value
- * \returns The Time divided by the scalar operand.
+ * @param [in] lhs The first value
+ * @param [in] rhs The second value
+ * @returns The Time divided by the scalar operand.
  */
 inline Time
 operator/(const Time& lhs, const int64x64_t& rhs)
@@ -1080,11 +1130,11 @@ operator/(const Time& lhs, const int64x64_t& rhs)
 /**
  * Divide a Time by an integer value.
  *
- * \tparam T Integer data type (int, long, etc.)
+ * @tparam T Integer data type (int, long, etc.)
  *
- * \param [in] lhs The Time instance to scale
- * \param [in] rhs The scale value
- * \returns A new Time instance containing the scaled value
+ * @param [in] lhs The Time instance to scale
+ * @param [in] rhs The scale value
+ * @returns A new Time instance containing the scaled value
  */
 template <class T>
 std::enable_if_t<std::is_integral_v<T>, Time>
@@ -1110,10 +1160,10 @@ operator/(const Time& lhs, T rhs)
  *
  *     Rem (ta, tb)  ==  ta % tb;
  *
- * \see Div()
- * \param [in] lhs The first time value
- * \param [in] rhs The second time value
- * \returns The remainder of `lhs / rhs`.
+ * @see Div()
+ * @param [in] lhs The first time value
+ * @param [in] rhs The second time value
+ * @returns The remainder of `lhs / rhs`.
  * @{
  */
 inline Time
@@ -1138,17 +1188,17 @@ Rem(const Time& lhs, const Time& rhs)
  *
  * As usual, if `ta`, and `tb` are both Times
  *
- * \code
+ * @code
  *     ta  ==  tb * Div (ta, tb) + Rem (ta, tb);
  *
  *     ta  ==  tb * (ta / tb).GetHigh()  + ta % tb;
- * \endcode
+ * @endcode
  *
- * \param [in] lhs The first value
- * \param [in] rhs The second value
- * \returns The integer portion of `lhs / rhs`.
+ * @param [in] lhs The first value
+ * @param [in] rhs The second value
+ * @returns The integer portion of `lhs / rhs`.
  *
- * \see Rem()
+ * @see Rem()
  */
 inline int64_t
 Div(const Time& lhs, const Time& rhs)
@@ -1158,9 +1208,9 @@ Div(const Time& lhs, const Time& rhs)
 
 /**
  * Compound addition assignment for Time.
- * \param [in] lhs The first value
- * \param [in] rhs The second value
- * \returns The sum of the two inputs.
+ * @param [in] lhs The first value
+ * @param [in] rhs The second value
+ * @returns The sum of the two inputs.
  */
 inline Time&
 operator+=(Time& lhs, const Time& rhs)
@@ -1171,9 +1221,9 @@ operator+=(Time& lhs, const Time& rhs)
 
 /**
  * Compound subtraction assignment for Time.
- * \param [in] lhs The first value
- * \param [in] rhs The second value
- * \returns The difference of the two operands.
+ * @param [in] lhs The first value
+ * @param [in] rhs The second value
+ * @returns The difference of the two operands.
  */
 inline Time&
 operator-=(Time& lhs, const Time& rhs)
@@ -1184,8 +1234,8 @@ operator-=(Time& lhs, const Time& rhs)
 
 /**
  * Absolute value for Time.
- * \param [in] time The Time value
- * \returns The absolute value of the input.
+ * @param [in] time The Time value
+ * @returns The absolute value of the input.
  */
 inline Time
 Abs(const Time& time)
@@ -1195,9 +1245,9 @@ Abs(const Time& time)
 
 /**
  * Maximum of two Times.
- * \param [in] timeA The first value
- * \param [in] timeB The second value
- * \returns The larger of the two operands.
+ * @param [in] timeA The first value
+ * @param [in] timeB The second value
+ * @returns The larger of the two operands.
  */
 inline Time
 Max(const Time& timeA, const Time& timeB)
@@ -1207,9 +1257,9 @@ Max(const Time& timeA, const Time& timeB)
 
 /**
  * Minimum of two Times.
- * \param [in] timeA The first value
- * \param [in] timeB The second value
- * \returns The smaller of the two operands.
+ * @param [in] timeA The first value
+ * @param [in] timeB The second value
+ * @returns The smaller of the two operands.
  */
 inline Time
 Min(const Time& timeA, const Time& timeB)
@@ -1231,11 +1281,11 @@ Min(const Time& timeA, const Time& timeB)
  * The stream `width` and `precision` are ignored; Time output always
  * includes ".0".
  *
- * \see As() for more flexible output formatting.
+ * @see As() for more flexible output formatting.
  *
- * \param [in,out] os The output stream.
- * \param [in] time The Time to put on the stream.
- * \return The stream.
+ * @param [in,out] os The output stream.
+ * @param [in] time The Time to put on the stream.
+ * @return The stream.
  */
 std::ostream& operator<<(std::ostream& os, const Time& time);
 /**
@@ -1243,28 +1293,28 @@ std::ostream& operator<<(std::ostream& os, const Time& time);
  *
  * Uses the Time(const std::string &) constructor
  *
- * \param [in,out] is The input stream.
- * \param [out] time The Time variable to set from the stream data.
- * \return The stream.
+ * @param [in,out] is The input stream.
+ * @param [out] time The Time variable to set from the stream data.
+ * @return The stream.
  */
 std::istream& operator>>(std::istream& is, Time& time);
 
 /**
- * \ingroup time
- * \defgroup timecivil Standard Time Units.
+ * @ingroup time
+ * @defgroup timecivil Standard Time Units.
  * Convenience constructors in standard units.
  *
  * For example:
- * \code
+ * @code
  *   Time t = Seconds (2.0);
  *   Simulator::Schedule (Seconds (5.0), ...);
- * \endcode
+ * @endcode
  */
 /**
- * \ingroup timecivil
+ * @ingroup timecivil
  * Construct a Time in the indicated unit.
- * \param [in] value The value
- * \return The Time
+ * @param [in] value The value
+ * @return The Time
  * @{
  */
 inline Time
@@ -1392,10 +1442,10 @@ FemtoSeconds(int64x64_t value)
 /**
  * Scheduler interface.
  *
- * \note This is internal to the Time implementation.
- * \param [in] ts The time value, in the current unit.
- * \return A Time.
- * \relates Time
+ * @note This is internal to the Time implementation.
+ * @param [in] ts The time value, in the current unit.
+ * @return A Time.
+ * @relates Time
  */
 inline Time
 TimeStep(uint64_t ts)
@@ -1407,21 +1457,21 @@ ATTRIBUTE_VALUE_DEFINE(Time);
 ATTRIBUTE_ACCESSOR_DEFINE(Time);
 
 /**
- * \ingroup attribute_Time
+ * @ingroup attribute_Time
  * Helper to make a Time checker with bounded range.
  * Both limits are inclusive
  *
- * \param [in] min Minimum allowed value.
- * \param [in] max Maximum allowed value.
- * \return The AttributeChecker
+ * @param [in] min Minimum allowed value.
+ * @param [in] max Maximum allowed value.
+ * @return The AttributeChecker
  */
 Ptr<const AttributeChecker> MakeTimeChecker(const Time min, const Time max);
 
 /**
- * \ingroup attribute_Time
+ * @ingroup attribute_Time
  * Helper to make an unbounded Time checker.
  *
- * \return The AttributeChecker
+ * @return The AttributeChecker
  */
 inline Ptr<const AttributeChecker>
 MakeTimeChecker()
@@ -1430,11 +1480,11 @@ MakeTimeChecker()
 }
 
 /**
- * \ingroup attribute_Time
+ * @ingroup attribute_Time
  * Helper to make a Time checker with a lower bound.
  *
- * \param [in] min Minimum allowed value.
- * \return The AttributeChecker
+ * @param [in] min Minimum allowed value.
+ * @return The AttributeChecker
  */
 inline Ptr<const AttributeChecker>
 MakeTimeChecker(const Time min)
@@ -1443,7 +1493,7 @@ MakeTimeChecker(const Time min)
 }
 
 /**
- * \ingroup time
+ * @ingroup time
  * A Time with attached unit, to facilitate output in that unit.
  */
 class TimeWithUnit
@@ -1452,8 +1502,8 @@ class TimeWithUnit
     /**
      * Attach a unit to a Time
      *
-     * \param [in] time The time.
-     * \param [in] unit The unit to use for output
+     * @param [in] time The time.
+     * @param [in] unit The unit to use for output
      */
     TimeWithUnit(const Time time, const Time::Unit unit)
         : m_time(time),
@@ -1467,42 +1517,22 @@ class TimeWithUnit
 
     /**
      * Output streamer
-     * \param [in,out] os The stream.
-     * \param [in] timeU The Time with desired unit
-     * \returns The stream.
+     * @param [in,out] os The stream.
+     * @param [in] timeU The Time with desired unit
+     * @returns The stream.
      */
     friend std::ostream& operator<<(std::ostream& os, const TimeWithUnit& timeU);
 
-}; // class TimeWithUnit
-
-/**
- * \ingroup time
- *
- * ns3::TypeNameGet<Time>() specialization.
- * \returns The type name as a string.
- */
-TYPENAMEGET_DEFINE(Time);
-
-/**
- * \ingroup time
- *
- * \brief Helper class to force static initialization
- * of Time in each compilation unit, ensuring it is
- * initialized before usage.
- * This is internal to the Time implementation.
- * \relates Time
- */
-class TimeInitializationHelper
-{
-  public:
-    /** Default constructor calls Time::StaticInit */
-    TimeInitializationHelper()
-    {
-        Time::StaticInit();
-    }
+    // end of class TimeWithUnit
 };
 
-static TimeInitializationHelper g_timeInitHelper; ///< Instance of Time static initialization helper
+/**
+ * @ingroup time
+ *
+ * ns3::TypeNameGet<Time>() specialization.
+ * @returns The type name as a string.
+ */
+TYPENAMEGET_DEFINE(Time);
 
 } // namespace ns3
 

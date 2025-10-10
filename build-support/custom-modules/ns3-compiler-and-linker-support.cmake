@@ -1,17 +1,6 @@
 # Copyright (c) 2023 Universidade de Brasília
 #
-# This program is free software; you can redistribute it and/or modify it under
-# the terms of the GNU General Public License version 2 as published by the Free
-# Software Foundation;
-#
-# This program is distributed in the hope that it will be useful, but WITHOUT
-# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-# FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
-# details.
-#
-# You should have received a copy of the GNU General Public License along with
-# this program; if not, write to the Free Software Foundation, Inc., 59 Temple
-# Place, Suite 330, Boston, MA  02111-1307 USA
+# SPDX-License-Identifier: GPL-2.0-only
 #
 # Author: Gabriel Ferreira <gabrielcarvfer@gmail.com>
 
@@ -43,6 +32,10 @@ endif()
 if(CLANG)
   if(${NS3_COLORED_OUTPUT} OR "$ENV{CLICOLOR}")
     add_definitions(-fcolor-diagnostics) # colorize clang++ output
+  endif()
+  if("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "aarch64")
+    # see https://gitlab.com/nsnam/ns-3-dev/-/issues/932
+    add_compile_definitions(NVALGRIND)
   endif()
 endif()
 
@@ -116,7 +109,7 @@ if(${CLANG} AND APPLE)
   set(STATIC_LINK_FLAGS "")
 endif()
 
-if(${NS3_FAST_LINKERS})
+if(${NS3_FAST_LINKERS} AND (NOT ${MSVC}))
   # Search for faster linkers mold and lld, and use them if available
   mark_as_advanced(MOLD LLD)
   find_program(MOLD mold)

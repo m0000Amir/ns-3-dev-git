@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2013 Natale Patriciello <natale.patriciello@gmail.com>
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  */
 
@@ -28,9 +17,9 @@ using namespace ns3;
 NS_LOG_COMPONENT_DEFINE("TimestampTestSuite");
 
 /**
- * \ingroup internet-test
+ * @ingroup internet-test
  *
- * \brief TCP TimeStamp enabling Test.
+ * @brief TCP TimeStamp enabling Test.
  */
 class TimestampTestCase : public TcpGeneralTest
 {
@@ -47,8 +36,8 @@ class TimestampTestCase : public TcpGeneralTest
     };
 
     /**
-     * \brief Constructor.
-     * \param conf Test configuration.
+     * @brief Constructor.
+     * @param conf Test configuration.
      */
     TimestampTestCase(TimestampTestCase::Configuration conf);
 
@@ -202,18 +191,18 @@ TimestampTestCase::Rx(const Ptr<const Packet> p, const TcpHeader& h, SocketWho w
 }
 
 /**
- * \ingroup internet-test
+ * @ingroup internet-test
  *
- * \brief TCP TimeStamp values Test.
+ * @brief TCP TimeStamp values Test.
  */
 class TimestampValueTestCase : public TestCase
 {
   public:
     /**
-     * \brief Constructor.
-     * \param startTime Start time (Seconds).
-     * \param timeToWait Time to wait (Seconds).
-     * \param name Test description.
+     * @brief Constructor.
+     * @param startTime Start time (Seconds).
+     * @param timeToWait Time to wait (Seconds).
+     * @param name Test description.
      */
     TimestampValueTestCase(double startTime, double timeToWait, std::string name);
 
@@ -222,11 +211,11 @@ class TimestampValueTestCase : public TestCase
     void DoTeardown() override;
 
     /**
-     * \brief Perform the test checks.
+     * @brief Perform the test checks.
      */
     void Check();
     /**
-     * \brief Test initialization.
+     * @brief Test initialization.
      */
     void Init();
 
@@ -282,9 +271,9 @@ TimestampValueTestCase::Check()
 }
 
 /**
- * \ingroup internet-test
+ * @ingroup internet-test
  *
- * \brief TCP TimeStamp TestSuite.
+ * @brief TCP TimeStamp TestSuite.
  */
 class TcpTimestampTestSuite : public TestSuite
 {

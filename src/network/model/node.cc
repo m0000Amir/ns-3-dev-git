@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2006 Georgia Tech Research Corporation, INRIA
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Authors: George F. Riley<riley@ece.gatech.edu>
  *          Mathieu Lacage <mathieu.lacage@sophia.inria.fr>
@@ -41,9 +30,9 @@ NS_LOG_COMPONENT_DEFINE("Node");
 NS_OBJECT_ENSURE_REGISTERED(Node);
 
 /**
- * \relates Node
- * \anchor GlobalValueChecksumEnabled
- * \brief A global switch to enable all checksums for all protocols.
+ * @relates Node
+ * @anchor GlobalValueChecksumEnabled
+ * @brief A global switch to enable all checksums for all protocols.
  */
 static GlobalValue g_checksumEnabled =
     GlobalValue("ChecksumEnabled",
@@ -140,7 +129,7 @@ Node::AddDevice(Ptr<NetDevice> device)
     device->SetNode(this);
     device->SetIfIndex(index);
     device->SetReceiveCallback(MakeCallback(&Node::NonPromiscReceiveFromDevice, this));
-    Simulator::ScheduleWithContext(GetId(), Seconds(0.0), &NetDevice::Initialize, device);
+    Simulator::ScheduleWithContext(GetId(), Seconds(0), &NetDevice::Initialize, device);
     NotifyDeviceAdded(device);
     return index;
 }
@@ -167,7 +156,7 @@ Node::AddApplication(Ptr<Application> application)
     uint32_t index = m_applications.size();
     m_applications.push_back(application);
     application->SetNode(this);
-    Simulator::ScheduleWithContext(GetId(), Seconds(0.0), &Application::Initialize, application);
+    Simulator::ScheduleWithContext(GetId(), Seconds(0), &Application::Initialize, application);
     return index;
 }
 

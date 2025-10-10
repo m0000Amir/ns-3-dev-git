@@ -2,19 +2,25 @@ set(emu_sources)
 set(emu_headers)
 set(emu_features)
 set(emu_libraries)
-if(${ENABLE_EMU})
-  set(emu_sources
-      helper/emu-epc-helper.cc
+if(DEFINED
+   ENABLE_EMUNETDEV
+)
+  if(${ENABLE_EMU}
+     AND ${ENABLE_EMUNETDEV}
   )
-  set(emu_headers
-      helper/emu-epc-helper.h
-  )
-  set(emu_features
-      EmuFdNetDevice
-  )
-  set(emu_libraries
-      ${libfd-net-device}
-  )
+    set(emu_sources
+        helper/emu-epc-helper.cc
+    )
+    set(emu_headers
+        helper/emu-epc-helper.h
+    )
+    set(emu_features
+        EmuFdNetDevice
+    )
+    set(emu_libraries
+        ${libfd-net-device}
+    )
+  endif()
 endif()
 
 set(source_files
@@ -358,4 +364,5 @@ build_lib(
     ${libconfig-store}
   TEST_SOURCES ${test_sources}
   MODULE_ENABLED_FEATURES ${emu_features}
+  GENERATE_EXPORT_HEADER
 )

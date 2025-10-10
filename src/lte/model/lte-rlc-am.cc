@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2011 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Author: Manuel Requena <manuel.requena@cttc.es>
  *         Nicola Baldo <nbaldo@cttc.es>
@@ -1023,7 +1012,7 @@ LteRlcAm::DoReceivePdu(LteMacSapUser::ReceivePduParameters rxPduParams)
             NS_LOG_LOGIC("Reordering timer is running");
             if ((m_vrX == m_vrR) || ((!IsInsideReceivingWindow(m_vrX)) && (m_vrX != m_vrMr)))
             {
-                /// \todo stop and reset the t-Reordering
+                /// @todo stop and reset the t-Reordering
                 NS_LOG_LOGIC("Stop reordering timer");
                 m_reorderingTimer.Cancel();
             }
@@ -1070,6 +1059,7 @@ LteRlcAm::DoReceivePdu(LteMacSapUser::ReceivePduParameters rxPduParams)
 
         bool incrementVtA = true;
 
+        // Loop over SN : VT(A) <= SN < ACK SN
         for (sn = m_vtA; sn < ackSn && sn < m_vtS; sn++)
         {
             NS_LOG_LOGIC("sn = " << sn);
@@ -1145,8 +1135,7 @@ LteRlcAm::DoReceivePdu(LteMacSapUser::ReceivePduParameters rxPduParams)
                 ackSn.SetModulusBase(m_vtA);
                 sn.SetModulusBase(m_vtA);
             }
-
-        } // loop over SN : VT(A) <= SN < ACK SN
+        }
 
         return;
     }
@@ -1230,7 +1219,7 @@ LteRlcAm::ReassembleAndDeliver(Ptr<Packet> packet)
             {
                 NS_LOG_LOGIC("INTERNAL ERROR: Not enough data in the packet ("
                              << packet->GetSize() << "). Needed LI=" << lengthIndicator);
-                /// \todo What to do in this case? Discard packet and continue? Or Assert?
+                /// @todo What to do in this case? Discard packet and continue? Or Assert?
             }
 
             // Split packet in two fragments

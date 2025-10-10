@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2021 2020 Universita' degli Studi di Napoli Federico II
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Author: Stefano Avallone <stavallo@unina.it>
  */
@@ -40,8 +29,8 @@ using namespace ns3;
 NS_LOG_COMPONENT_DEFINE("WifiChannelSwitchingTest");
 
 /**
- * \ingroup wifi-test
- * \ingroup tests
+ * @ingroup wifi-test
+ * @ingroup tests
  *
  * This test verifies that communication between an AP and a STA resumes
  * after that both switch channel and PHY band. The channel switch is
@@ -53,7 +42,7 @@ class WifiChannelSwitchingTest : public TestCase
 {
   public:
     /**
-     * \brief Constructor
+     * @brief Constructor
      */
     WifiChannelSwitchingTest();
     ~WifiChannelSwitchingTest() override;
@@ -64,23 +53,23 @@ class WifiChannelSwitchingTest : public TestCase
      * Callback invoked when a station associates with an AP. Tracks the number of
      * times the association procedure is performed.
      *
-     * \param bssid the BSSID
+     * @param bssid the BSSID
      */
     void Associated(Mac48Address bssid);
     /**
      * Callback invoked when PHY receives a PSDU to transmit from the MAC. Tracks the
      * number of times a QoS data frame is transmitted by the STA.
      *
-     * \param psduMap the PSDU map
-     * \param txVector the TX vector
-     * \param txPowerW the tx power in Watts
+     * @param psduMap the PSDU map
+     * @param txVector the TX vector
+     * @param txPowerW the tx power in Watts
      */
     void Transmit(WifiConstPsduMap psduMap, WifiTxVector txVector, double txPowerW);
     /**
      * Function to trace packets received by the server application
      *
-     * \param p the packet
-     * \param addr the address
+     * @param p the packet
+     * @param addr the address
      */
     void L7Receive(Ptr<const Packet> p, const Address& addr);
     /**
@@ -94,10 +83,10 @@ class WifiChannelSwitchingTest : public TestCase
     /**
      * Callback invoked when the PHY on the given node changes state.
      *
-     * \param nodeId the given node ID
-     * \param start the time state changes
-     * \param duration the time the PHY will stay in the new state
-     * \param state the new PHY state
+     * @param nodeId the given node ID
+     * @param start the time state changes
+     * @param duration the time the PHY will stay in the new state
+     * @param state the new PHY state
      */
     void StateChange(uint32_t nodeId, Time start, Time duration, WifiPhyState state);
 
@@ -188,13 +177,13 @@ WifiChannelSwitchingTest::SendPacket()
     client->SetRemote(socket);
     m_staNode.Get(0)->AddApplication(client);
     client->SetStartTime(Seconds(0.5));
-    client->SetStopTime(Seconds(1.0));
+    client->SetStopTime(Seconds(1));
 
     auto server = CreateObject<PacketSocketServer>();
     server->SetLocal(socket);
     m_apNode.Get(0)->AddApplication(server);
-    server->SetStartTime(Seconds(0.0));
-    server->SetStopTime(Seconds(1.0));
+    server->SetStartTime(Seconds(0));
+    server->SetStopTime(Seconds(1));
 }
 
 void
@@ -220,8 +209,6 @@ WifiChannelSwitchingTest::StateChange(uint32_t nodeId,
 void
 WifiChannelSwitchingTest::DoRun()
 {
-    Time simulationTime(Seconds(6.0));
-
     RngSeedManager::SetSeed(1);
     RngSeedManager::SetRun(40);
     int64_t streamNumber = 100;
@@ -303,10 +290,10 @@ WifiChannelSwitchingTest::DoRun()
 }
 
 /**
- * \ingroup wifi-test
- * \ingroup tests
+ * @ingroup wifi-test
+ * @ingroup tests
  *
- * \brief Block Ack Test Suite
+ * @brief Block Ack Test Suite
  */
 class WifiChannelSwitchingTestSuite : public TestSuite
 {

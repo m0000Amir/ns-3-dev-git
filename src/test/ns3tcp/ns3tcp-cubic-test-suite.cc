@@ -3,18 +3,7 @@
  * Copyright (c) 2018-20 NITK Surathkal (topology setup)
  * Copyright (c) 2024 Tom Henderson (test definition)
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  */
 
 // Test suite based on tcp-bbr-example.cc modified topology setup:
@@ -78,13 +67,13 @@ static constexpr bool WRITE_PCAP = false;    //!< Set to true to write out pcap.
 static constexpr bool WRITE_GNUPLOT = false; //!< Set to true to write out gnuplot.
 
 /**
- * \ingroup system-tests-tcp
+ * @ingroup system-tests-tcp
  *
  * Add sample trace values to data structures
- * \param gnuplotTimeSeries Gnuplot data structure
- * \param timeSeries time series of cwnd changes
- * \param oldval old value of cwnd
- * \param newval new value of cwnd
+ * @param gnuplotTimeSeries Gnuplot data structure
+ * @param timeSeries time series of cwnd changes
+ * @param oldval old value of cwnd
+ * @param newval new value of cwnd
  */
 void
 CubicCwndTracer(Gnuplot2dDataset* gnuplotTimeSeries,
@@ -99,7 +88,7 @@ CubicCwndTracer(Gnuplot2dDataset* gnuplotTimeSeries,
 }
 
 /**
- * \ingroup system-tests-tcp
+ * @ingroup system-tests-tcp
  * Test Cubic response
  */
 class Ns3TcpCubicTestCase : public TestCase
@@ -108,12 +97,12 @@ class Ns3TcpCubicTestCase : public TestCase
     /**
      * Constructor.
      *
-     * \param testCase testcase name
-     * \param prefix filename prefix if writing output files
-     * \param fastConvergence whether to enable fast convergence
-     * \param tcpFriendliness whether to enable TCP friendliness
-     * \param baseRtt base RTT to use for test case
-     * \param capacityIncrease whether to trigger a sudden capacity increase
+     * @param testCase testcase name
+     * @param prefix filename prefix if writing output files
+     * @param fastConvergence whether to enable fast convergence
+     * @param tcpFriendliness whether to enable TCP friendliness
+     * @param baseRtt base RTT to use for test case
+     * @param capacityIncrease whether to trigger a sudden capacity increase
      */
     Ns3TcpCubicTestCase(std::string testCase,
                         std::string prefix,
@@ -129,24 +118,24 @@ class Ns3TcpCubicTestCase : public TestCase
     /**
      * Connect TCP cwnd trace after socket is instantiated
      *
-     * \param nodeId node ID to connect to
-     * \param socketId socket ID to connect to
+     * @param nodeId node ID to connect to
+     * @param socketId socket ID to connect to
      */
     void ConnectCwndTrace(uint32_t nodeId, uint32_t socketId);
 
     /**
      * Increases the device bandwidth to 100 Mbps
-     * \param device device to modify
+     * @param device device to modify
      */
     void IncreaseBandwidth(Ptr<PointToPointNetDevice> device);
 
     /**
      * Check that time series values within a time range are within a value range.
-     * \param start start of time range
-     * \param end end of time range
-     * \param lowerBound lower bound of acceptable values
-     * \param upperBound upper bound of acceptable values
-     * \return true if values are within range
+     * @param start start of time range
+     * @param end end of time range
+     * @param lowerBound lower bound of acceptable values
+     * @param upperBound upper bound of acceptable values
+     * @return true if values are within range
      */
     bool CheckValues(Time start, Time end, double lowerBound, double upperBound);
 
@@ -310,7 +299,7 @@ Ns3TcpCubicTestCase::DoRun()
     // Install application on the receiver
     PacketSinkHelper sink("ns3::TcpSocketFactory", InetSocketAddress(Ipv4Address::GetAny(), port));
     ApplicationContainer sinkApps = sink.Install(receiver.Get(0));
-    sinkApps.Start(Seconds(0.0));
+    sinkApps.Start(Seconds(0));
     sinkApps.Stop(stopTime);
 
     if (m_capacityIncrease)
@@ -359,7 +348,7 @@ Ns3TcpCubicTestCase::DoRun()
     if (m_prefix == "ns3-tcp-cubic-no-heuristic")
     {
         // Check overall min and max
-        NS_TEST_ASSERT_MSG_EQ(CheckValues(Seconds(1), Seconds(19), 50, 90),
+        NS_TEST_ASSERT_MSG_EQ(CheckValues(Seconds(1), Seconds(19), 60, 98),
                               true,
                               "cwnd outside range");
         // Time just before a reduction does not have much variation
@@ -370,7 +359,7 @@ Ns3TcpCubicTestCase::DoRun()
     else if (m_prefix == "ns3-tcp-cubic-fast-conv")
     {
         // Check overall min and max
-        NS_TEST_ASSERT_MSG_EQ(CheckValues(Seconds(1), Seconds(19), 50, 90),
+        NS_TEST_ASSERT_MSG_EQ(CheckValues(Seconds(1), Seconds(19), 60, 98),
                               true,
                               "cwnd outside range");
         // Initial convex region does not have much variation
@@ -386,7 +375,7 @@ Ns3TcpCubicTestCase::DoRun()
                               true,
                               "cwnd outside range");
         // After time 17.5, cwnd should have grown much higher
-        NS_TEST_ASSERT_MSG_EQ(CheckValues(Seconds(17.5), Seconds(18.5), 170, 215),
+        NS_TEST_ASSERT_MSG_EQ(CheckValues(Seconds(17.5), Seconds(18.5), 169, 215),
                               true,
                               "cwnd outside range");
     }
@@ -402,7 +391,7 @@ Ns3TcpCubicTestCase::DoRun()
 }
 
 /**
- * \ingroup system-tests-tcp
+ * @ingroup system-tests-tcp
  * TestSuite for module tcp-cubic
  */
 class Ns3TcpCubicTestSuite : public TestSuite

@@ -1,18 +1,7 @@
 //
 // Copyright (c) 2006 Georgia Tech Research Corporation
 //
-// This program is free software; you can redistribute it and/or modify
-// it under the terms of the GNU General Public License version 2 as
-// published by the Free Software Foundation;
-//
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+// SPDX-License-Identifier: GPL-2.0-only
 //
 // Author: George F. Riley<riley@ece.gatech.edu>
 //
@@ -46,8 +35,6 @@ namespace ns3
 {
 
 NS_LOG_COMPONENT_DEFINE("Ipv4L3Protocol");
-
-const uint16_t Ipv4L3Protocol::PROT_NUMBER = 0x0800;
 
 NS_OBJECT_ENSURE_REGISTERED(Ipv4L3Protocol);
 
@@ -644,13 +631,6 @@ Ipv4L3Protocol::Receive(Ptr<NetDevice> device,
         }
     }
 
-    for (auto i = m_sockets.begin(); i != m_sockets.end(); ++i)
-    {
-        NS_LOG_LOGIC("Forwarding to raw socket");
-        Ptr<Ipv4RawSocketImpl> socket = *i;
-        socket->ForwardUp(packet, ipHeader, ipv4Interface);
-    }
-
     if (m_enableDpd && ipHeader.GetDestination().IsMulticast() && UpdateDuplicate(packet, ipHeader))
     {
         NS_LOG_LOGIC("Dropping received packet -- duplicate.");
@@ -1028,13 +1008,13 @@ Ipv4L3Protocol::IpMulticastForward(Ptr<Ipv4MulticastRoute> mrtentry,
 
         Ptr<Packet> packet = p->Copy();
         Ipv4Header ipHeader = header;
-        ipHeader.SetTtl(header.GetTtl() - 1);
-        if (ipHeader.GetTtl() == 0)
+        if (ipHeader.GetTtl() <= 1)
         {
             NS_LOG_WARN("TTL exceeded.  Drop.");
             m_dropTrace(header, packet, DROP_TTL_EXPIRED, this, interface);
             return;
         }
+        ipHeader.SetTtl(header.GetTtl() - 1);
         NS_LOG_LOGIC("Forward multicast via interface " << interface);
         Ptr<Ipv4Route> rtentry = Create<Ipv4Route>();
         rtentry->SetSource(ipHeader.GetSource());
@@ -1057,8 +1037,7 @@ Ipv4L3Protocol::IpForward(Ptr<Ipv4Route> rtentry, Ptr<const Packet> p, const Ipv
     Ipv4Header ipHeader = header;
     Ptr<Packet> packet = p->Copy();
     int32_t interface = GetInterfaceForDevice(rtentry->GetOutputDevice());
-    ipHeader.SetTtl(ipHeader.GetTtl() - 1);
-    if (ipHeader.GetTtl() == 0)
+    if (ipHeader.GetTtl() <= 1)
     {
         // Do not reply to multicast/broadcast IP address
         if (!ipHeader.GetDestination().IsBroadcast() && !ipHeader.GetDestination().IsMulticast())
@@ -1070,6 +1049,7 @@ Ipv4L3Protocol::IpForward(Ptr<Ipv4Route> rtentry, Ptr<const Packet> p, const Ipv
         m_dropTrace(header, packet, DROP_TTL_EXPIRED, this, interface);
         return;
     }
+    ipHeader.SetTtl(ipHeader.GetTtl() - 1);
     // in case the packet still has a priority tag attached, remove it
     SocketPriorityTag priorityTag;
     packet->RemovePacketTag(priorityTag);
@@ -1107,6 +1087,14 @@ Ipv4L3Protocol::LocalDeliver(Ptr<const Packet> packet, const Ipv4Header& ip, uin
     }
 
     m_localDeliverTrace(ipHeader, p, iif);
+
+    Ptr<Ipv4Interface> ipv4Interface = GetInterface(iif);
+
+    for (auto& socket : m_sockets)
+    {
+        NS_LOG_INFO("Delivering to raw socket " << socket);
+        socket->ForwardUp(p, ipHeader, ipv4Interface);
+    }
 
     Ptr<IpL4Protocol> protocol = GetProtocol(ipHeader.GetProtocol(), iif);
     if (protocol)
@@ -1411,19 +1399,6 @@ bool
 Ipv4L3Protocol::GetIpForward() const
 {
     return m_ipForward;
-}
-
-void
-Ipv4L3Protocol::SetWeakEsModel(bool model)
-{
-    NS_LOG_FUNCTION(this << model);
-    m_strongEndSystemModel = !model;
-}
-
-bool
-Ipv4L3Protocol::GetWeakEsModel() const
-{
-    return !m_strongEndSystemModel;
 }
 
 void

@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2018 NITK Surathkal
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Authors: Vivek Jain <jain.vivek.anand@gmail.com>
  *          Viyom Mittal <viyommittal@gmail.com>
@@ -130,7 +119,6 @@ TcpBbr::TcpBbr(const TcpBbr& sock)
       m_isInitialized(sock.m_isInitialized),
       m_uv(sock.m_uv),
       m_delivered(sock.m_delivered),
-      m_appLimited(sock.m_appLimited),
       m_extraAckedGain(sock.m_extraAckedGain),
       m_extraAckedWinRtt(sock.m_extraAckedWinRtt),
       m_extraAckedWinRttLength(sock.m_extraAckedWinRttLength),
@@ -141,6 +129,12 @@ TcpBbr::TcpBbr(const TcpBbr& sock)
       m_hasSeenRtt(sock.m_hasSeenRtt)
 {
     NS_LOG_FUNCTION(this);
+}
+
+void
+TcpBbr::SetRateOps(Ptr<TcpRateOps> rateOps)
+{
+    m_rateOps = rateOps;
 }
 
 const char* const TcpBbr::BbrModeName[BBR_PROBE_RTT + 1] = {
@@ -370,7 +364,7 @@ TcpBbr::UpdateRTprop(Ptr<TcpSocketState> tcb)
 {
     NS_LOG_FUNCTION(this << tcb);
     m_minRttExpired = Simulator::Now() > (m_minRttStamp + m_minRttFilterLen);
-    if (tcb->m_lastRtt >= Seconds(0) && (tcb->m_lastRtt <= m_minRtt || m_minRttExpired))
+    if (tcb->m_lastRtt.Get().IsPositive() && (tcb->m_lastRtt <= m_minRtt || m_minRttExpired))
     {
         m_minRtt = tcb->m_lastRtt;
         m_minRttStamp = Simulator::Now();
@@ -426,16 +420,15 @@ TcpBbr::HandleProbeRTT(Ptr<TcpSocketState> tcb)
 {
     NS_LOG_FUNCTION(this << tcb);
 
-    uint32_t totalBytes = m_delivered + tcb->m_bytesInFlight.Get();
-    m_appLimited = (totalBytes > 0 ? totalBytes : 1);
+    m_rateOps->SetAppLimited(tcb->m_bytesInFlight.Get());
 
-    if (m_probeRttDoneStamp == Seconds(0) && tcb->m_bytesInFlight <= m_minPipeCwnd)
+    if (m_probeRttDoneStamp.IsZero() && tcb->m_bytesInFlight <= m_minPipeCwnd)
     {
         m_probeRttDoneStamp = Simulator::Now() + m_probeRttDuration;
         m_probeRttRoundDone = false;
         m_nextRoundDelivered = m_delivered;
     }
-    else if (m_probeRttDoneStamp != Seconds(0))
+    else if (!m_probeRttDoneStamp.IsZero())
     {
         if (m_roundStart)
         {
@@ -774,7 +767,8 @@ TcpBbr::CwndEvent(Ptr<TcpSocketState> tcb, const TcpSocketState::TcpCAEvent_t ev
         m_packetConservation = false;
         RestoreCwnd(tcb);
     }
-    else if (event == TcpSocketState::CA_EVENT_TX_START && m_appLimited)
+    else if (event == TcpSocketState::CA_EVENT_TX_START &&
+             m_rateOps->GetConnectionRate().m_appLimited)
     {
         NS_LOG_DEBUG("CwndEvent triggered to CA_EVENT_TX_START :: " << event);
         m_idleRestart = true;

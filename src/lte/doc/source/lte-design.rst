@@ -1169,7 +1169,7 @@ a traffic flow of user :math:`i` is characterized by following parameters:
 
  * :math:`t_{i}`: packet arrival rate (byte/sec )
  * :math:`r_{i}`: token generation rate (byte/sec)
- * :math:`p_{i}`: token pool size (byte)
+ * :math:`p_{i}`: token pool size (byte)
  * :math:`E_{i}`: counter that records the number of token borrowed from or given to the token bank by flow :math:`i` ;
    :math:`E_{i}` can be smaller than zero
 
@@ -1183,7 +1183,7 @@ users having the same token generation rate, traffic rate and token pool size, u
 has more opportunity to borrow tokens from bank. In addition, TBFQ can police the traffic by setting the token
 generation rate to limit the throughput.  Additionally, TBFQ also maintains following three parameters for each flow:
 
- * Debt limit :math:`d_{i}`: if :math:`E_{i}` belows this threshold, user i cannot further borrow tokens from bank. This is for
+ * Debt limit :math:`d_{i}`: if :math:`E_{i}` is below this threshold, user i cannot further borrow tokens from bank. This is for
    preventing malicious UE to borrow too much tokens.
  * Credit limit :math:`c_{i}`: the maximum number of tokens UE i can borrow from the bank in one time.
  * Credit threshold :math:`C`: once :math:`E_{i}` reaches debt limit, UE i must store :math:`C` tokens to bank in order to further
@@ -2269,7 +2269,7 @@ the PCFICH errors [R4-081920]_ (also refer to
 :ref:`sec-control-channels-phy-error-model`). Once, the UE is unable to decode
 20 consecutive frames, i.e., the Qout evaluation period (200ms) is reached, an
 out-of-sync indication is sent to the UE RRC layer (see ``LteUeRrc::DoNotifyOutOfSync``).
-Else, the counter for the unsuccessfuly decoded frames is reset to zero. At the
+Else, the counter for the unsuccessfully decoded frames is reset to zero. At the
 LteUeRrc, when the number of consecutive out-of-sync indications matches with the
 value of N310 parameter, the T310 timer is started and LteUePhy is notified to start
 measuring for in-sync indications (see ``LteUePhy::DoStartInSyncDetection``). We note
@@ -2893,7 +2893,7 @@ the procedure.
    |            |          |            | COMPLETE    |          |            |
    +------------+----------+------------+-------------+----------+------------+
    | Connection | eNodeB   | Send RRC   | Never       | 30 ms    | Remove UE  |
-   | rejected   | RRC      | CONNECTION |             |          | context    |
+   | rejected   | RRC      | CONNECTION |             |          | context    |
    | timeout    |          | REJECT     |             |          |            |
    +------------+----------+------------+-------------+----------+------------+
 

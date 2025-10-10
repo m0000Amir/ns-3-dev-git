@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2009 CTTC
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Author: Nicola Baldo <nbaldo@cttc.es>
  */
@@ -22,20 +11,21 @@
 #include "spectrum-phy.h"
 #include "spectrum-propagation-loss-model.h"
 #include "spectrum-transmit-filter.h"
+#include "wraparound-model.h"
 
-#include <ns3/angles.h>
-#include <ns3/antenna-model.h>
-#include <ns3/double.h>
-#include <ns3/log.h>
-#include <ns3/mobility-model.h>
-#include <ns3/net-device.h>
-#include <ns3/node.h>
-#include <ns3/object.h>
-#include <ns3/packet-burst.h>
-#include <ns3/packet.h>
-#include <ns3/propagation-delay-model.h>
-#include <ns3/propagation-loss-model.h>
-#include <ns3/simulator.h>
+#include "ns3/angles.h"
+#include "ns3/antenna-model.h"
+#include "ns3/double.h"
+#include "ns3/log.h"
+#include "ns3/mobility-model.h"
+#include "ns3/net-device.h"
+#include "ns3/node.h"
+#include "ns3/object.h"
+#include "ns3/packet-burst.h"
+#include "ns3/packet.h"
+#include "ns3/propagation-delay-model.h"
+#include "ns3/propagation-loss-model.h"
+#include "ns3/simulator.h"
 
 #include <algorithm>
 
@@ -122,7 +112,9 @@ SingleModelSpectrumChannel::StartTx(Ptr<SpectrumSignalParameters> txParams)
         NS_ASSERT(*(txParams->psd->GetSpectrumModel()) == *m_spectrumModel);
     }
 
-    Ptr<MobilityModel> senderMobility = txParams->txPhy->GetMobility();
+    auto wraparound = GetObject<WraparoundModel>();
+    Ptr<MobilityModel> refSenderMobility = txParams->txPhy->GetMobility();
+    Ptr<MobilityModel> senderMobility = refSenderMobility;
 
     for (auto rxPhyIterator = m_phyList.begin(); rxPhyIterator != m_phyList.end(); ++rxPhyIterator)
     {
@@ -147,7 +139,7 @@ SingleModelSpectrumChannel::StartTx(Ptr<SpectrumSignalParameters> txParams)
 
         if ((*rxPhyIterator) != txParams->txPhy)
         {
-            Time delay = MicroSeconds(0);
+            Time delay;
 
             Ptr<MobilityModel> receiverMobility = (*rxPhyIterator)->GetMobility();
             NS_LOG_LOGIC("copying signal parameters " << txParams);
@@ -155,6 +147,14 @@ SingleModelSpectrumChannel::StartTx(Ptr<SpectrumSignalParameters> txParams)
 
             if (senderMobility && receiverMobility)
             {
+                if (wraparound)
+                {
+                    // Use virtual mobility model instead
+                    senderMobility =
+                        wraparound->GetVirtualMobilityModel(refSenderMobility, receiverMobility);
+                }
+                rxParams->txMobility = senderMobility;
+
                 double txAntennaGain = 0;
                 double rxAntennaGain = 0;
                 double propagationGainDb = 0;
@@ -239,7 +239,7 @@ SingleModelSpectrumChannel::StartRx(Ptr<SpectrumSignalParameters> params, Ptr<Sp
     {
         params->psd =
             m_spectrumPropagationLoss->CalcRxPowerSpectralDensity(params,
-                                                                  params->txPhy->GetMobility(),
+                                                                  params->txMobility,
                                                                   receiver->GetMobility());
     }
     receiver->StartRx(params);

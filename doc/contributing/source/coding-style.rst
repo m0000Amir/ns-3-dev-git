@@ -29,9 +29,37 @@ use this Python script to check and fix all formatting guidelines followed by |n
 Clang-format installation
 =========================
 
-Clang-format can be installed using your OS's package manager. Please note that you
-should install one of the supported versions of clang-format, which are listed in the
-following section.
+Clang-format can be installed using one of two methods.
+Please note that you should install one of the supported versions of clang-format,
+which are listed in the ``RELEASE_NOTES.md`` file.
+
+The first method is to install clang-format using the package manager available in the
+Linux distribution (e.g., Ubuntu's ``apt``).
+For example, in Ubuntu 24.04, clang-format 20 can be installed with the following command:
+
+.. sourcecode:: console
+
+  sudo apt install clang-format-20
+
+If the package manager does not provide one of the clang-format versions supported by |ns3|,
+users can install clang-format using Python's pip tool.
+
+The following command will install the latest version of clang-format:
+
+.. sourcecode:: console
+
+  pip3 install clang-format
+
+To install a specific version of clang-format, use the following command:
+
+.. sourcecode:: console
+
+  pip3 install clang-format==<version_number>
+
+where ``<version_number>`` is something like ``20.1.8`` (MAJOR.MINOR.PATCH).
+
+Starting with Python 3.11, pip requires users to either create a virtual environment (venv)
+or add the ``--break-system-packages`` flag to the installation commands above.
 
 Supported versions of clang-format
 ==================================
@@ -40,13 +68,8 @@ Since each new major version of clang-format can add or modify properties,
 newer versions of clang-format might produce different outputs compared to
 previous versions.
 
-The following list contains the set of clang-format versions that are verified
-to produce consistent output among themselves.
-
-* clang-format-17
-* clang-format-16
-* clang-format-15
-* clang-format-14
+The list of clang-format versions that are verified to produce consistent output
+among themselves are listed in the ``RELEASE_NOTES.md`` document.
 
 Integration with IDEs
 =====================
@@ -56,10 +79,11 @@ read the ``.clang-format`` file and automatically format the code on save or on 
 
 Please refer to the documentation of your IDE for more information.
 Some examples of IDE integration are provided in
-`clang-format documentation <https://clang.llvm.org/docs/ClangFormat.html>`_
+`clang-format documentation <https://clang.llvm.org/docs/ClangFormat.html>`_.
 
-As an example, VS Code can be configured to automatically format code on save, on paste
-and on type by enabling the following settings:
+As an example, VS Code's `C/C++ extension <https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools>`_
+contains the latest clang-format binary.
+VS Code can be configured to automatically format code on save, on paste and on type by enabling the following settings:
 
 .. sourcecode:: json
 
@@ -99,22 +123,22 @@ To fix the formatting of files with Git, run the following commands in the |ns3|
 These commands do not change past commits. Instead, the reformatted files are left in the
 workspace. These changes should be squashed to the corresponding commits, in order to fix them.
 
-  .. sourcecode:: console
+.. sourcecode:: console
 
-    # Fix all commits of the current branch, relative to the master branch
-    git clang-format master
+  # Fix all commits of the current branch, relative to the master branch
+  git clang-format master
 
-    # Fix all staged changes (i.e., changes that have been `git add`ed):
-    git clang-format
+  # Fix all staged changes (i.e., changes that have been `git add`ed):
+  git clang-format
 
-    # Fix all changes staged and unstaged:
-    git clang-format -f
+  # Fix all changes staged and unstaged:
+  git clang-format -f
 
-    # Fix specific files:
-    git clang-format path_to_file
+  # Fix specific files:
+  git clang-format path_to_file
 
-    # Check what formatting changes are needed (if no files provided, check all staged files):
-    git clang-format --diff
+  # Check what formatting changes are needed (if no files provided, check all staged files):
+  git clang-format --diff
 
 Note that this only fixes formatting issues related to clang-format.
 For other |ns3| coding style guidelines, read the ``check-style-clang-format.py`` section below.
@@ -150,15 +174,48 @@ source code files. Additionally, it performs other manual checks and fixes in te
 We recommend running this script over your newly introduced C++ files prior to submission
 as a Merge Request.
 
-The script has multiple modes of operation. By default, the script checks if
-source code files are well formatted, if there are no #include headers from the same
-module with the "ns3/" prefix, and text files do not have trailing whitespace
-nor tabs. The process returns a zero exit code if all files adhere to these rules.
+The script performs multiple style checks. It returns a zero exit code if all files adhere to these rules.
 If there are files that do not comply with the rules, the process returns a non-zero
 exit code and lists the respective files. This mode is useful for developers editing
 their code and for the GitLab CI/CD pipeline to check if the codebase is well formatted.
-All checks are enabled by default. Users can disable specific checks using the corresponding
-flags: ``--no-include-prefixes``, ``--no-formatting``, ``--no-whitespace`` and ``--no-tabs``.
+
+The script runs the checks explained in the following table.
+All checks are enabled by default.
+Users can disable specific checks using the corresponding flags.
+
+.. list-table::
+  :header-rows: 1
+
+  * - Check
+    - Description
+    - Flag to Disable Check
+  * - Formatting
+    - Check code formatting using clang-format. Respects clang-format guards.
+    - ``--no-formatting``
+  * - #include "ns3/" prefixes
+    - Check if local ``#include`` headers do not use the "ns3/" prefix. Respects clang-format guards.
+    - ``--no-include-prefixes``
+  * - #include quotes
+    - Check if ns-3 ``#include`` headers use quotes (``""``) instead of angle brackets (``<>``). Respects clang-format guards.
+    - ``--no-include-quotes``
+  * - Doxygen tags
+    - Check if Doxygen tags use ``@`` rather than ``\\``. Respects clang-format guards.
+    - ``--no-doxygen-tags``
+  * - SPDX Licenses
+    - Check if source code use SPDX licenses rather than GPL license text. Respects clang-format guards.
+    - ``--no-licenses``
+  * - Emacs comments
+    - Check if source code does not have emacs file style comments. Respects clang-format guards.
+    - ``--no-emacs``
+  * - Trailing whitespace
+    - Check if there are no trailing whitespace. Always checked.
+    - ``--no-whitespace``
+  * - Tabs
+    - Check if there are no tabs. Respects clang-format guards.
+    - ``--no-tabs``
+  * - File encoding
+    - Check if files have the correct encoding (UTF-8). Always checked.
+    - ``--no-encoding``
 
 Additional information about the formatting issues detected by the script can be enabled
 by adding the ``-v, --verbose`` flag.
@@ -221,9 +278,10 @@ Therefore, it is recommended to use the latest version available.
 
 To ensure consistency among developers, |ns3| defines a minimum version of clang-tidy,
 whose warnings must not be ignored. Therefore, developers should, at least, scan their
-code with the minimum version of clang-tidy.
+code with the minimum version of clang-tidy. However, more recent versions can be used,
+which will produce better warnings.
 
-The minimum version is clang-tidy-14.
+The minimum version is clang-tidy-15.
 
 Integration with IDEs
 =====================
@@ -649,18 +707,7 @@ statement.
   /*
    * Copyright (c) YEAR COPYRIGHTHOLDER
    *
-   * This program is free software; you can redistribute it and/or modify
-   * it under the terms of the GNU General Public License version 2 as
-   * published by the Free Software Foundation;
-   *
-   * This program is distributed in the hope that it will be useful,
-   * but WITHOUT ANY WARRANTY; without even the implied warranty of
-   * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   * GNU General Public License for more details.
-   *
-   * You should have received a copy of the GNU General Public License
-   * along with this program; if not, write to the Free Software
-   * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+   * SPDX-License-Identifier: GPL-2.0-only
    *
    * Author: MyName <myemail@example.com>
    */
@@ -681,7 +728,7 @@ is described in the `Doxygen website <https://www.doxygen.nl/index.html>`_.
   {
 
   /**
-   * \brief short one-line description of the purpose of your class
+   * @brief short one-line description of the purpose of your class
    *
    * A longer description of the purpose of your class after a blank
    * empty line.
@@ -694,8 +741,8 @@ is described in the `Doxygen website <https://www.doxygen.nl/index.html>`_.
       /**
        * A detailed description of the purpose of the method.
        *
-       * \param firstParam a short description of the purpose of this parameter
-       * \returns a short description of what is returned from this function.
+       * @param firstParam a short description of the purpose of this parameter
+       * @return a short description of what is returned from this function.
        */
       int DoSomething(int firstParam);
 
@@ -719,7 +766,7 @@ The ``my-class.cc`` file is structured similarly:
   /*
    * Copyright (c) YEAR COPYRIGHTHOLDER
    *
-   * 3-paragraph GPL blurb
+   * SPDX-License-Identifier: GPL-2.0-only
    *
    * Author: MyName <myemail@foo.com>
    */
@@ -771,7 +818,7 @@ For standard headers, use the C++ style of inclusion:
 
   .. sourcecode:: cpp
 
-    #include <ns3/header.h>
+    #include "ns3/header.h"
 
 - inside .cc files, use
 
@@ -783,7 +830,7 @@ For standard headers, use the C++ style of inclusion:
 
   .. sourcecode:: cpp
 
-    #include <ns3/header.h>
+    #include "ns3/header.h"
 
 Variables and constants
 =======================
@@ -832,7 +879,6 @@ file (``*.cc``).
 When declaring variables that are easily deducible from context, prefer to declare them
 with ``auto`` instead of repeating the type name. Not only does this improve code readability,
 by making lines shorter, but it also facilitates future code refactoring.
-When declaring variables, prefer to use direct-initialization, to avoid repeating the type name.
 
 .. sourcecode:: cpp
 
@@ -846,11 +892,73 @@ When declaring variables, prefer to use direct-initialization, to avoid repeatin
   auto* ptr = new int[10];
   auto m = static_cast<uint8_t>(97 + (i % 26));
 
+
+Initialization
+==============
+
+When declaring variables, prefer to use direct-initialization, to avoid repeating the type name.
+
+.. sourcecode:: cpp
+
   // Avoid splitting the declaration and initialization of variables
   Ipv4Address ipv4Address = Ipv4Address("192.168.0.1")
 
   // Prefer to use direct-initialization
   Ipv4Address ipv4Address("192.168.0.1")
+
+Variables with no default constructor or of primitive types should be initialized when declared.
+
+Variables with default constructors do not need to be explicitly initialized, since the compiler
+already does that. An example of this is the ``ns3::Time`` class, which will initialize to zero.
+
+Member variables of structs and classes should be initialized unless the member has a default
+constructor that guarantees initialization.  Preferably, variables should be initialized together
+with the declaration (in the header file). Alternatively, they can be initialized in the default
+constructor (in the implementation file), and you may see instances of this in the codebase, but
+direct initialization upon declaration is preferred going forward.
+
+If all member variables of a class / struct are directly initialized (see above), they do not
+require explicit default initialization. But if not all variables are initialized, those
+non-initialized variables will contain garbage. Therefore, initializing the class object with
+``{}`` allows all member variables to always be initialized -- either with the provided default
+initialization or with the primitive type's default value (typically 0).
+
+C++ supports two syntax choices for direct initialization, either ``()`` or ``{}``.  There are
+various tradeoffs in the choices for more complicated types (consult the C++ literature on
+brace vs. parentheses initialization), but for the fundamental types like ``double``, either is
+acceptable (please use consistently within files).
+
+Regarding ``ns3::Time``, do not initialize to non-zero integer values as follows, assuming
+that it will be converted to nanoseconds:
+
+.. sourcecode:: cpp
+
+  Time t{1000000};  // This is disallowed
+
+The value will be interpreted according to the current resolution, which is ambiguous.  A
+user's program may have already changed the resolution from the default of nanoseconds to
+something else by the time of this initialization, and it will be instead interpreted according
+to 10^6 * the new resolution unit.
+
+Time initialization to raw floating-point values is additionally fraught, because of rounding.  Doing
+so with small values has led to bugs in practice such as timer timeout values of zero time.
+
+When declaring or manipulating ``Time`` objects with known values, prefer to use integer-based representations and
+arguments over floating-point fractions, where possible, because integer-based is faster.
+This means preferring the use of ``NanoSeconds``, ``MicroSeconds``, and ``MilliSeconds`` over
+``Seconds``.  For example, to represent a tenth of a second, prefer ``MilliSeconds(100)``
+to ``Seconds(0.1)``.
+
+To summarize Time declaration and initialization, consider the following examples and comments:
+
+.. sourcecode:: cpp
+
+  Time t;  // OK, will be value-initialized to integer zero
+  Time t{MilliSeconds(100)};  // OK, fastest, no floating point involved
+  Time t{"100ms"}; // OK, will perform a string conversion; integer would be faster
+  Time t{Seconds(0.1)};  // OK, will invoke Seconds(double); integer would be faster
+  Time t{100000000}; // NOT OK, is interpreted differently when ``Time::SetResolution()`` called
+  Time t{0.1}; // NOT OK, will round to zero; see above and also merge request !2007
 
 Comments
 ========
@@ -862,9 +970,10 @@ Doxygen comments should use the C-style comment (also known as Javadoc) style.
 For comments that are intended to not be exposed publicly in the Doxygen output,
 use the ``@internal`` and ``@endinternal`` tags.
 Please use the ``@see`` tag for cross-referencing.
-All parameters and return values should be documented. The |ns3| codebase uses
-both the ``@`` or ``\`` characters for tag identification; please make sure
-that usage is consistent within a file.
+All parameters and return values should be documented. The |ns3| codebase prefers
+the ``@`` character for tag identification. This character is recognized by clang-format
+as the start of Doxygen tags, which enables it to keep tags properly formatted;
+therefore please don't use ``\`` as the delimiter.
 
 .. sourcecode:: cpp
 
@@ -876,7 +985,7 @@ that usage is consistent within a file.
       /**
        * Constructor.
        *
-       * \param n Number of elements.
+       * @param n Number of elements.
        */
       MyClass(int n);
   };
@@ -891,11 +1000,11 @@ classes (e.g., all the classes in a module). E.g.;
 .. sourcecode:: cpp
 
   /**
-   * \defgroup mynewmodule This is a new module
+   * @defgroup mynewmodule This is a new module
    */
 
   /**
-   * \ingroup mynewmodule
+   * @ingroup mynewmodule
    *
    * MyClassOne description.
    */
@@ -904,7 +1013,7 @@ classes (e.g., all the classes in a module). E.g.;
   };
 
   /**
-   * \ingroup mynewmodule
+   * @ingroup mynewmodule
    *
    * MyClassTwo description.
    */
@@ -917,22 +1026,22 @@ In the tests for the module, it is suggested to add an ancillary group:
 .. sourcecode:: cpp
 
   /**
-   * \defgroup mynewmodule-test Tests for new module
-   * \ingroup mynewmodule
-   * \ingroup tests
+   * @defgroup mynewmodule-test Tests for new module
+   * @ingroup mynewmodule
+   * @ingroup tests
    */
 
   /**
-   * \ingroup mynewmodule-tests
-   * \brief MyNewModule Test
+   * @ingroup mynewmodule-tests
+   * @brief MyNewModule Test
    */
   class MyNewModuleTest : public TestCase
   {
   };
 
   /**
-   * \ingroup mynewmodule-tests
-   * \brief MyNewModule TestSuite
+   * @ingroup mynewmodule-tests
+   * @brief MyNewModule TestSuite
    */
   class MyNewModuleTestSuite : public TestSuite
   {
@@ -941,7 +1050,7 @@ In the tests for the module, it is suggested to add an ancillary group:
   };
 
   /**
-   * \ingroup mynewmodule-tests
+   * @ingroup mynewmodule-tests
    * Static variable for test initialization
    */
   static MyNewModuleTestSuite g_myNewModuleTestSuite;
@@ -979,6 +1088,60 @@ the preceding lines.
 
   /// Node container with the Wi-Fi stations
   NodeContainer wifiStations(3);
+
+Comments in closing braces are generally discouraged, to allow for consistent style
+formatting across recent versions of clang-format (see MRs
+`!1899 <https://gitlab.com/nsnam/ns-3-dev/-/merge_requests/1899>`_ and
+`!2070 <https://gitlab.com/nsnam/ns-3-dev/-/merge_requests/2070>`_).
+This rule may be overridden in cases where the comment improves the code's readability.
+For example, in class declarations in files with multiple classes, classes within parent classes,
+and inline class functions.
+To ensure consistent style formatting, prefer placing the comment marking the end of the class
+in a new line before the brace.
+
+An exception to this rule are the comments in the closing brace of a namespace,
+which identifies the corresponding namespace.
+
+The following examples illustrate the above guidelines.
+
+.. sourcecode:: cpp
+
+  // File with only one class
+
+  namespace ns3
+  {
+
+  int
+  MyClass::Func(int x)
+  {
+      while (...)
+      {
+          if (...)
+          {
+          } // end if // Do not add this comment
+      } // end while  // Do not add this comment
+  } // end Func       // Do not add this comment
+
+  } // namespace ns3  // Keep this comment
+
+.. sourcecode:: cpp
+
+  // Example of file with multiple classes, and classes within classes
+
+  class MyClass
+  {
+      class InlineClass
+      {
+          ...
+          int var; //!< Some variable
+
+          // end of class InlineClass  // This comment is allowed
+      };
+
+      ...
+
+      // end of class MyClass  // This comment is allowed
+  };
 
 Casts
 =====
@@ -1069,8 +1232,8 @@ The general guidelines are as follows:
     /**
      * Receive packet from lower layer (passed to PHY as callback).
      *
-     * \param pkt Packet being received.
-     * \param txMode Mode of received packet.
+     * @param pkt Packet being received.
+     * @param txMode Mode of received packet.
      */
     void RxPacketGood(Ptr<Packet> pkt, double, UanTxMode txMode);
 
@@ -1372,6 +1535,16 @@ for more details.
 
 - Avoid declaring trivial destructors, to optimize performance.
 
+.. _When an empty destructor is required: https://andreasfertig.com/blog/2023/12/when-an-empty-destructor-is-required/
+
+- When declaring default destructors with ``~Class() = default;``, be aware
+  that classes derived from ``SimpleRefCount<T>`` must have this declaration
+  on the source file (``.cc``). The header file (``.h``) should contain
+  the plain destructor declaration ``~Class();``. This is due to PIMPL's
+  opaque pointer, as explained in Andrea Fertig's blog post
+  `When an empty destructor is required`_.
+  See class WifiPpdu's destructor for an example.
+
 C++ standard
 ============
 
@@ -1505,6 +1678,18 @@ Miscellaneous items
     {
         ...
     };
+
+- When checking whether a Time value is zero, use ``Time::IsZero()`` rather than comparing it to a zero-valued time object with ``operator==``, to avoid construction of a temporary.  Similar guidance applies to the related functions ``Time::IsPositive()``, ``Time::IsNegative()``, ``Time::IsStrictlyPositive``, and ``Time::IsStrictlyNegative()``.
+
+  .. sourcecode:: cpp
+
+    Time t = ...;
+    // prefer the below:
+    if (t.IsStrictlyPositive())
+    {...}
+    // to this alternative:
+    if (t > Seconds(0))
+    {...}
 
 Clang-tidy rules
 ================
@@ -1745,3 +1930,83 @@ add the following configuration to ``.vscode/settings.json``:
       "pyproject.toml",
     ],
   }
+
+Markdown Lint
+*************
+
+.. _MarkdownLint: https://github.com/DavidAnson/MarkdownLint
+.. _MarkdownLint Rules: https://github.com/DavidAnson/MarkdownLint/blob/main/doc/Rules.md
+.. _MarkdownLint Installation: https://github.com/igorshubovych/markdownlint-cli?tab=readme-ov-file#installation
+.. _MarkdownLint Configuration File: https://github.com/DavidAnson/MarkdownLint/blob/main/schema/.MarkdownLint.yaml
+.. _MarkdownLint Docker: https://github.com/igorshubovych/MarkdownLint-cli/pkgs/container/MarkdownLint-cli
+.. _MarkdownLint VS Code Extension: https://marketplace.visualstudio.com/items?itemName=DavidAnson.vscode-MarkdownLint
+
+|ns3| uses `MarkdownLint`_ as a linter of Markdown files.
+This linter checks if Markdown files follow a set of defined rules, in order to encourage
+standardization and consistency of Markdown files across parsers.
+It also ensures that Markdown files are correctly interpreted and rendered.
+
+MarkdownLint detects linting issues and can fix most of them automatically.
+Some issues may need to be manually fixed.
+
+MarkdownLint configuration
+==========================
+
+MarkdownLint's settings are saved in the file ``.markdownlint.yml``.
+This schema of this file is defined in `MarkdownLint Configuration File`_,
+which explains how to customize the tool to enable / disable rules or customize its parameters.
+
+The list of Markdown rules supported by MarkdownLint is available in `MarkdownLint Rules`_.
+
+Install and Run MarkdownLint
+============================
+
+MarkdownLint is written in NodeJS. To run MarkdownLint, either use the official
+MarkdownLint Docker image, install it natively in macOS via Homebrew,
+or install MarkdownLint with NodeJS / npm.
+
+Run MarkdownLint with Docker image
+##################################
+
+MarkdownLint has an official Docker image in `MarkdownLint Docker`_ with the tool
+and all dependencies installed.
+
+To run MarkdownLint in a Docker container, use the following command:
+
+.. sourcecode:: console
+
+  # Check all Markdown files in the current directory and subdirectories
+  docker run --rm -v $PWD:/workdir ghcr.io/igorshubovych/markdownlint-cli:latest . [--fix]
+
+  # Check specific Markdown file
+  docker run --rm -v $PWD:/workdir ghcr.io/igorshubovych/markdownlint-cli:latest PATH_TO_FILE [--fix]
+
+If the ``fix`` flag is used, the tool tries to automatically fix the detected issues.
+Otherwise, it only reports the issues found.
+
+Install and Run MarkdownLint natively
+#####################################
+
+To install MarkdownLint natively, either on macOS via Homebrew or using NodeJS / npm,
+follow the instructions available in `MarkdownLint Installation`_.
+
+To run MarkdownLint, use the following command:
+
+.. sourcecode:: console
+
+  # Check all Markdown files in the current directory and subdirectories
+  markdownlint-cli . [--fix]
+
+  # Check specific Markdown file
+  markdownlint-cli PATH_TO_FILE [--fix]
+
+VS Code Extension
+=================
+
+For VS Code users, the `MarkdownLint VS Code Extension`_ extension is available in the marketplace.
+This extension uses the same engine and respects the configuration file.
+
+The MarkdownLint extension automatically analyzes files open in the editor and provides inline hints
+when issues are detected. It can automatically fix most issues related with formatting.
+As explained in the "Integration with IDEs" section, VS Code can be configured to automatically
+format code when saving, editing or pasting code.

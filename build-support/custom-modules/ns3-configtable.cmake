@@ -44,7 +44,7 @@
 # sixlowpan                 spectrum                  stats
 # tap-bridge                test (no Python)          topology-read
 # traffic-control           uan                       virtual-net-device
-# wave                      wifi                      wimax
+# wave                      wifi
 #
 # Modules not built (see ns-3 tutorial for explanation):
 # brite                     click                     dpdk-net-device
@@ -202,8 +202,8 @@ macro(write_configtable)
 
   set(really-enabled-modules ${ns3-libs};${ns3-contrib-libs})
   if(${ENABLE_TESTS})
-    list(APPEND really-enabled-modules libtest) # test is an object library and
-                                                # is treated differently
+    list(APPEND really-enabled-modules test) # test is an object library and
+    # is treated differently
   endif()
   if(really-enabled-modules)
     print_formatted_table_with_modules(

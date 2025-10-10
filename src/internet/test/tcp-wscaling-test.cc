@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2013 Natale Patriciello <natale.patriciello@gmail.com>
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  */
 
@@ -31,9 +20,9 @@ NS_LOG_COMPONENT_DEFINE("WScalingTestSuite");
 
 // TODO: Check the buffer size and scaling option value
 /**
- * \ingroup internet-test
+ * @ingroup internet-test
  *
- * \brief TCP Window Scaling enabling Test.
+ * @brief TCP Window Scaling enabling Test.
  */
 class WScalingTestCase : public TcpGeneralTest
 {
@@ -50,11 +39,11 @@ class WScalingTestCase : public TcpGeneralTest
     };
 
     /**
-     * \brief Constructor.
-     * \param conf Test configuration.
-     * \param maxRcvBufferSize Maximum receiver buffer size.
-     * \param maxSndBufferSize Maximum sender buffer size.
-     * \param name Test description.
+     * @brief Constructor.
+     * @param conf Test configuration.
+     * @param maxRcvBufferSize Maximum receiver buffer size.
+     * @param maxSndBufferSize Maximum sender buffer size.
+     * @param name Test description.
      */
     WScalingTestCase(WScalingTestCase::Configuration conf,
                      uint32_t maxRcvBufferSize,
@@ -218,9 +207,9 @@ WScalingTestCase::Tx(const Ptr<const Packet> p, const TcpHeader& h, SocketWho wh
 }
 
 /**
- * \ingroup internet-test
+ * @ingroup internet-test
  *
- * \brief TCP Window Scaling TestSuite.
+ * @brief TCP Window Scaling TestSuite.
  */
 class TcpWScalingTestSuite : public TestSuite
 {

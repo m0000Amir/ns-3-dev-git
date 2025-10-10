@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2022
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Author: Sharan Naribole <sharan.naribole@gmail.com>
  */
@@ -300,6 +289,36 @@ TidToLinkMapping::DeserializeInformationField(Buffer::Iterator start, uint16_t l
                                                       "from actual number of bytes read ("
                                                    << +count << ")");
     return count;
+}
+
+void
+TidToLinkMapping::Print(std::ostream& os) const
+{
+    os << "TID-To-Link Mapping=["
+       << "Direction: " << static_cast<uint16_t>(m_control.direction)
+       << ", Default Mapping: " << m_control.defaultMapping
+       << ", Link Mapping Size: " << +m_control.linkMappingSize;
+    if (m_control.mappingSwitchTimePresent)
+    {
+        os << ", Mapping Switch Time: " << *m_mappingSwitchTime;
+    }
+    if (m_control.expectedDurationPresent)
+    {
+        os << ", Expected Duration: " << *m_expectedDuration;
+    }
+    os << ", Link Mapping: {";
+    for (const auto& [tid, linkMapping] : m_linkMapping)
+    {
+        os << "TID " << +tid << ": ";
+        for (uint8_t linkId = 0; linkId < 15; linkId++)
+        {
+            if (((linkMapping >> linkId) & 0x0001) == 1)
+            {
+                os << +linkId << " ";
+            }
+        }
+    }
+    os << "}]";
 }
 
 } // namespace ns3

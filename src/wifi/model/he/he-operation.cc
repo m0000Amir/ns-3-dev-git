@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2017 Sébastien Deronne
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Authors: Sébastien Deronne <sebastien.deronne@gmail.com>
  *          Stefano Avallone <stavallo@unina.it>
@@ -44,11 +33,12 @@ HeOperation::ElementIdExt() const
 void
 HeOperation::HeOperationParams::Print(std::ostream& os) const
 {
-    os << "Default PE Duration: " << +m_defaultPeDuration << " TWT Required: " << +m_twtRequired
-       << " TXOP Duration RTS Threshold: " << m_txopDurRtsThresh
-       << " VHT Operation Information Present: " << +m_vhOpPresent
-       << " Co-Hosted BSS: " << +m_coHostedBss << " ER SU Disable: " << +m_erSuDisable
-       << " 6 GHz Operation Information Present: " << m_6GHzOpPresent;
+    os << "HE Operation=[Default PE Duration: " << +m_defaultPeDuration
+       << ", TWT Required: " << +m_twtRequired
+       << ", TXOP Duration RTS Threshold: " << m_txopDurRtsThresh
+       << ", VHT Operation Information Present: " << +m_vhOpPresent
+       << ", Co-Hosted BSS: " << +m_coHostedBss << ", ER SU Disable: " << +m_erSuDisable
+       << ", 6 GHz Operation Information Present: " << m_6GHzOpPresent << "]";
 }
 
 uint16_t

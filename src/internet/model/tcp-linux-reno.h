@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2019 NITK Surathkal
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Author: Apoorva Bharagava <apoorvabhargava13@gmail.com>
  *         Mohit P. Tahiliani <tahiliani@nitk.edu.in>
@@ -29,9 +18,9 @@ namespace ns3
 {
 
 /**
- * \ingroup congestionOps
+ * @ingroup congestionOps
  *
- * \brief Reno congestion control algorithm
+ * @brief Reno congestion control algorithm
  *
  * This class implement the Reno congestion control type
  * and it mimics the one implemented in the Linux kernel.
@@ -40,16 +29,16 @@ class TcpLinuxReno : public TcpCongestionOps
 {
   public:
     /**
-     * \brief Get the type ID.
-     * \return the object TypeId
+     * @brief Get the type ID.
+     * @return the object TypeId
      */
     static TypeId GetTypeId();
 
     TcpLinuxReno();
 
     /**
-     * \brief Copy constructor.
-     * \param sock object to copy.
+     * @brief Copy constructor.
+     * @param sock object to copy.
      */
     TcpLinuxReno(const TcpLinuxReno& sock);
 
@@ -64,15 +53,15 @@ class TcpLinuxReno : public TcpCongestionOps
   protected:
     /**
      * Slow start phase handler
-     * \param tcb Transmission Control Block of the connection
-     * \param segmentsAcked count of segments acked
-     * \return Number of segments acked minus the difference between the receiver and sender Cwnd
+     * @param tcb Transmission Control Block of the connection
+     * @param segmentsAcked count of segments acked
+     * @return Number of segments acked minus the difference between the receiver and sender Cwnd
      */
     virtual uint32_t SlowStart(Ptr<TcpSocketState> tcb, uint32_t segmentsAcked);
     /**
      * Congestion avoidance phase handler
-     * \param tcb Transmission Control Block of the connection
-     * \param segmentsAcked count of segments acked
+     * @param tcb Transmission Control Block of the connection
+     * @param segmentsAcked count of segments acked
      */
     virtual void CongestionAvoidance(Ptr<TcpSocketState> tcb, uint32_t segmentsAcked);
 
@@ -83,7 +72,7 @@ class TcpLinuxReno : public TcpCongestionOps
      * derived classes using the IncreaseWindow() method may not want this
      * behavior, so this method exists to allow subclasses to set it to false.
      *
-     * \param value Value to set whether the isCwndLimited condition
+     * @param value Value to set whether the isCwndLimited condition
      *        suppresses window updates
      */
     void SetSuppressIncreaseIfCwndLimited(bool value);

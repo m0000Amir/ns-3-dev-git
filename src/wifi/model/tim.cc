@@ -1,23 +1,14 @@
 /*
  * Copyright (c) 2022 Universita' degli Studi di Napoli Federico II
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Author: Davide Magrin <davide@magr.in>
  */
 
 #include "tim.h"
+
+#include "wifi-standard-constants.h"
 
 #include <algorithm>
 #include <cstdint>
@@ -48,7 +39,7 @@ Tim::GetInformationFieldSize() const
 void
 Tim::AddAid(uint16_t aid)
 {
-    NS_ABORT_IF(aid > 2007);
+    NS_ABORT_IF(aid > MAX_AID);
 
     m_aidValues.insert(aid);
 }
@@ -216,9 +207,8 @@ Tim::GetPartialVirtualBitmap() const
 void
 Tim::Print(std::ostream& os) const
 {
-    os << "DTIM Count: " << +m_dtimCount << ", "
-       << "DTIM Period: " << +m_dtimPeriod << ", "
-       << "Has Multicast Pending: " << m_hasMulticastPending << ", AID values:";
+    os << "TIM=[DTIM Count: " << +m_dtimCount << ", DTIM Period: " << +m_dtimPeriod
+       << ", Has Multicast Pending: " << m_hasMulticastPending << ", AID values: ";
     for (uint16_t aid = 0; aid < 2008; ++aid)
     {
         if (HasAid(aid))
@@ -226,6 +216,7 @@ Tim::Print(std::ostream& os) const
             os << aid << " ";
         }
     }
+    os << "]";
 }
 
 } // namespace ns3

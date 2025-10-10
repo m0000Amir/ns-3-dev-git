@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2009 IITP RAS
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Authors: Pavel Boyko <boyko@iitp.ru>
  */
@@ -31,10 +20,10 @@ namespace ns3
 namespace olsr
 {
 /**
- * \ingroup olsr-test
- * \ingroup tests
+ * @ingroup olsr-test
+ * @ingroup tests
  *
- * \brief Less trivial test of OLSR Topology Control message generation
+ * @brief Less trivial test of OLSR Topology Control message generation
  *
  * This test simulates 3 Wi-Fi stations with chain topology and runs OLSR without any extra traffic.
  * It is expected that only second station will send TC messages.
@@ -79,6 +68,7 @@ namespace olsr
    \endverbatim
  */
 // clang-format on
+
 class TcRegressionTest : public TestCase
 {
   public:
@@ -94,7 +84,7 @@ class TcRegressionTest : public TestCase
 
     /**
      * Receive raw data on node A
-     * \param socket receiving socket
+     * @param socket receiving socket
      */
     void ReceivePktProbeA(Ptr<Socket> socket);
     /// Packet counter on node A
@@ -104,7 +94,7 @@ class TcRegressionTest : public TestCase
 
     /**
      * Receive raw data on node B
-     * \param socket receiving socket
+     * @param socket receiving socket
      */
     void ReceivePktProbeB(Ptr<Socket> socket);
     /// Packet counter on node B
@@ -114,7 +104,7 @@ class TcRegressionTest : public TestCase
 
     /**
      * Receive raw data on node C
-     * \param socket receiving socket
+     * @param socket receiving socket
      */
     void ReceivePktProbeC(Ptr<Socket> socket);
     /// Packet counter on node C

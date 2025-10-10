@@ -2,18 +2,7 @@
  * Copyright (c) 2011 CTTC
  * Copyright (c) 2010 TELEMATICS LAB, DEE - Politecnico di Bari
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Authors:
  *   Nicola Baldo <nbaldo@cttc.es> (the EpcTftClassifier class)
@@ -262,10 +251,9 @@ EpcTftClassifier::Classify(Ptr<Packet> p, EpcTft::Direction direction, uint16_t 
 
     if (protocolNumber == Ipv4L3Protocol::PROT_NUMBER)
     {
-        NS_LOG_INFO("Classifying packet:"
-                    << " localAddr=" << localAddressIpv4 << " remoteAddr=" << remoteAddressIpv4
-                    << " localPort=" << localPort << " remotePort=" << remotePort << " tos=0x"
-                    << (uint16_t)tos);
+        NS_LOG_INFO("Classifying packet: localAddr="
+                    << localAddressIpv4 << " remoteAddr=" << remoteAddressIpv4 << " localPort="
+                    << localPort << " remotePort=" << remotePort << " tos=0x" << (uint16_t)tos);
 
         // now it is possible to classify the packet!
         // we use a reverse iterator since filter priority is not implemented properly.
@@ -293,10 +281,9 @@ EpcTftClassifier::Classify(Ptr<Packet> p, EpcTft::Direction direction, uint16_t 
     }
     else if (protocolNumber == Ipv6L3Protocol::PROT_NUMBER)
     {
-        NS_LOG_INFO("Classifying packet:"
-                    << " localAddr=" << localAddressIpv6 << " remoteAddr=" << remoteAddressIpv6
-                    << " localPort=" << localPort << " remotePort=" << remotePort << " tos=0x"
-                    << (uint16_t)tos);
+        NS_LOG_INFO("Classifying packet: localAddr="
+                    << localAddressIpv6 << " remoteAddr=" << remoteAddressIpv6 << " localPort="
+                    << localPort << " remotePort=" << remotePort << " tos=0x" << (uint16_t)tos);
 
         // now it is possible to classify the packet!
         // we use a reverse iterator since filter priority is not implemented properly.

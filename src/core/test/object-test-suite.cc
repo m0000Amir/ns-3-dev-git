@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2007 INRIA, Gustavo Carneiro
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Authors: Gustavo Carneiro <gjcarneiro@gmail.com>,
  *          Mathieu Lacage <mathieu.lacage@sophia.inria.fr>
@@ -23,23 +12,23 @@
 #include "ns3/test.h"
 
 /**
- * \file
- * \ingroup core-tests
- * \ingroup object
- * \ingroup object-tests
+ * @file
+ * @ingroup core-tests
+ * @ingroup object
+ * @ingroup object-tests
  * Object test suite.
  */
 
 /**
- * \ingroup core-tests
- * \defgroup object-tests Object test suite
+ * @ingroup core-tests
+ * @defgroup object-tests Object test suite
  */
 
 namespace
 {
 
 /**
- * \ingroup object-tests
+ * @ingroup object-tests
  * Base class A.
  */
 class BaseA : public ns3::Object
@@ -47,7 +36,7 @@ class BaseA : public ns3::Object
   public:
     /**
      * Register this type.
-     * \return The TypeId.
+     * @return The TypeId.
      */
     static ns3::TypeId GetTypeId()
     {
@@ -66,7 +55,7 @@ class BaseA : public ns3::Object
 };
 
 /**
- * \ingroup object-tests
+ * @ingroup object-tests
  * Derived class A.
  */
 class DerivedA : public BaseA
@@ -74,7 +63,7 @@ class DerivedA : public BaseA
   public:
     /**
      * Register this type.
-     * \return The TypeId.
+     * @return The TypeId.
      */
     static ns3::TypeId GetTypeId()
     {
@@ -99,7 +88,7 @@ class DerivedA : public BaseA
 };
 
 /**
- * \ingroup object-tests
+ * @ingroup object-tests
  * Base class B.
  */
 class BaseB : public ns3::Object
@@ -107,7 +96,7 @@ class BaseB : public ns3::Object
   public:
     /**
      * Register this type.
-     * \return The TypeId.
+     * @return The TypeId.
      */
     static ns3::TypeId GetTypeId()
     {
@@ -126,7 +115,7 @@ class BaseB : public ns3::Object
 };
 
 /**
- * \ingroup object-tests
+ * @ingroup object-tests
  * Derived class B.
  */
 class DerivedB : public BaseB
@@ -134,7 +123,7 @@ class DerivedB : public BaseB
   public:
     /**
      * Register this type.
-     * \return The TypeId.
+     * @return The TypeId.
      */
     static ns3::TypeId GetTypeId()
     {
@@ -172,7 +161,7 @@ namespace tests
 {
 
 /**
- * \ingroup object-tests
+ * @ingroup object-tests
  * Test we can make Objects using CreateObject.
  */
 class CreateObjectTestCase : public TestCase
@@ -253,7 +242,7 @@ CreateObjectTestCase::DoRun()
 }
 
 /**
- * \ingroup object-tests
+ * @ingroup object-tests
  * Test we can aggregate Objects.
  */
 class AggregateObjectTestCase : public TestCase
@@ -465,7 +454,7 @@ AggregateObjectTestCase::DoRun()
 }
 
 /**
- * \ingroup object-tests
+ * @ingroup object-tests
  * Test we can aggregate Objects.
  */
 class UnidirectionalAggregateObjectTestCase : public TestCase
@@ -533,7 +522,7 @@ UnidirectionalAggregateObjectTestCase::DoRun()
 }
 
 /**
- * \ingroup object-tests
+ * @ingroup object-tests
  * Test an Object factory can create Objects
  */
 class ObjectFactoryTestCase : public TestCase
@@ -618,7 +607,7 @@ ObjectFactoryTestCase::DoRun()
 }
 
 /**
- * \ingroup object-tests
+ * @ingroup object-tests
  * The Test Suite that glues the Test Cases together.
  */
 class ObjectTestSuite : public TestSuite
@@ -638,7 +627,7 @@ ObjectTestSuite::ObjectTestSuite()
 }
 
 /**
- * \ingroup object-tests
+ * @ingroup object-tests
  * ObjectTestSuite instance variable.
  */
 static ObjectTestSuite g_objectTestSuite;

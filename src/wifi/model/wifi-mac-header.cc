@@ -2,18 +2,7 @@
  * Copyright (c) 2006, 2009 INRIA
  * Copyright (c) 2009 MIRKO BANCHI
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Authors: Mathieu Lacage <mathieu.lacage@sophia.inria.fr>
  *          Mirko Banchi <mk.banchi@gmail.com>
@@ -798,6 +787,16 @@ WifiMacHeader::GetDuration() const
     return MicroSeconds(m_duration);
 }
 
+bool
+WifiMacHeader::HasNav() const
+{
+    // When the contents of a received Duration/ID field, treated as an unsigned integer,
+    // are greater than 32 768, the contents are interpreted as appropriate for the frame
+    // type and subtype or ignored if the receiving MAC entity does not have a defined
+    // interpretation for that type and subtype (IEEE 802.11-2016 sec. 10.27.3)
+    return (GetRawDuration() & 0x8000) == 0;
+}
+
 uint16_t
 WifiMacHeader::GetSequenceControl() const
 {
@@ -843,29 +842,25 @@ WifiMacHeader::IsPowerManagement() const
 bool
 WifiMacHeader::IsQosBlockAck() const
 {
-    NS_ASSERT(IsQosData());
-    return (m_qosAckPolicy == 3);
+    return (IsQosData() && m_qosAckPolicy == 3);
 }
 
 bool
 WifiMacHeader::IsQosNoAck() const
 {
-    NS_ASSERT(IsQosData());
-    return (m_qosAckPolicy == 1);
+    return (IsQosData() && m_qosAckPolicy == 1);
 }
 
 bool
 WifiMacHeader::IsQosAck() const
 {
-    NS_ASSERT(IsQosData());
-    return (m_qosAckPolicy == 0);
+    return (IsQosData() && m_qosAckPolicy == 0);
 }
 
 bool
 WifiMacHeader::IsQosEosp() const
 {
-    NS_ASSERT(IsQosData());
-    return (m_qosEosp == 1);
+    return (IsQosData() && m_qosEosp == 1);
 }
 
 WifiMacHeader::QosAckPolicy
@@ -897,8 +892,7 @@ WifiMacHeader::GetQosAckPolicy() const
 bool
 WifiMacHeader::IsQosAmsdu() const
 {
-    NS_ASSERT(IsQosData());
-    return (m_amsduPresent == 1);
+    return (IsQosData() && m_amsduPresent == 1);
 }
 
 uint8_t
@@ -1151,6 +1145,7 @@ WifiMacHeader::Print(std::ostream& os) const
            << ", SeqNumber=" << m_seqSeq;
         break;
     case WIFI_MAC_DATA:
+    case WIFI_MAC_QOSDATA:
         PrintFrameControl(os);
         os << " Duration/ID=" << m_duration << "us";
         if (!m_ctrlToDs && !m_ctrlFromDs)
@@ -1199,6 +1194,8 @@ WifiMacHeader::Print(std::ostream& os) const
         break;
     case WIFI_MAC_CTL_BACKREQ:
     case WIFI_MAC_CTL_BACKRESP:
+        os << "RA=" << m_addr1 << ", TA=" << m_addr2 << ", Duration/ID=" << m_duration << "us";
+        break;
     case WIFI_MAC_CTL_CTLWRAPPER:
     case WIFI_MAC_CTL_END:
     case WIFI_MAC_CTL_END_ACK:
@@ -1209,7 +1206,6 @@ WifiMacHeader::Print(std::ostream& os) const
     case WIFI_MAC_DATA_NULL_CFACK:
     case WIFI_MAC_DATA_NULL_CFPOLL:
     case WIFI_MAC_DATA_NULL_CFACK_CFPOLL:
-    case WIFI_MAC_QOSDATA:
     case WIFI_MAC_QOSDATA_CFACK:
     case WIFI_MAC_QOSDATA_CFPOLL:
     case WIFI_MAC_QOSDATA_CFACK_CFPOLL:

@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2016 ResiliNets, ITTC, University of Kansas
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Author: Truc Anh N. Nguyen <annguyen@ittc.ku.edu>
  *
@@ -34,24 +23,24 @@ using namespace ns3;
 NS_LOG_COMPONENT_DEFINE("TcpIllinoisTestSuite");
 
 /**
- * \ingroup internet-test
+ * @ingroup internet-test
  *
- * \brief TcpIllinois C-AIMD algorithm tests.
+ * @brief TcpIllinois C-AIMD algorithm tests.
  */
 class TcpIllinoisTest : public TestCase
 {
   public:
     /**
-     * \brief Constructor.
-     * \param cWnd Congestion window.
-     * \param ssThresh Slow Start Threshold.
-     * \param segmentSize Segment size.
-     * \param cntRtt RTT counter.
-     * \param maxRtt Max RTT.
-     * \param segmentsAcked Number of segments ACKed.
-     * \param nextTxSeq Next Tx sequence number.
-     * \param lastAckedSeq Last ACKed sequence number.
-     * \param name Test description.
+     * @brief Constructor.
+     * @param cWnd Congestion window.
+     * @param ssThresh Slow Start Threshold.
+     * @param segmentSize Segment size.
+     * @param cntRtt RTT counter.
+     * @param maxRtt Max RTT.
+     * @param segmentsAcked Number of segments ACKed.
+     * @param nextTxSeq Next Tx sequence number.
+     * @param lastAckedSeq Last ACKed sequence number.
+     * @param name Test description.
      */
     TcpIllinoisTest(uint32_t cWnd,
                     uint32_t ssThresh,
@@ -66,37 +55,37 @@ class TcpIllinoisTest : public TestCase
   private:
     void DoRun() override;
     /**
-     * \brief Increases the TCP window.
-     * \param cong The congestion control.
+     * @brief Increases the TCP window.
+     * @param cong The congestion control.
      */
     void IncreaseWindow(Ptr<TcpIllinois> cong);
     /**
-     * \brief Recalculate the internal TCP Illinois params.
-     * \param cong The congestion control.
+     * @brief Recalculate the internal TCP Illinois params.
+     * @param cong The congestion control.
      */
     void RecalcParam(Ptr<TcpIllinois> cong);
     /**
-     * \brief Calculate the maximum delay.
-     * \returns The maximum delay.
+     * @brief Calculate the maximum delay.
+     * @returns The maximum delay.
      */
     Time CalculateMaxDelay();
     /**
-     * \brief Calculate the average delay.
-     * \returns The average delay.
+     * @brief Calculate the average delay.
+     * @returns The average delay.
      */
     Time CalculateAvgDelay();
     /**
-     * \brief Calculate the TCP Illinois alpha param.
-     * \param cong The congestion control.
-     * \param da Average delay (in milliseconds).
-     * \param dm Maximum delay (in milliseconds).
+     * @brief Calculate the TCP Illinois alpha param.
+     * @param cong The congestion control.
+     * @param da Average delay (in milliseconds).
+     * @param dm Maximum delay (in milliseconds).
      */
     void CalculateAlpha(Ptr<TcpIllinois> cong, double da, double dm);
     /**
-     * \brief Calculate the TCP Illinois beta param.
-     * \param cong The congestion control.
-     * \param da Average delay (in milliseconds).
-     * \param dm Maximum delay (in milliseconds).
+     * @brief Calculate the TCP Illinois beta param.
+     * @param cong The congestion control.
+     * @param da Average delay (in milliseconds).
+     * @param dm Maximum delay (in milliseconds).
      */
     void CalculateBeta(Ptr<TcpIllinois> cong, double da, double dm);
     /**
@@ -344,9 +333,9 @@ TcpIllinoisTest::GetSsThresh()
 }
 
 /**
- * \ingroup internet-test
+ * @ingroup internet-test
  *
- * \brief TCP Illinois TestSuite
+ * @brief TCP Illinois TestSuite
  */
 class TcpIllinoisTestSuite : public TestSuite
 {

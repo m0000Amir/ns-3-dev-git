@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2010 University of Washington
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  */
 
 #include "ns3tcp-socket-writer.h"
@@ -64,9 +53,9 @@ const uint32_t PCAP_LINK_TYPE =
 const uint32_t PCAP_SNAPLEN = 64; //!< Don't bother to save much data.
 
 /**
- * \ingroup system-tests-tcp
+ * @ingroup system-tests-tcp
  *
- * \brief Tests of TCP implementation state machine behavior
+ * @brief Tests of TCP implementation state machine behavior
  */
 class Ns3TcpStateTestCase : public TestCase
 {
@@ -74,7 +63,7 @@ class Ns3TcpStateTestCase : public TestCase
     Ns3TcpStateTestCase();
     /**
      * Constructor.
-     * \param testCase Testcase number.
+     * @param testCase Testcase number.
      */
     Ns3TcpStateTestCase(uint32_t testCase);
 
@@ -101,10 +90,10 @@ class Ns3TcpStateTestCase : public TestCase
      * Check that the transmitted packets are consistent with the trace.
      * This callback is hooked to ns3::Ipv4L3Protocol/Tx.
      *
-     * \param context The callback context (unused).
-     * \param packet The transmitted packet.
-     * \param ipv4 The IPv4 object that did send the packet (unused).
-     * \param interface The IPv4 interface that did send the packet (unused).
+     * @param context The callback context (unused).
+     * @param packet The transmitted packet.
+     * @param ipv4 The IPv4 object that did send the packet (unused).
+     * @param interface The IPv4 interface that did send the packet (unused).
      */
     void Ipv4L3Tx(std::string context,
                   Ptr<const Packet> packet,
@@ -114,10 +103,10 @@ class Ns3TcpStateTestCase : public TestCase
      * Check that the received packets are consistent with the trace.
      * This callback is hooked to ns3::Ipv4L3Protocol/Tx.
      *
-     * \param context The callback context (unused).
-     * \param packet The transmitted packet.
-     * \param ipv4 The IPv4 object that did send the packet (unused).
-     * \param interface The IPv4 interface that did send the packet (unused).
+     * @param context The callback context (unused).
+     * @param packet The transmitted packet.
+     * @param ipv4 The IPv4 object that did send the packet (unused).
+     * @param interface The IPv4 interface that did send the packet (unused).
      */
     void Ipv4L3Rx(std::string context,
                   Ptr<const Packet> packet,
@@ -126,16 +115,16 @@ class Ns3TcpStateTestCase : public TestCase
     /**
      * Write to the socket until the buffer is full.
      *
-     * \param localSocket The output socket.
-     * \param txSpace The space left on the socket (unused).
+     * @param localSocket The output socket.
+     * @param txSpace The space left on the socket (unused).
      */
     void WriteUntilBufferFull(Ptr<Socket> localSocket, uint32_t txSpace);
     /**
      * Start transmitting a TCP flow.
      *
-     * \param localSocket The sending socket.
-     * \param servAddress The IPv4 address of the server (i.e., the destination address).
-     * \param servPort The TCP port of the server (i.e., the destination port).
+     * @param localSocket The sending socket.
+     * @param servAddress The IPv4 address of the server (i.e., the destination address).
+     * @param servPort The TCP port of the server (i.e., the destination port).
      */
     void StartFlow(Ptr<Socket> localSocket, Ipv4Address servAddress, uint16_t servPort);
 };
@@ -404,8 +393,8 @@ Ns3TcpStateTestCase::DoRun()
     PacketSinkHelper sink("ns3::TcpSocketFactory",
                           InetSocketAddress(Ipv4Address::GetAny(), servPort));
     ApplicationContainer sinkApps = sink.Install(n1n2.Get(1));
-    sinkApps.Start(Seconds(0.0));
-    sinkApps.Stop(Seconds(100.0));
+    sinkApps.Start(Seconds(0));
+    sinkApps.Stop(Seconds(100));
 
     // Create a data source to send packets on node n0
     // Instead of full application, here use the socket directly by
@@ -520,7 +509,7 @@ Ns3TcpStateTestCase::DoRun()
 }
 
 /**
- * \ingroup system-tests-tcp
+ * @ingroup system-tests-tcp
  *
  * TCP implementation state machine behavior TestSuite.
  */

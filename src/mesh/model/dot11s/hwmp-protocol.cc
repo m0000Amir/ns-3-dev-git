@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2008,2009 IITP RAS
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Authors: Kirill Andreev <andreev@iitp.ru>
  */
@@ -192,6 +181,8 @@ HwmpProtocol::DoInitialize()
     if (m_isRoot)
     {
         Time randomStart = Seconds(m_coefficient->GetValue());
+        NS_LOG_INFO("Root is starting proactive PREQ timer to expire at "
+                    << randomStart.As(Time::S));
         m_proactivePreqTimer =
             Simulator::Schedule(randomStart, &HwmpProtocol::SendProactivePreq, this);
     }
@@ -423,7 +414,7 @@ HwmpProtocol::ReceivePreq(IePreq preq,
 {
     NS_LOG_FUNCTION(this << from << interface << fromMp << metric);
     preq.IncrementMetric(metric);
-    // acceptance cretirea:
+    // acceptance criteria:
     auto i = m_hwmpSeqnoMetricDatabase.find(preq.GetOriginatorAddress());
     bool freshInfo(true);
     if (i != m_hwmpSeqnoMetricDatabase.end())
@@ -609,7 +600,7 @@ HwmpProtocol::ReceivePrep(IePrep prep,
 {
     NS_LOG_FUNCTION(this << from << interface << fromMp << metric);
     prep.IncrementMetric(metric);
-    // acceptance cretirea:
+    // acceptance criteria:
     auto i = m_hwmpSeqnoMetricDatabase.find(prep.GetOriginatorAddress());
     bool freshInfo(true);
     uint32_t sequence = prep.GetDestinationSeqNumber();
@@ -716,7 +707,7 @@ HwmpProtocol::ReceivePerr(std::vector<FailedDestination> destinations,
                           Mac48Address fromMp)
 {
     NS_LOG_FUNCTION(this << from << interface << fromMp);
-    // Acceptance cretirea:
+    // Acceptance criteria:
     NS_LOG_DEBUG("I am " << GetAddress() << ", received PERR from " << from);
     std::vector<FailedDestination> retval;
     HwmpRtable::LookupResult result;
@@ -746,6 +737,8 @@ HwmpProtocol::SendPrep(Mac48Address src,
                        uint32_t lifetime,
                        uint32_t interface)
 {
+    NS_LOG_FUNCTION(this << src << dst << retransmitter << initMetric << originatorDsn
+                         << destinationSN << lifetime << interface);
     IePrep prep;
     prep.SetHopcount(0);
     prep.SetTtl(m_maxTtl);

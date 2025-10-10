@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2008 INRIA
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Authors: Mathieu Lacage <mathieu.lacage@sophia.inria.fr>
  */
@@ -21,6 +10,7 @@
 
 #include "attribute-accessor-helper.h"
 #include "attribute.h"
+#include "demangle.h"
 
 #include <algorithm> // find_if
 #include <list>
@@ -30,8 +20,8 @@
 #include <typeinfo>
 
 /**
- * \file
- * \ingroup attribute_Enum
+ * @file
+ * @ingroup attribute_Enum
  * ns3::EnumValue attribute value declarations.
  */
 
@@ -48,14 +38,14 @@ namespace ns3
  * This is often used with ObjectFactory and Config to bind
  * the value of a particular enum to an Attribute or Config name.
  * For example,
- * \code
+ * @code
  *   Ptr<RateErrorModel> model = CreateObjectWithAttributes<RateErrorModel> (
  *     "ErrorRate", DoubleValue (0.05),
  *     "ErrorUnit", EnumValue (RateErrorModel::ERROR_UNIT_PACKET));
  *
  *   Config::SetDefault ("ns3::RipNg::SplitHorizon",
  *                       EnumValue (RipNg::NO_SPLIT_HORIZON));
- * \endcode
+ * @endcode
  */
 template <typename T>
 class EnumValue : public AttributeValue
@@ -122,28 +112,28 @@ class EnumChecker : public AttributeChecker
 
     /**
      * Add a default value.
-     * \param [in] value The value.
-     * \param [in] name Then enum symbol name.
+     * @param [in] value The value.
+     * @param [in] name Then enum symbol name.
      */
     void AddDefault(T value, std::string name);
     /**
      * Add a new value.
-     * \param [in] value The value.
-     * \param [in] name The enum symbol name.
+     * @param [in] value The value.
+     * @param [in] name The enum symbol name.
      */
     void Add(T value, std::string name);
 
     /**
      * Get the enum symbol name by value.
-     * \param [in] value The value.
-     * \return The enum symbol name.
+     * @param [in] value The value.
+     * @return The enum symbol name.
      */
     std::string GetName(T value) const;
 
     /**
      * Get the enum value by name.
-     * \param [in] name Then enum symbol name.
-     * \returns The enum value.
+     * @param [in] name Then enum symbol name.
+     * @returns The enum value.
      */
     T GetValue(const std::string name) const;
 
@@ -175,14 +165,14 @@ class EnumChecker : public AttributeChecker
  * As many additional enum value, name pairs as desired can be passed
  * as arguments.
  *
- * \see AttributeChecker
+ * @see AttributeChecker
  *
- * \tparam Ts The type list of additional parameters. Additional parameters
+ * @tparam Ts The type list of additional parameters. Additional parameters
  *            should be T, string pairs.
- * \returns The AttributeChecker
- * \param [in] v  The default enum value.
- * \param [in] n  The corresponding name.
- * \param [in] args Any additional arguments.
+ * @returns The AttributeChecker
+ * @param [in] v  The default enum value.
+ * @param [in] n  The corresponding name.
+ * @param [in] args Any additional arguments.
  */
 template <typename T, typename... Ts>
 Ptr<const AttributeChecker>
@@ -196,13 +186,13 @@ MakeEnumChecker(T v, std::string n, Ts... args)
 /**
  * Handler for enum value, name pairs other than the default.
  *
- * \tparam Ts The type list of additional parameters. Additional parameters
+ * @tparam Ts The type list of additional parameters. Additional parameters
  *            should be T, string pairs.
- * \returns The AttributeChecker
- * \param [in] checker The AttributeChecker.
- * \param [in] v  The next enum value.
- * \param [in] n  The corresponding name.
- * \param [in] args Any additional arguments.
+ * @returns The AttributeChecker
+ * @param [in] checker The AttributeChecker.
+ * @param [in] v  The next enum value.
+ * @param [in] n  The corresponding name.
+ * @param [in] args Any additional arguments.
  */
 template <typename T, typename... Ts>
 Ptr<const AttributeChecker>
@@ -215,8 +205,8 @@ MakeEnumChecker(Ptr<EnumChecker<T>> checker, T v, std::string n, Ts... args)
 /**
  * Terminate the recursion of variadic arguments.
  *
- * \returns The \p checker
- * \param [in] checker The AttributeChecker.
+ * @returns The \p checker
+ * @param [in] checker The AttributeChecker.
  */
 // inline to allow tail call optimization
 template <typename T>
@@ -341,7 +331,7 @@ template <typename T>
 std::string
 EnumChecker<T>::GetValueTypeName() const
 {
-    return "ns3::EnumValue<" + std::string(typeid(T).name()) + ">";
+    return "ns3::EnumValue<" + Demangle(typeid(T).name()) + ">";
 }
 
 template <typename T>

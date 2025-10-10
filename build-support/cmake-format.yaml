@@ -12,7 +12,7 @@ additional_commands:
             DEFINITIONS : '*'
 
     build_lib:
-        flags: [IGNORE_PCH]
+        flags: [IGNORE_PCH, GENERATE_EXPORT_HEADER]
         kwargs:
             LIBNAME : '1'
             SOURCE_FILES : '*'
@@ -56,6 +56,27 @@ additional_commands:
             CMAKE_PACKAGES : '*'
             EXECUTABLES : '*'
             PYTHON_PACKAGES : '*'
+    copy_headers:
+        kwargs:
+            PUBLIC_HEADER_OUTPUT_DIR: '1'
+            DEPRECATED_HEADER_OUTPUT_DIR: '1'
+            PRIVATE_HEADER_OUTPUT_DIR: '1'
+            PUBLIC_HEADER_FILES: '*'
+            DEPRECATED_HEADER_FILES: '*'
+            PRIVATE_HEADER_FILES: '*'
+    try_compile:
+        pargs:
+            nargs: 3
+        kwargs:
+            OUTPUT_VARIABLE: '1'
+            CXX_STANDARD: '1'
+            CXX_STANDARD_REQUIRED: '1'
+            CXX_EXTENSIONS: '1'
+            SOURCES: '*'
+            CMAKE_FLAGS: '*'
+            COMPILE_DEFINITIONS: '*'
+            LINK_OPTIONS: '*'
+            LINK_LIBRARIES: '*'
 
 format:
   tab_size: 2

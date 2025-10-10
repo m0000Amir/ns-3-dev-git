@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2014 Piotr Gawlowicz
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Author: Piotr Gawlowicz <gawlowicz.p@gmail.com>
  *
@@ -22,21 +11,21 @@
 
 #include "lte-ffr-simple.h"
 
+#include "ns3/boolean.h"
+#include "ns3/callback.h"
+#include "ns3/config.h"
+#include "ns3/double.h"
+#include "ns3/enum.h"
 #include "ns3/ff-mac-scheduler.h"
+#include "ns3/log.h"
 #include "ns3/lte-helper.h"
 #include "ns3/lte-rrc-sap.h"
+#include "ns3/lte-ue-mac.h"
+#include "ns3/lte-ue-net-device.h"
 #include "ns3/mobility-helper.h"
-#include <ns3/boolean.h>
-#include <ns3/callback.h>
-#include <ns3/config.h>
-#include <ns3/double.h>
-#include <ns3/enum.h>
-#include <ns3/log.h>
-#include <ns3/lte-ue-mac.h>
-#include <ns3/lte-ue-net-device.h>
-#include <ns3/pointer.h>
-#include <ns3/simulator.h>
-#include <ns3/string.h>
+#include "ns3/pointer.h"
+#include "ns3/simulator.h"
+#include "ns3/string.h"
 
 using namespace ns3;
 
@@ -145,7 +134,7 @@ LteCqiGenerationTestSuite::LteCqiGenerationTestSuite()
 }
 
 /**
- * \ingroup lte-test
+ * @ingroup lte-test
  * Static variable for test initialization
  */
 static LteCqiGenerationTestSuite lteCqiGenerationTestSuite;

@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2011-2019 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Authors:
  *   Jaume Nin <jnin@cttc.es>
@@ -39,8 +28,14 @@ PointToPointEpcHelper::PointToPointEpcHelper()
     : NoBackhaulEpcHelper()
 {
     NS_LOG_FUNCTION(this);
-    // To access the attribute value within the constructor
-    ObjectBase::ConstructSelf(AttributeConstructionList());
+}
+
+void
+PointToPointEpcHelper::NotifyConstructionCompleted()
+{
+    NoBackhaulEpcHelper::NotifyConstructionCompleted();
+
+    NS_LOG_FUNCTION(this);
 
     // since we use point-to-point links for the backhaul links,
     // we use a /30 subnet which can hold exactly two addresses
@@ -91,12 +86,6 @@ PointToPointEpcHelper::GetTypeId()
                           MakeBooleanAccessor(&PointToPointEpcHelper::m_s1uLinkEnablePcap),
                           MakeBooleanChecker());
     return tid;
-}
-
-TypeId
-PointToPointEpcHelper::GetInstanceTypeId() const
-{
-    return GetTypeId();
 }
 
 void

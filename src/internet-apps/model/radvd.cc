@@ -2,18 +2,7 @@
  * Copyright (c) 2008 Telecom Bretagne
  * Copyright (c) 2009 Strasbourg University
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Author: Sebastien Vincent <vincent@clarinet.u-strasbg.fr>
  *         Mehdi Benamor <benamor.mehdi@ensi.rnu.tn>
@@ -88,13 +77,19 @@ Radvd::DoDispose()
 {
     NS_LOG_FUNCTION(this);
 
-    m_recvSocket->Close();
-    m_recvSocket = nullptr;
+    if (m_recvSocket)
+    {
+        m_recvSocket->Close();
+        m_recvSocket = nullptr;
+    }
 
     for (auto it = m_sendSockets.begin(); it != m_sendSockets.end(); ++it)
     {
-        it->second->Close();
-        it->second = nullptr;
+        if (it->second)
+        {
+            it->second->Close();
+            it->second = nullptr;
+        }
     }
 
     Application::DoDispose();
@@ -183,8 +178,10 @@ int64_t
 Radvd::AssignStreams(int64_t stream)
 {
     NS_LOG_FUNCTION(this << stream);
-    m_jitter->SetStream(stream);
-    return 1;
+    auto currentStream = stream;
+    m_jitter->SetStream(currentStream++);
+    currentStream += Application::AssignStreams(currentStream);
+    return (currentStream - stream);
 }
 
 void

@@ -1,18 +1,7 @@
 //
 // Copyright (c) 2006 Georgia Tech Research Corporation
 //
-// This program is free software; you can redistribute it and/or modify
-// it under the terms of the GNU General Public License version 2 as
-// published by the Free Software Foundation;
-//
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+// SPDX-License-Identifier: GPL-2.0-only
 //
 // Author: Rajib Bhattacharjea<raj.b@gatech.edu>
 //
@@ -35,7 +24,7 @@ bool
 DataRate::DoParse(const std::string s, uint64_t* v)
 {
     NS_LOG_FUNCTION(s << v);
-    std::string::size_type n = s.find_first_not_of("0123456789.");
+    std::string::size_type n = s.find_first_not_of("0123456789. ");
     if (n != std::string::npos)
     { // Found non-numeric
         std::istringstream iss;
@@ -271,7 +260,7 @@ std::istream&
 operator>>(std::istream& is, DataRate& rate)
 {
     std::string value;
-    is >> value;
+    std::getline(is, value);
     uint64_t v;
     bool ok = DataRate::DoParse(value, &v);
     if (!ok)

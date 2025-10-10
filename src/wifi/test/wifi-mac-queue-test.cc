@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2021 IITP RAS
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Author: Alexander Krotov <krotov@iitp.ru>
  */
@@ -27,10 +16,10 @@
 using namespace ns3;
 
 /**
- * \ingroup wifi-test
- * \ingroup tests
+ * @ingroup wifi-test
+ * @ingroup tests
  *
- * \brief Test DROP_OLDEST setting.
+ * @brief Test DROP_OLDEST setting.
  *
  * This test verifies the correctness of DROP_OLDEST policy when packets
  * are pushed into the front of the queue. This case is not handled
@@ -40,7 +29,7 @@ class WifiMacQueueDropOldestTest : public TestCase
 {
   public:
     /**
-     * \brief Constructor
+     * @brief Constructor
      */
     WifiMacQueueDropOldestTest();
 
@@ -123,10 +112,10 @@ WifiMacQueueDropOldestTest::DoRun()
 }
 
 /**
- * \ingroup wifi-test
- * \ingroup tests
+ * @ingroup wifi-test
+ * @ingroup tests
  *
- * \brief Test extraction of expired MPDUs from MAC queue container
+ * @brief Test extraction of expired MPDUs from MAC queue container
  *
  * This test verifies the correctness of the WifiMacQueueContainer methods
  * (ExtractExpiredMpdus and ExtractAllExpiredMpdus) that extract MPDUs with
@@ -143,9 +132,9 @@ class WifiExtractExpiredMpdusTest : public TestCase
     /**
      * Enqueue a new MPDU into the container.
      *
-     * \param rxAddr Receiver Address of the MPDU
-     * \param inflight whether the MPDU is inflight
-     * \param expiryTime the expity time for the MPDU
+     * @param rxAddr Receiver Address of the MPDU
+     * @param inflight whether the MPDU is inflight
+     * @param expiryTime the expity time for the MPDU
      */
     void Enqueue(Mac48Address rxAddr, bool inflight, Time expiryTime);
 
@@ -225,8 +214,8 @@ WifiExtractExpiredMpdusTest::DoRun()
     Enqueue(rxAddr2, false, MilliSeconds(70));
     Enqueue(rxAddr2, false, MilliSeconds(75));
 
-    WifiContainerQueueId queueId1{WIFI_QOSDATA_QUEUE, WIFI_UNICAST, rxAddr1, 0};
-    WifiContainerQueueId queueId2{WIFI_QOSDATA_QUEUE, WIFI_UNICAST, rxAddr2, 0};
+    WifiContainerQueueId queueId1{WIFI_QOSDATA_QUEUE, WifiRcvAddr::UNICAST, rxAddr1, 0};
+    WifiContainerQueueId queueId2{WIFI_QOSDATA_QUEUE, WifiRcvAddr::UNICAST, rxAddr2, 0};
 
     Simulator::Schedule(MilliSeconds(25), [&]() {
         /**
@@ -429,10 +418,101 @@ WifiExtractExpiredMpdusTest::DoRun()
 }
 
 /**
- * \ingroup wifi-test
- * \ingroup tests
+ * @ingroup wifi-test
+ * @ingroup tests
  *
- * \brief Wifi MAC Queue Test Suite
+ * @brief Test that a wifi MAC queue is correctly flushed even if (at least) a container queue
+ * is blocked.
+ */
+class WifiMacQueueFlushTest : public TestCase
+{
+  public:
+    WifiMacQueueFlushTest();
+
+  private:
+    void DoRun() override;
+};
+
+WifiMacQueueFlushTest::WifiMacQueueFlushTest()
+    : TestCase("Test WifiMacQueue Flush operation")
+{
+}
+
+void
+WifiMacQueueFlushTest::DoRun()
+{
+    auto wifiMacQueue = CreateObject<WifiMacQueue>(AC_BE);
+    auto wifiMacScheduler = CreateObject<FcfsWifiQueueScheduler>();
+    wifiMacScheduler->m_perAcInfo[AC_BE].wifiMacQueue = wifiMacQueue;
+    wifiMacQueue->SetScheduler(wifiMacScheduler);
+
+    const auto addr1 = Mac48Address::Allocate();
+    const auto addr2 = Mac48Address::Allocate();
+
+    // Initialize the queue with some packets.
+    const auto tid = wifiAcList.at(AC_BE).GetLowTid();
+    const std::size_t nPackets = 5;
+    for (std::size_t i = 0; i < nPackets; i++)
+    {
+        WifiMacHeader header(WIFI_MAC_QOSDATA);
+        header.SetAddr1(addr1);
+        header.SetAddr2(addr2);
+        header.SetQosTid(tid);
+        auto item = Create<WifiMpdu>(Create<Packet>(), header);
+        wifiMacQueue->Enqueue(item);
+    }
+
+    WifiContainerQueueId queueId(WifiContainerQueueType::WIFI_QOSDATA_QUEUE,
+                                 WifiRcvAddr::UNICAST,
+                                 addr1,
+                                 tid);
+
+    // Check that all elements are inserted successfully.
+    NS_TEST_EXPECT_MSG_EQ(wifiMacQueue->GetNPackets(),
+                          nPackets,
+                          "Queue has unexpected number of elements");
+
+    NS_TEST_EXPECT_MSG_EQ(wifiMacQueue->GetNPackets(queueId),
+                          nPackets,
+                          "Unexpected number of packets in container queue");
+
+    NS_TEST_EXPECT_MSG_EQ(wifiMacScheduler->GetNext(AC_BE, SINGLE_LINK_OP_ID).has_value(),
+                          true,
+                          "Expected the scheduler to return a container queue");
+
+    // block the queue containing the packets
+    wifiMacScheduler->BlockQueues(WifiQueueBlockedReason::TID_NOT_MAPPED,
+                                  AC_BE,
+                                  {WifiContainerQueueType::WIFI_QOSDATA_QUEUE},
+                                  addr1,
+                                  addr2,
+                                  {tid},
+                                  {SINGLE_LINK_OP_ID});
+
+    NS_TEST_EXPECT_MSG_EQ(wifiMacScheduler->GetNext(AC_BE, SINGLE_LINK_OP_ID).has_value(),
+                          false,
+                          "Expected the container queue to  be blocked");
+
+    wifiMacQueue->Flush();
+
+    // Check that all elements are removed successfully.
+    NS_TEST_EXPECT_MSG_EQ(wifiMacQueue->GetNPackets(),
+                          0,
+                          "Queue has unexpected number of elements");
+
+    NS_TEST_EXPECT_MSG_EQ(wifiMacQueue->GetNPackets(queueId),
+                          0,
+                          "Unexpected number of packets in container queue");
+
+    wifiMacQueue->Dispose();
+    Simulator::Destroy();
+}
+
+/**
+ * @ingroup wifi-test
+ * @ingroup tests
+ *
+ * @brief Wifi MAC Queue Test Suite
  */
 class WifiMacQueueTestSuite : public TestSuite
 {
@@ -445,6 +525,7 @@ WifiMacQueueTestSuite::WifiMacQueueTestSuite()
 {
     AddTestCase(new WifiMacQueueDropOldestTest, TestCase::Duration::QUICK);
     AddTestCase(new WifiExtractExpiredMpdusTest, TestCase::Duration::QUICK);
+    AddTestCase(new WifiMacQueueFlushTest, TestCase::Duration::QUICK);
 }
 
 static WifiMacQueueTestSuite g_wifiMacQueueTestSuite; ///< the test suite

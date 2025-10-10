@@ -2,18 +2,7 @@
  * Copyright (c) 2011 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  * Copyright (c) 2013 Budiarto Herman
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Original work authors (from lte-enb-rrc.cc):
  *   Nicola Baldo <nbaldo@cttc.es>
@@ -26,8 +15,8 @@
 
 #include "a2-a4-rsrq-handover-algorithm.h"
 
-#include <ns3/log.h>
-#include <ns3/uinteger.h>
+#include "ns3/log.h"
+#include "ns3/uinteger.h"
 
 #include <algorithm>
 
@@ -168,8 +157,7 @@ A2A4RsrqHandoverAlgorithm::DoReportUeMeas(uint16_t rnti, LteRrcSap::MeasResults 
     {
         NS_LOG_WARN("Ignoring measId " << (uint16_t)measResults.measId);
     }
-
-} // end of DoReportUeMeas
+}
 
 void
 A2A4RsrqHandoverAlgorithm::EvaluateHandover(uint16_t rnti, uint8_t servingCellRsrq)
@@ -213,10 +201,8 @@ A2A4RsrqHandoverAlgorithm::EvaluateHandover(uint16_t rnti, uint8_t servingCellRs
                 m_handoverManagementSapUser->TriggerHandover(rnti, bestNeighbourCellId);
             }
         }
-
-    } // end of else of if (it1 == m_neighbourCellMeasures.end ())
-
-} // end of EvaluateMeasurementReport
+    }
+}
 
 bool
 A2A4RsrqHandoverAlgorithm::IsValidNeighbour(uint16_t cellId)
@@ -224,7 +210,7 @@ A2A4RsrqHandoverAlgorithm::IsValidNeighbour(uint16_t cellId)
     NS_LOG_FUNCTION(this << cellId);
 
     /**
-     * \todo In the future, this function can be expanded to validate whether the
+     * @todo In the future, this function can be expanded to validate whether the
      *       neighbour cell is a valid target cell, e.g., taking into account the
      *       NRT in ANR and whether it is a CSG cell with closed access.
      */
@@ -255,7 +241,6 @@ A2A4RsrqHandoverAlgorithm::UpdateNeighbourMeasurements(uint16_t rnti, uint16_t c
     {
         neighbourCellMeasures = it2->second;
         neighbourCellMeasures->m_cellId = cellId;
-        neighbourCellMeasures->m_rsrp = 0;
         neighbourCellMeasures->m_rsrq = rsrq;
     }
     else
@@ -263,11 +248,9 @@ A2A4RsrqHandoverAlgorithm::UpdateNeighbourMeasurements(uint16_t rnti, uint16_t c
         // insert a new cell entry
         neighbourCellMeasures = Create<UeMeasure>();
         neighbourCellMeasures->m_cellId = cellId;
-        neighbourCellMeasures->m_rsrp = 0;
         neighbourCellMeasures->m_rsrq = rsrq;
         it1->second[cellId] = neighbourCellMeasures;
     }
+}
 
-} // end of UpdateNeighbourMeasurements
-
-} // end of namespace ns3
+} // namespace ns3

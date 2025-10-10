@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2020 NITK Surathkal
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Authors: Deepak Kumaraswamy <deepakkavoor99@gmail.com>
  *
@@ -29,9 +18,9 @@ using namespace ns3;
 NS_LOG_COMPONENT_DEFINE("TcpPacingTestSuite");
 
 /**
- * \ingroup internet-test
+ * @ingroup internet-test
  *
- * \brief Test the behavior of TCP pacing
+ * @brief Test the behavior of TCP pacing
  *
  * This test checks that packets are paced at correct intervals.  The test
  * uses a shadow pacing rate calculation assumed to match the internal
@@ -90,17 +79,17 @@ class TcpPacingTest : public TcpGeneralTest
 {
   public:
     /**
-     * \brief Constructor.
-     * \param segmentSize Segment size at the TCP layer (bytes).
-     * \param packetSize Size of packets sent at the application layer (bytes).
-     * \param packets Number of packets.
-     * \param pacingSsRatio Pacing Ratio during Slow Start (multiplied by 100)
-     * \param pacingCaRatio Pacing Ratio during Congestion Avoidance (multiplied by 100)
-     * \param ssThresh slow start threshold (bytes)
-     * \param paceInitialWindow whether to pace the initial window
-     * \param delAckMaxCount Delayed ACK max count parameter
-     * \param congControl Type of congestion control.
-     * \param desc The test description.
+     * @brief Constructor.
+     * @param segmentSize Segment size at the TCP layer (bytes).
+     * @param packetSize Size of packets sent at the application layer (bytes).
+     * @param packets Number of packets.
+     * @param pacingSsRatio Pacing Ratio during Slow Start (multiplied by 100)
+     * @param pacingCaRatio Pacing Ratio during Congestion Avoidance (multiplied by 100)
+     * @param ssThresh slow start threshold (bytes)
+     * @param paceInitialWindow whether to pace the initial window
+     * @param delAckMaxCount Delayed ACK max count parameter
+     * @param congControl Type of congestion control.
+     * @param desc The test description.
      */
     TcpPacingTest(uint32_t segmentSize,
                   uint32_t packetSize,
@@ -124,7 +113,7 @@ class TcpPacingTest : public TcpGeneralTest
     void NormalClose(SocketWho who) override;
 
     /**
-     * \brief Update the expected interval at which next packet will be sent
+     * @brief Update the expected interval at which next packet will be sent
      */
     virtual void UpdateExpectedInterval();
 
@@ -185,11 +174,11 @@ TcpPacingTest::TcpPacingTest(uint32_t segmentSize,
       m_paceInitialWindow(paceInitialWindow),
       m_delAckMaxCount(delAckMaxCount),
       m_isConnAboutToEnd(false),
-      m_transmissionStartTime(Seconds(0)),
-      m_expectedInterval(Seconds(0)),
+      m_transmissionStartTime(),
+      m_expectedInterval(),
       m_packetsSent(0),
-      m_nextPacketInterval(Seconds(0)),
-      m_tracedRtt(Seconds(0))
+      m_nextPacketInterval(),
+      m_tracedRtt()
 {
     m_congControlTypeId = typeId;
 }
@@ -253,7 +242,7 @@ void
 TcpPacingTest::UpdateExpectedInterval()
 {
     double_t factor;
-    Time rtt = 2 * GetPropagationDelay();
+
     if (m_curCwnd < m_ssThresh / 2)
     {
         factor = static_cast<double>(m_pacingSsRatio) / 100;
@@ -364,9 +353,9 @@ TcpPacingTest::NormalClose(SocketWho who)
 }
 
 /**
- * \ingroup internet-test
+ * @ingroup internet-test
  *
- * \brief TestSuite for the behavior of TCP pacing
+ * @brief TestSuite for the behavior of TCP pacing
  */
 class TcpPacingTestSuite : public TestSuite
 {

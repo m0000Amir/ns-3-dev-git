@@ -1,26 +1,15 @@
 /*
  * Copyright (c) 2021 DERONNE SOFTWARE ENGINEERING
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Author: Sébastien Deronne <sebastien.deronne@gmail.com>
  */
 
-// This example is used to validate NIST and YANS error rate models for EHT rates.
-//
-// It outputs plots of the Frame Success Rate versus the Signal-to-noise ratio for
-// Nist, Yans and Table-based error rate models and for every HT MCS value.
+// This example is used to generate plots of the Frame Success Rate (FSR) versus the Signal-to-noise
+// ratio (SNR) for NIST, YANS and Table-based error rate models and for every EHT MCS value. It also
+// performs a boundary check to ensure that the FSR is between 0 and 1. The results are finally
+// saved in files (.plt) per model which can be processed by gnuplot to generate the plots.
 
 #include "ns3/command-line.h"
 #include "ns3/gnuplot.h"
@@ -146,7 +135,6 @@ set yrange [0:1]\n";
         plotExtra << "set style line " << (i + 1) << " linewidth 5 linecolor rgb \"" << colors[i]
                   << "\" \n";
     }
-    plotExtra << "set style increment user";
 
     yansplot.SetTerminal("postscript eps color enh \"Times-BoldItalic\"");
     yansplot.SetLegend("SNR(dB)", "Frame Success Rate");

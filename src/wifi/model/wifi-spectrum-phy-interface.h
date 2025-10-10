@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2009 CTTC
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Author: Nicola Baldo <nbaldo@cttc.es>
  */
@@ -25,13 +14,15 @@
 #include "ns3/he-phy.h"
 #include "ns3/spectrum-phy.h"
 
+#include <vector>
+
 namespace ns3
 {
 
 class SpectrumWifiPhy;
 
 /**
- * \ingroup wifi
+ * @ingroup wifi
  *
  * This class is an adaptor between class SpectrumWifiPhy (which inherits
  * from WifiPhy) and class SpectrumChannel (which expects objects derived
@@ -45,25 +36,25 @@ class WifiSpectrumPhyInterface : public SpectrumPhy
 {
   public:
     /**
-     * \brief Get the type ID.
-     * \return the object TypeId
+     * @brief Get the type ID.
+     * @return the object TypeId
      */
     static TypeId GetTypeId();
     /**
      * Constructor
      *
-     * \param freqRange the frequency range covered by the interface
+     * @param freqRange the frequency range covered by the interface
      */
     WifiSpectrumPhyInterface(FrequencyRange freqRange);
     /**
      * Connect SpectrumWifiPhy object
-     * \param phy SpectrumWifiPhy object to be connected to this object
+     * @param phy SpectrumWifiPhy object to be connected to this object
      */
     void SetSpectrumWifiPhy(const Ptr<SpectrumWifiPhy> phy);
 
     /**
      * Get SpectrumWifiPhy object
-     * \return Pointer to SpectrumWifiPhy object
+     * @return Pointer to SpectrumWifiPhy object
      */
     Ptr<const SpectrumWifiPhy> GetSpectrumWifiPhy() const;
 
@@ -79,78 +70,79 @@ class WifiSpectrumPhyInterface : public SpectrumPhy
     /**
      * Get the spectrum channel this interface is attached to
      *
-     * \return the spectrum channel this interface is attached to
+     * @return the spectrum channel this interface is attached to
      */
     Ptr<SpectrumChannel> GetChannel() const;
 
     /**
      * Get the frequency range covered by the spectrum channel this interface is attached to
      *
-     * \return the frequency range covered by the spectrum channel this interface is attached to
+     * @return the frequency range covered by the spectrum channel this interface is attached to
      */
     const FrequencyRange& GetFrequencyRange() const;
 
     /**
-     * Get the center frequency in MHz of the the spectrum channel this interface is attached to
+     * Get the center frequency for each segment of the the spectrum channel this interface is
+     * attached to
      *
-     * \return the center frequency in MHz of the the spectrum channel this interface is attached to
-     * to
+     * @return the center frequency for each segment of the the spectrum channel this interface is
+     * attached to to
      */
-    uint16_t GetCenterFrequency() const;
+    const std::vector<MHz_u>& GetCenterFrequencies() const;
 
     /**
-     * Get the channel width in MHz covered by the spectrum channel this interface is attached to
+     * Get the channel width covered by the spectrum channel this interface is attached to
      *
-     * \return the channel width in MHz covered by the spectrum channel this interface is attached
+     * @return the channel width covered by the spectrum channel this interface is attached
      * to to
      */
-    ChannelWidthMhz GetChannelWidth() const;
+    MHz_u GetChannelWidth() const;
 
     /**
      * Start transmission over the spectrum channel
      *
-     * \param params the parameters of the signal to transmit
+     * @param params the parameters of the signal to transmit
      */
     void StartTx(Ptr<SpectrumSignalParameters> params);
 
     /**
      * Set the RX spectrum model
      *
-     * \param centerFrequency the center frequency in MHz
-     * \param channelWidth the channel width in MHz
-     * \param bandBandwidth the width of each band in Hz
-     * \param guardBandwidth the width of the guard band in MHz
+     * @param centerFrequencies the center frequency for each segment
+     * @param channelWidth the total channel width
+     * @param bandBandwidth the width of each band
+     * @param guardBandwidth the total width of the guard band
      */
-    void SetRxSpectrumModel(uint16_t centerFrequency,
-                            ChannelWidthMhz channelWidth,
-                            uint32_t bandBandwidth,
-                            ChannelWidthMhz guardBandwidth);
+    void SetRxSpectrumModel(const std::vector<MHz_u>& centerFrequencies,
+                            MHz_u channelWidth,
+                            Hz_u bandBandwidth,
+                            MHz_u guardBandwidth);
 
     /**
      * Set the vector of spectrum bands handled by this interface
      *
-     * \param bands vector of spectrum bands
+     * @param bands vector of spectrum bands
      */
     void SetBands(WifiSpectrumBands&& bands);
     /**
      * Get the vector of spectrum bands handled by this interface
      *
-     * \return the vector of spectrum bands
+     * @return the vector of spectrum bands
      */
     const WifiSpectrumBands& GetBands() const;
 
     /**
-     * Set the HE RU spectrum bands handled by this interface (if any)
+     * Set the RU spectrum bands handled by this interface (if any)
      *
-     * \param heRuBands the HE RU spectrum bands
+     * @param ruBands the RU spectrum bands
      */
-    void SetHeRuBands(HeRuBands&& heRuBands);
+    void SetRuBands(RuBands&& ruBands);
     /**
-     * Get the HE RU spectrum bands handled by this interface
+     * Get the RU spectrum bands handled by this interface
      *
-     * \return the HE RU spectrum bands
+     * @return the RU spectrum bands
      */
-    const HeRuBands& GetHeRuBands() const;
+    const RuBands& GetRuBands() const;
 
   private:
     void DoDispose() override;
@@ -159,13 +151,13 @@ class WifiSpectrumPhyInterface : public SpectrumPhy
     Ptr<SpectrumWifiPhy> m_spectrumWifiPhy;     ///< spectrum PHY
     Ptr<NetDevice> m_netDevice;                 ///< the device
     Ptr<SpectrumChannel> m_channel;             ///< spectrum channel
-    uint16_t m_centerFrequency;                 ///< center frequency in MHz
-    ChannelWidthMhz m_channelWidth;             ///< channel width in MHz
+    std::vector<MHz_u> m_centerFrequencies;     ///< center frequency per segment
+    MHz_u m_channelWidth;                       ///< channel width
     Ptr<const SpectrumModel> m_rxSpectrumModel; ///< receive spectrum model
 
     WifiSpectrumBands
         m_bands; /**< Store all the distinct spectrum bands associated with every channels widths */
-    HeRuBands m_heRuBands; /**< Store all the distinct spectrum bands associated with every RU */
+    RuBands m_ruBands; /**< Store all the distinct spectrum bands associated with every RU */
 };
 
 } // namespace ns3

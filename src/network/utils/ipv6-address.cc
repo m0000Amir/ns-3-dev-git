@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2007-2008 Louis Pasteur University
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Author: Sebastien Vincent <vincent@clarinet.u-strasbg.fr>
  */
@@ -46,11 +35,11 @@ extern "C"
 { /* } */
 #endif
     /**
-     * \brief Mix hash keys in-place for lookuphash
+     * @brief Mix hash keys in-place for lookuphash
      *
-     * \param a first word of the hash key
-     * \param b second word of the hash key
-     * \param c third word of the hash key
+     * @param a first word of the hash key
+     * @param b second word of the hash key
+     * @param c third word of the hash key
      */
     void mixHashKey(uint32_t& a, uint32_t& b, uint32_t& c)
     {
@@ -84,12 +73,12 @@ extern "C"
     }
 
     /**
-     * \brief Get a hash key.
-     * \param k the key
-     * \param length the length of the key
-     * \param level the previous hash, or an arbitrary value
-     * \return hash
-     * \note Adapted from Jens Jakobsen implementation (chillispot).
+     * @brief Get a hash key.
+     * @param k the key
+     * @param length the length of the key
+     * @param level the previous hash, or an arbitrary value
+     * @return hash
+     * @note Adapted from Jens Jakobsen implementation (chillispot).
      */
     static uint32_t lookuphash(unsigned char* k, uint32_t length, uint32_t level)
     {
@@ -663,7 +652,8 @@ Ipv6Address::IsMatchingType(const Address& address)
     return address.CheckCompatible(GetType(), 16);
 }
 
-Ipv6Address::operator Address() const
+Ipv6Address::
+operator Address() const
 {
     return ConvertTo();
 }

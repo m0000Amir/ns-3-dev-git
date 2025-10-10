@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2009 IITP RAS
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Authors: Kirill Andreev  <andreev@iitp.ru>
  */
@@ -26,9 +15,9 @@
 using namespace ns3;
 
 /**
- * \ingroup dot11s-test
+ * @ingroup dot11s-test
  *
- * \brief This is a test for intermediate reply and saving routing
+ * @brief This is a test for intermediate reply and saving routing
  * information about neighbour. 4 stations and 3 UDP ping streams are initiated.
  */
 // clang-format off
@@ -69,6 +58,7 @@ using namespace ns3;
    \endverbatim
  */
 // clang-format on
+
 class HwmpDoRfRegressionTest : public TestCase
 {
   public:
@@ -80,7 +70,7 @@ class HwmpDoRfRegressionTest : public TestCase
     void CheckResults();
 
   private:
-    /// \internal It is important to have pointers here
+    /// @internal It is important to have pointers here
     NodeContainer* m_nodes;
     /// Simulation time
     Time m_time;
@@ -115,37 +105,37 @@ class HwmpDoRfRegressionTest : public TestCase
 
     /**
      * Send data A
-     * \param socket the sending socket
+     * @param socket the sending socket
      */
     void SendDataA(Ptr<Socket> socket);
 
     /**
      * Send data B
-     * \param socket the sending socket
+     * @param socket the sending socket
      */
     void SendDataB(Ptr<Socket> socket);
 
     /**
      * Send data C
-     * \param socket the sending socket
+     * @param socket the sending socket
      */
     void SendDataC(Ptr<Socket> socket);
 
     /**
-     * \brief Handle a packet reception.
+     * @brief Handle a packet reception.
      *
      * This function is called by lower layers.
      *
-     * \param socket the socket the packet was received to.
+     * @param socket the socket the packet was received to.
      */
     void HandleReadServer(Ptr<Socket> socket);
 
     /**
-     * \brief Handle a packet reception.
+     * @brief Handle a packet reception.
      *
      * This function is called by lower layers.
      *
-     * \param socket the socket the packet was received to.
+     * @param socket the socket the packet was received to.
      */
     void HandleReadClient(Ptr<Socket> socket);
 };

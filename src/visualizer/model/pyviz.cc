@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2008 INESC Porto
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Author: Gustavo Carneiro  <gjc@inescporto.pt>
  */
@@ -35,8 +24,6 @@
 #include <sstream>
 
 NS_LOG_COMPONENT_DEFINE("PyViz");
-
-#define NUM_LAST_PACKETS 10
 
 static std::vector<std::string>
 PathSplit(std::string str)
@@ -80,8 +67,8 @@ struct PyVizPacketTag : public Tag
 };
 
 /**
- * \brief Get the type ID.
- * \return the object TypeId
+ * @brief Get the type ID.
+ * @return the object TypeId
  */
 TypeId
 PyVizPacketTag::GetTypeId()
@@ -164,13 +151,6 @@ PyViz::PyViz()
 
     Config::ConnectFailSafe("/NodeList/*/DeviceList/*/$ns3::PointToPointNetDevice/MacRx",
                             MakeCallback(&PyViz::TraceNetDevRxPointToPoint, this));
-
-    // WiMax
-    Config::ConnectFailSafe("/NodeList/*/DeviceList/*/$ns3::WimaxNetDevice/Tx",
-                            MakeCallback(&PyViz::TraceNetDevTxWimax, this));
-
-    Config::ConnectFailSafe("/NodeList/*/DeviceList/*/$ns3::WimaxNetDevice/Rx",
-                            MakeCallback(&PyViz::TraceNetDevRxWimax, this));
 
     // LTE
     Config::ConnectFailSafe("/NodeList/*/DeviceList/*/$ns3::LteNetDevice/Tx",
@@ -642,7 +622,7 @@ PyViz::TraceNetDevRxCommon(const std::string& context,
     else
     {
         // NS_ASSERT (0);
-        NS_LOG_WARN("Packet has no byte tag; wimax link?");
+        NS_LOG_WARN("Packet has no byte tag");
         uid = packet->GetUid();
     }
 
@@ -808,22 +788,6 @@ PyViz::TraceNetDevPromiscRxCsma(std::string context, Ptr<const Packet> packet)
 }
 
 void
-PyViz::TraceNetDevTxWimax(std::string context,
-                          Ptr<const Packet> packet,
-                          const Mac48Address& destination)
-{
-    NS_LOG_FUNCTION(context);
-    TraceNetDevTxCommon(context, packet, destination);
-}
-
-void
-PyViz::TraceNetDevRxWimax(std::string context, Ptr<const Packet> packet, const Mac48Address& source)
-{
-    NS_LOG_FUNCTION(context);
-    TraceNetDevRxCommon(context, packet, source);
-}
-
-void
 PyViz::TraceNetDevTxLte(std::string context,
                         Ptr<const Packet> packet,
                         const Mac48Address& destination)
@@ -941,7 +905,7 @@ class FastClipping
   private:
     /**
      * Clip start top function
-     * \param line the clip line
+     * @param line the clip line
      */
     void ClipStartTop(Line& line) const
     {
@@ -951,7 +915,7 @@ class FastClipping
 
     /**
      * Clip start bottom function
-     * \param line the clip line
+     * @param line the clip line
      */
     void ClipStartBottom(Line& line) const
     {
@@ -961,7 +925,7 @@ class FastClipping
 
     /**
      * Clip start right function
-     * \param line the clip line
+     * @param line the clip line
      */
     void ClipStartRight(Line& line) const
     {
@@ -971,7 +935,7 @@ class FastClipping
 
     /**
      * Clip start left function
-     * \param line the clip line
+     * @param line the clip line
      */
     void ClipStartLeft(Line& line) const
     {
@@ -981,7 +945,7 @@ class FastClipping
 
     /**
      * Clip end top function
-     * \param line the clip line
+     * @param line the clip line
      */
     void ClipEndTop(Line& line) const
     {
@@ -991,7 +955,7 @@ class FastClipping
 
     /**
      * Clip end bottom function
-     * \param line the clip line
+     * @param line the clip line
      */
     void ClipEndBottom(Line& line) const
     {
@@ -1001,7 +965,7 @@ class FastClipping
 
     /**
      * Clip end right function
-     * \param line the clip line
+     * @param line the clip line
      */
     void ClipEndRight(Line& line) const
     {
@@ -1011,7 +975,7 @@ class FastClipping
 
     /**
      * Clip end left function
-     * \param line the clip line
+     * @param line the clip line
      */
     void ClipEndLeft(Line& line) const
     {
@@ -1023,8 +987,8 @@ class FastClipping
     /**
      * Constructor
      *
-     * \param clipMin minimum clipping vector
-     * \param clipMax maximum clipping vector
+     * @param clipMin minimum clipping vector
+     * @param clipMax maximum clipping vector
      */
     FastClipping(Vector2 clipMin, Vector2 clipMax)
         : m_clipMin(clipMin),
@@ -1034,8 +998,8 @@ class FastClipping
 
     /**
      * Clip line function
-     * \param line the clip line
-     * \returns true if clipped
+     * @param line the clip line
+     * @returns true if clipped
      */
     bool ClipLine(Line& line)
     {

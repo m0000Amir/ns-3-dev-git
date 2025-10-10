@@ -1,30 +1,19 @@
 /*
  * Copyright (c) 2009 CTTC
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Author: Nicola Baldo <nbaldo@cttc.es>
  */
 
-#include <ns3/log.h>
-#include <ns3/object.h>
-#include <ns3/packet.h>
-#include <ns3/ptr.h>
-#include <ns3/simulator.h>
-#include <ns3/spectrum-error-model.h>
-#include <ns3/spectrum-interference.h>
-#include <ns3/test.h>
+#include "ns3/log.h"
+#include "ns3/object.h"
+#include "ns3/packet.h"
+#include "ns3/ptr.h"
+#include "ns3/simulator.h"
+#include "ns3/spectrum-error-model.h"
+#include "ns3/spectrum-interference.h"
+#include "ns3/test.h"
 
 #include <iostream>
 
@@ -33,19 +22,19 @@ using namespace ns3;
 NS_LOG_COMPONENT_DEFINE("SpectrumInterferenceTest");
 
 /**
- * \ingroup spectrum-tests
+ * @ingroup spectrum-tests
  *
- * \brief Spectrum Interference Test
+ * @brief Spectrum Interference Test
  */
 class SpectrumInterferenceTestCase : public TestCase
 {
   public:
     /**
      * Constructor
-     * \param s Spectrum value
-     * \param txBytes number of bytes to transmit
-     * \param rxCorrect expected Rx bytes
-     * \param name test name
+     * @param s Spectrum value
+     * @param txBytes number of bytes to transmit
+     * @param rxCorrect expected Rx bytes
+     * @param name test name
      */
     SpectrumInterferenceTestCase(Ptr<SpectrumValue> s,
                                  uint32_t txBytes,
@@ -55,7 +44,7 @@ class SpectrumInterferenceTestCase : public TestCase
     void DoRun() override;
     /**
      * Retrieve the test results
-     * \param si SpectrumInterference instance
+     * @param si SpectrumInterference instance
      */
     void RetrieveTestResult(SpectrumInterference* si);
 
@@ -141,9 +130,9 @@ SpectrumInterferenceTestCase::RetrieveTestResult(SpectrumInterference* si)
 }
 
 /**
- * \ingroup spectrum-tests
+ * @ingroup spectrum-tests
  *
- * \brief Spectrum Interference TestSuite
+ * @brief Spectrum Interference TestSuite
  */
 class SpectrumInterferenceTestSuite : public TestSuite
 {

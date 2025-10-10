@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2016 ResiliNets, ITTC, University of Kansas
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Author: Truc Anh N. Nguyen <annguyen@ittc.ku.edu>
  *
@@ -34,23 +23,23 @@ using namespace ns3;
 NS_LOG_COMPONENT_DEFINE("TcpYeahTestSuite");
 
 /**
- * \ingroup internet-test
+ * @ingroup internet-test
  *
- * \brief Testing TcpYeah additive increase algorithm.
+ * @brief Testing TcpYeah additive increase algorithm.
  */
 class TcpYeahIncrementTest : public TestCase
 {
   public:
     /**
-     * \brief Constructor.
-     * \param cWnd Congestion window.
-     * \param ssThresh Slow Start Threshold.
-     * \param segmentSize Segment size.
-     * \param nextTxSeq Next Tx sequence number.
-     * \param lastAckedSeq Last ACKed sequence number.
-     * \param segmentsAcked Number of segments ACKed.
-     * \param minRtt Minimum RTT.
-     * \param name Test description.
+     * @brief Constructor.
+     * @param cWnd Congestion window.
+     * @param ssThresh Slow Start Threshold.
+     * @param segmentSize Segment size.
+     * @param nextTxSeq Next Tx sequence number.
+     * @param lastAckedSeq Last ACKed sequence number.
+     * @param segmentsAcked Number of segments ACKed.
+     * @param minRtt Minimum RTT.
+     * @param name Test description.
      */
     TcpYeahIncrementTest(uint32_t cWnd,
                          uint32_t ssThresh,
@@ -64,8 +53,8 @@ class TcpYeahIncrementTest : public TestCase
   private:
     void DoRun() override;
     /**
-     * \brief Increases the TCP window.
-     * \param cong The congestion control.
+     * @brief Increases the TCP window.
+     * @param cong The congestion control.
      */
     void IncreaseWindow(Ptr<TcpYeah> cong);
 
@@ -214,23 +203,23 @@ TcpYeahIncrementTest::IncreaseWindow(Ptr<TcpYeah> cong)
 }
 
 /**
- * \ingroup internet-test
+ * @ingroup internet-test
  *
- * \brief Testing TcpYeah multiplicative decrease algorithm
+ * @brief Testing TcpYeah multiplicative decrease algorithm
  */
 class TcpYeahDecrementTest : public TestCase
 {
   public:
     /**
-     * \brief Constructor.
-     * \param cWnd Congestion window.
-     * \param ssThresh Slow Start Threshold.
-     * \param segmentSize Segment size.
-     * \param nextTxSeq Next Tx sequence number.
-     * \param lastAckedSeq Last ACKed sequence number.
-     * \param minRtt Minimum RTT.
-     * \param rho TCP Yeah rho param.
-     * \param name Test description.
+     * @brief Constructor.
+     * @param cWnd Congestion window.
+     * @param ssThresh Slow Start Threshold.
+     * @param segmentSize Segment size.
+     * @param nextTxSeq Next Tx sequence number.
+     * @param lastAckedSeq Last ACKed sequence number.
+     * @param minRtt Minimum RTT.
+     * @param rho TCP Yeah rho param.
+     * @param name Test description.
      */
     TcpYeahDecrementTest(uint32_t cWnd,
                          uint32_t ssThresh,
@@ -244,9 +233,9 @@ class TcpYeahDecrementTest : public TestCase
   private:
     void DoRun() override;
     /**
-     * \brief Calculate the Slow Start threshold.
-     * \param cong The TCP state.
-     * \returns The SshThreshold.
+     * @brief Calculate the Slow Start threshold.
+     * @param cong The TCP state.
+     * @returns The SshThreshold.
      */
     uint32_t CalculateSsThresh(Ptr<TcpYeah> cong);
 
@@ -356,9 +345,9 @@ TcpYeahDecrementTest::CalculateSsThresh(Ptr<TcpYeah> cong)
 }
 
 /**
- * \ingroup internet-test
+ * @ingroup internet-test
  *
- * \brief TCP Yeah TestSuite
+ * @brief TCP Yeah TestSuite
  */
 class TcpYeahTestSuite : public TestSuite
 {

@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2005 INRIA
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Author: Mathieu Lacage <mathieu.lacage@sophia.inria.fr>
  */
@@ -61,7 +50,7 @@ class OriginatorRxStatus
     /**
      * Check if we are de-fragmenting packets.
      *
-     * \return true if we are de-fragmenting packets,
+     * @return true if we are de-fragmenting packets,
      *         false otherwise
      */
     bool IsDeFragmenting() const
@@ -73,7 +62,7 @@ class OriginatorRxStatus
      * We have received a first fragmented packet.
      * We start the deframentation by saving the first fragment.
      *
-     * \param packet the first fragmented packet
+     * @param packet the first fragmented packet
      */
     void AccumulateFirstFragment(Ptr<const Packet> packet)
     {
@@ -88,9 +77,9 @@ class OriginatorRxStatus
      * We re-construct the packet from the fragments we saved
      * and return the full packet.
      *
-     * \param packet the last fragment
+     * @param packet the last fragment
      *
-     * \return the fully reconstructed packet
+     * @return the fully reconstructed packet
      */
     Ptr<Packet> AccumulateLastFragment(Ptr<const Packet> packet)
     {
@@ -110,7 +99,7 @@ class OriginatorRxStatus
      * We received a fragmented packet (not first and not last).
      * We simply save it into our internal list.
      *
-     * \param packet the received fragment
+     * @param packet the received fragment
      */
     void AccumulateFragment(Ptr<const Packet> packet)
     {
@@ -122,9 +111,9 @@ class OriginatorRxStatus
      * Check if the sequence control (i.e. fragment number) is
      * in order.
      *
-     * \param sequenceControl the raw sequence control
+     * @param sequenceControl the raw sequence control
      *
-     * \return true if the sequence control is in order,
+     * @return true if the sequence control is in order,
      *         false otherwise
      */
     bool IsNextFragment(uint16_t sequenceControl) const
@@ -136,7 +125,7 @@ class OriginatorRxStatus
     /**
      * Return the last sequence control we received.
      *
-     * \return the last sequence control
+     * @return the last sequence control
      */
     uint16_t GetLastSequenceControl() const
     {
@@ -146,7 +135,7 @@ class OriginatorRxStatus
     /**
      * Set the last sequence control we received.
      *
-     * \param sequenceControl the last sequence control we received
+     * @param sequenceControl the last sequence control we received
      */
     void SetSequenceControl(uint16_t sequenceControl)
     {
@@ -172,15 +161,26 @@ MacRxMiddle::SetForwardCallback(ForwardUpCallback callback)
 }
 
 OriginatorRxStatus&
-MacRxMiddle::Lookup(const WifiMacHeader& hdr)
+MacRxMiddle::Lookup(Ptr<const WifiMpdu> mpdu)
 {
-    NS_LOG_FUNCTION(hdr);
+    NS_LOG_FUNCTION(*mpdu);
+    const auto& hdr = mpdu->GetOriginal()->GetHeader();
     const auto source = hdr.GetAddr2();
-    if (hdr.IsQosData() && !source.IsGroup())
+    const auto dest = hdr.GetAddr1();
+    if (hdr.IsQosData() && !dest.IsGroup())
     {
-        /* only for QoS data non-broadcast frames */
+        /* only for QoS data unicast frames */
         const auto key = std::make_pair(source, hdr.GetQosTid());
         auto [it, inserted] = m_qosOriginatorStatus.try_emplace(key);
+        return it->second;
+    }
+    else if (hdr.IsQosData() && dest.IsGroup())
+    {
+        /* for QoS data groupcast frames: use the (nonconcealed) group address as key */
+        const auto groupAddress =
+            hdr.IsQosAmsdu() ? mpdu->begin()->second.GetDestinationAddr() : hdr.GetAddr1();
+        const auto key = std::make_pair(groupAddress, hdr.GetQosTid());
+        auto [it, inserted] = m_qosOriginatorStatus.insert({key, {}});
         return it->second;
     }
     /* - management frames
@@ -267,7 +267,7 @@ MacRxMiddle::Receive(Ptr<const WifiMpdu> mpdu, uint8_t linkId)
     const auto& hdr = mpdu->GetOriginal()->GetHeader();
     NS_ASSERT(hdr.IsData() || hdr.IsMgt());
 
-    auto& originator = Lookup(hdr);
+    auto& originator = Lookup(mpdu);
     /**
      * The check below is really unneeded because it can fail in a lot of
      * normal cases. Specifically, it is possible for sequence numbers to
@@ -298,10 +298,7 @@ MacRxMiddle::Receive(Ptr<const WifiMpdu> mpdu, uint8_t linkId)
     }
     NS_LOG_DEBUG("forwarding data from=" << hdr.GetAddr2() << ", seq=" << hdr.GetSequenceNumber()
                                          << ", frag=" << +hdr.GetFragmentNumber());
-    if (!hdr.GetAddr1().IsGroup())
-    {
-        originator.SetSequenceControl(hdr.GetSequenceControl());
-    }
+    originator.SetSequenceControl(hdr.GetSequenceControl());
     if (aggregate == mpdu->GetPacket())
     {
         m_callback(mpdu, linkId);

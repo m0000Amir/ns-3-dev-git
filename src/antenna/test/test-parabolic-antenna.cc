@@ -1,27 +1,16 @@
 /*
  * Copyright (c) 2011,12 CTTC
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Author: Nicola Baldo <nbaldo@cttc.es>
  */
 
-#include <ns3/double.h>
-#include <ns3/log.h>
-#include <ns3/parabolic-antenna-model.h>
-#include <ns3/simulator.h>
-#include <ns3/test.h>
+#include "ns3/double.h"
+#include "ns3/log.h"
+#include "ns3/parabolic-antenna-model.h"
+#include "ns3/simulator.h"
+#include "ns3/test.h"
 
 #include <cmath>
 #include <iostream>
@@ -33,9 +22,9 @@ using namespace ns3;
 NS_LOG_COMPONENT_DEFINE("TestParabolicAntennaModel");
 
 /**
- * \ingroup antenna-tests
+ * @ingroup antenna-tests
  *
- * \brief Test condition (equal to or less than)
+ * @brief Test condition (equal to or less than)
  */
 enum ParabolicAntennaModelGainTestCondition
 {
@@ -44,30 +33,30 @@ enum ParabolicAntennaModelGainTestCondition
 };
 
 /**
- * \ingroup antenna-tests
+ * @ingroup antenna-tests
  *
- * \brief ParabolicAntennaModel Test
+ * @brief ParabolicAntennaModel Test
  */
 class ParabolicAntennaModelTestCase : public TestCase
 {
   public:
     /**
      * Build the test name
-     * \param a Antenna angle
-     * \param b Beamwidth
-     * \param o Orientation
-     * \param g MaxGain
-     * \return the test name
+     * @param a Antenna angle
+     * @param b Beamwidth
+     * @param o Orientation
+     * @param g MaxGain
+     * @return the test name
      */
     static std::string BuildNameString(Angles a, double b, double o, double g);
     /**
      * Constructor
-     * \param a Antenna angle
-     * \param b Beamwidth
-     * \param o Orientation
-     * \param g MaxGain
-     * \param expectedGainDb Expected antenna gain
-     * \param cond Test condition
+     * @param a Antenna angle
+     * @param b Beamwidth
+     * @param o Orientation
+     * @param g MaxGain
+     * @param expectedGainDb Expected antenna gain
+     * @param cond Test condition
      */
     ParabolicAntennaModelTestCase(Angles a,
                                   double b,
@@ -92,8 +81,7 @@ ParabolicAntennaModelTestCase::BuildNameString(Angles a, double b, double o, dou
 {
     std::ostringstream oss;
     oss << "theta=" << a.GetInclination() << " , phi=" << a.GetAzimuth() << ", beamdwidth=" << b
-        << "deg"
-        << ", orientation=" << o << ", maxAttenuation=" << g << " dB";
+        << "deg, orientation=" << o << ", maxAttenuation=" << g << " dB";
     return oss.str();
 }
 
@@ -141,9 +129,9 @@ ParabolicAntennaModelTestCase::DoRun()
 }
 
 /**
- * \ingroup antenna-tests
+ * @ingroup antenna-tests
  *
- * \brief ParabolicAntennaModel TestSuite
+ * @brief ParabolicAntennaModel TestSuite
  */
 class ParabolicAntennaModelTestSuite : public TestSuite
 {

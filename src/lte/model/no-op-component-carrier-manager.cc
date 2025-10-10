@@ -2,18 +2,7 @@
  * Copyright (c) 2015 Danilo Abrignani
  * Copyright (c) 2016 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Authors: Danilo Abrignani <danilo.abrignani@unibo.it>
  *          Biljana Bojovic <biljana.bojovic@cttc.es>
@@ -24,8 +13,8 @@
 
 #include "lte-common.h"
 
-#include <ns3/log.h>
-#include <ns3/random-variable-stream.h>
+#include "ns3/log.h"
+#include "ns3/random-variable-stream.h"
 
 namespace ns3
 {
@@ -217,14 +206,14 @@ NoOpComponentCarrierManager::DoSetupDataRadioBearer(EpsBearer bearer,
             lci.mbrDl = 0;
             lci.gbrUl = 0;
             lci.gbrDl = 0;
-        } // data flows only on PC
+        }
         NS_LOG_DEBUG(this << " RNTI " << lci.rnti << "Lcid " << (uint16_t)lci.lcId << " lcGroup "
                           << (uint16_t)lci.lcGroup);
         entry.componentCarrierId = ncc;
         entry.lc = lci;
         entry.msu = m_ccmMacSapUser;
         res.push_back(entry);
-    } // end for
+    }
 
     auto lcidIt = rntiIt->second.m_rlcLcInstantiated.find(lcid);
     if (lcidIt == rntiIt->second.m_rlcLcInstantiated.end())
@@ -489,4 +478,4 @@ RrComponentCarrierManager::DoUlReceiveSr(uint16_t rnti, uint8_t /* componentCarr
     }
 }
 
-} // end of namespace ns3
+} // namespace ns3

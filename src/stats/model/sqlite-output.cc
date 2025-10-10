@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2018 Natale Patriciello <natale.patriciello@gmail.com>
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  */
 #include "sqlite-output.h"
@@ -33,6 +22,7 @@ SQLiteOutput::SQLiteOutput(const std::string& name)
 {
     int rc = sqlite3_open(name.c_str(), &m_db);
     NS_ABORT_MSG_UNLESS(rc == SQLITE_OK, "Failed to open DB");
+    sqlite3_busy_timeout(m_db, 100); // set 100 ms timeout for sqlite3 operations
 }
 
 SQLiteOutput::~SQLiteOutput()
@@ -95,7 +85,7 @@ SQLiteOutput::RetrieveColumn(sqlite3_stmt* /* stmt */, int /* pos */) const
     NS_FATAL_ERROR("Can't call generic fn");
 }
 
-/// \copydoc SQLiteOutput::RetrieveColumn
+/// @copydoc SQLiteOutput::RetrieveColumn
 template <>
 int
 SQLiteOutput::RetrieveColumn(sqlite3_stmt* stmt, int pos) const
@@ -103,7 +93,7 @@ SQLiteOutput::RetrieveColumn(sqlite3_stmt* stmt, int pos) const
     return sqlite3_column_int(stmt, pos);
 }
 
-/// \copydoc SQLiteOutput::RetrieveColumn
+/// @copydoc SQLiteOutput::RetrieveColumn
 template <>
 uint32_t
 SQLiteOutput::RetrieveColumn(sqlite3_stmt* stmt, int pos) const
@@ -111,7 +101,7 @@ SQLiteOutput::RetrieveColumn(sqlite3_stmt* stmt, int pos) const
     return static_cast<uint32_t>(sqlite3_column_int(stmt, pos));
 }
 
-/// \copydoc SQLiteOutput::RetrieveColumn
+/// @copydoc SQLiteOutput::RetrieveColumn
 template <>
 double
 SQLiteOutput::RetrieveColumn(sqlite3_stmt* stmt, int pos) const

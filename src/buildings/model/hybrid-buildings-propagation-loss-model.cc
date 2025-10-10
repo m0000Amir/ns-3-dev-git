@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2011 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Author: Marco Miozzo <marco.miozzo@cttc.es>
  *         Nicola Baldo <nbaldo@cttc.es>
@@ -210,7 +199,7 @@ HybridBuildingsPropagationLossModel::GetLoss(Ptr<MobilityModel> a, Ptr<MobilityM
                 loss = ItuR1411(a, b) + ExternalWallLoss(b1) + HeightLoss(b1);
                 NS_LOG_INFO(this << " 0-I (<1000) ITUR1411 + BEL : " << loss);
             }
-        } // end b1->isIndoor ()
+        }
     }
     else
     {
@@ -253,8 +242,8 @@ HybridBuildingsPropagationLossModel::GetLoss(Ptr<MobilityModel> a, Ptr<MobilityM
                 loss = ItuR1411(a, b) + ExternalWallLoss(a1) + HeightLoss(a1);
                 NS_LOG_INFO(this << " I-O (<1000)  ITUR1411 + BEL + HG: " << loss);
             }
-        } // end if (isBIndoor)
-    }     // end if (!isAIndoor)
+        }
+    }
 
     loss = std::max(loss, 0.0);
 

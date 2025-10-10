@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2013 Fraunhofer FKIE
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Author:
  *  Sascha Alexander Jopen <jopen@cs.uni-bonn.de>
@@ -20,8 +9,8 @@
 #ifndef LR_WPAN_INTERFERENCE_HELPER_H
 #define LR_WPAN_INTERFERENCE_HELPER_H
 
-#include <ns3/ptr.h>
-#include <ns3/simple-ref-count.h>
+#include "ns3/ptr.h"
+#include "ns3/simple-ref-count.h"
 
 #include <set>
 
@@ -35,9 +24,9 @@ namespace lrwpan
 {
 
 /**
- * \ingroup lr-wpan
+ * @ingroup lr-wpan
  *
- * \brief This class provides helper functions for LrWpan interference handling.
+ * @brief This class provides helper functions for LrWpan interference handling.
  */
 class LrWpanInterferenceHelper : public SimpleRefCount<LrWpanInterferenceHelper>
 {
@@ -45,7 +34,7 @@ class LrWpanInterferenceHelper : public SimpleRefCount<LrWpanInterferenceHelper>
     /**
      * Create a new interference helper for the given SpectrumModel.
      *
-     * \param spectrumModel the SpectrumModel to be used
+     * @param spectrumModel the SpectrumModel to be used
      */
     LrWpanInterferenceHelper(Ptr<const SpectrumModel> spectrumModel);
 
@@ -56,8 +45,8 @@ class LrWpanInterferenceHelper : public SimpleRefCount<LrWpanInterferenceHelper>
      * signal more than once. The SpectrumModels of the signal and the one used
      * for instantiation of the helper have to be the same.
      *
-     * \param signal the signal to be added
-     * \return false, if the signal was not added because the SpectrumModel of the
+     * @param signal the signal to be added
+     * @return false, if the signal was not added because the SpectrumModel of the
      * signal does not match the one of the helper, true otherwise.
      */
     bool AddSignal(Ptr<const SpectrumValue> signal);
@@ -65,8 +54,8 @@ class LrWpanInterferenceHelper : public SimpleRefCount<LrWpanInterferenceHelper>
     /**
      * Remove the given signal to the set of accumulated signals.
      *
-     * \param signal the signal to be removed
-     * \return false, if the signal was not removed (because it was not added
+     * @param signal the signal to be removed
+     * @return false, if the signal was not removed (because it was not added
      * before), true otherwise.
      */
     bool RemoveSignal(Ptr<const SpectrumValue> signal);
@@ -79,26 +68,26 @@ class LrWpanInterferenceHelper : public SimpleRefCount<LrWpanInterferenceHelper>
     /**
      * Get the sum of all accumulated signals.
      *
-     * \return the sum of the signals
+     * @return the sum of the signals
      */
     Ptr<SpectrumValue> GetSignalPsd() const;
 
     /**
      * Get the SpectrumModel used by the helper.
      *
-     * \return the helpers SpectrumModel
+     * @return the helpers SpectrumModel
      */
     Ptr<const SpectrumModel> GetSpectrumModel() const;
 
   private:
     // Disable implicit copy constructors
     /**
-     * \brief Copy constructor - defined and not implemented.
+     * @brief Copy constructor - defined and not implemented.
      */
     LrWpanInterferenceHelper(const LrWpanInterferenceHelper&);
     /**
-     * \brief Copy constructor - defined and not implemented.
-     * \returns
+     * @brief Copy constructor - defined and not implemented.
+     * @returns
      */
     LrWpanInterferenceHelper& operator=(const LrWpanInterferenceHelper&);
     /**

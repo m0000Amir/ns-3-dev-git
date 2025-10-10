@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2016 NITK Surathkal
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Authors: Charitha Sangaraju <charitha29193@gmail.com>
  *          Nandita G <gm.nandita@gmail.com>
@@ -32,21 +21,21 @@ namespace ns3
 NS_LOG_COMPONENT_DEFINE("TcpLpTestSuite");
 
 /**
- * \ingroup internet-test
+ * @ingroup internet-test
  *
- * \brief Testing the behaviour common to New Reno
+ * @brief Testing the behaviour common to New Reno
  */
 class TcpLpToNewReno : public TestCase
 {
   public:
     /**
      * Constructor
-     * \param cWnd Congestion window size
-     * \param segmentSize Segment size
-     * \param segmentsAcked Segments acked
-     * \param ssThresh Slow start threshold
-     * \param rtt RTT
-     * \param name Test case name
+     * @param cWnd Congestion window size
+     * @param segmentSize Segment size
+     * @param segmentsAcked Segments acked
+     * @param ssThresh Slow start threshold
+     * @param rtt RTT
+     * @param name Test case name
      */
     TcpLpToNewReno(uint32_t cWnd,
                    uint32_t segmentSize,
@@ -112,20 +101,20 @@ TcpLpToNewReno::DoRun()
 }
 
 /**
- * \ingroup internet-test
+ * @ingroup internet-test
  *
- * \brief Testing TcpLp when cwd exceeds threshold
+ * @brief Testing TcpLp when cwd exceeds threshold
  */
 class TcpLpInferenceTest1 : public TestCase
 {
   public:
     /**
      * Constructor
-     * \param cWnd Congestion window size
-     * \param segmentSize Segment size
-     * \param segmentsAcked Segments acked
-     * \param rtt RTT
-     * \param name Test case name
+     * @param cWnd Congestion window size
+     * @param segmentSize Segment size
+     * @param segmentsAcked Segments acked
+     * @param rtt RTT
+     * @param name Test case name
      */
     TcpLpInferenceTest1(uint32_t cWnd,
                         uint32_t segmentSize,
@@ -181,20 +170,20 @@ TcpLpInferenceTest1::DoRun()
 }
 
 /**
- * \ingroup internet-test
+ * @ingroup internet-test
  *
- * \brief Testing TcpLp when it is inference phase
+ * @brief Testing TcpLp when it is inference phase
  */
 class TcpLpInferenceTest2 : public TestCase
 {
   public:
     /**
      * Constructor
-     * \param cWnd Congestion window size
-     * \param segmentSize Segment size
-     * \param segmentsAcked Segments acked
-     * \param rtt RTT
-     * \param name Test case name
+     * @param cWnd Congestion window size
+     * @param segmentSize Segment size
+     * @param segmentsAcked Segments acked
+     * @param rtt RTT
+     * @param name Test case name
      */
     TcpLpInferenceTest2(uint32_t cWnd,
                         uint32_t segmentSize,
@@ -254,7 +243,7 @@ TcpLpInferenceTest2::DoRun()
 }
 
 /**
- * \ingroup internet-test
+ * @ingroup internet-test
  *
  * Test the behaviour common to New Reno
  */

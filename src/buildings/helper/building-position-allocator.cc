@@ -1,18 +1,7 @@
 /*
  * Copyright (C)  2012 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Author: Nicola Baldo <nbaldo@cttc.es>
  *         Michele Polese <michele.polese@gmail.com> for the OutdoorPositionAllocator class
@@ -28,12 +17,12 @@
 #include "ns3/double.h"
 #include "ns3/enum.h"
 #include "ns3/log.h"
+#include "ns3/mobility-building-info.h"
 #include "ns3/mobility-model.h"
 #include "ns3/pointer.h"
 #include "ns3/random-variable-stream.h"
 #include "ns3/string.h"
 #include "ns3/uinteger.h"
-#include <ns3/mobility-building-info.h>
 
 #include <cmath>
 
@@ -294,10 +283,9 @@ RandomRoomPositionAllocator::GetNext() const
     double y2 = box.yMin + rdy * r.roomy;
     double z1 = box.zMin + rdz * (r.floor - 1);
     double z2 = box.zMin + rdz * r.floor;
-    NS_LOG_LOGIC("randomly allocating position in "
-                 << " (" << x1 << "," << x2 << ") "
-                 << "x (" << y1 << "," << y2 << ") "
-                 << "x (" << z1 << "," << z2 << ") ");
+    NS_LOG_LOGIC("randomly allocating position in (" << x1 << "," << x2 << ") "
+                                                     << "x (" << y1 << "," << y2 << ") "
+                                                     << "x (" << z1 << "," << z2 << ") ");
 
     double x = m_rand->GetValue(x1, x2);
     double y = m_rand->GetValue(y1, y2);
@@ -385,10 +373,9 @@ SameRoomPositionAllocator::GetNext() const
     double y2 = box.yMin + rdy * roomy;
     double z1 = box.zMin + rdz * (floor - 1);
     double z2 = box.zMin + rdz * floor;
-    NS_LOG_LOGIC("randomly allocating position in "
-                 << " (" << x1 << "," << x2 << ") "
-                 << "x (" << y1 << "," << y2 << ") "
-                 << "x (" << z1 << "," << z2 << ") ");
+    NS_LOG_LOGIC("randomly allocating position in (" << x1 << "," << x2 << ") "
+                                                     << "x (" << y1 << "," << y2 << ") "
+                                                     << "x (" << z1 << "," << z2 << ") ");
 
     double x = m_rand->GetValue(x1, x2);
     double y = m_rand->GetValue(y1, y2);
@@ -446,10 +433,9 @@ FixedRoomPositionAllocator::GetNext() const
     double y2 = box.yMin + rdy * roomy;
     double z1 = box.zMin + rdz * (floor - 1);
     double z2 = box.zMin + rdz * floor;
-    NS_LOG_LOGIC("randomly allocating position in "
-                 << " (" << x1 << "," << x2 << ") "
-                 << "x (" << y1 << "," << y2 << ") "
-                 << "x (" << z1 << "," << z2 << ") ");
+    NS_LOG_LOGIC("randomly allocating position in (" << x1 << "," << x2 << ") "
+                                                     << "x (" << y1 << "," << y2 << ") "
+                                                     << "x (" << z1 << "," << z2 << ") ");
 
     double x = m_rand->GetValue(x1, x2);
     double y = m_rand->GetValue(y1, y2);

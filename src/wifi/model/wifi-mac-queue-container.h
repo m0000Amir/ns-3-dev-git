@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2022 Universita' degli Studi di Napoli Federico II
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Author: Stefano Avallone <stavallo@unina.it>
  */
@@ -22,6 +11,7 @@
 
 #include "wifi-mac-queue-elem.h"
 
+#include "ns3/deprecated.h"
 #include "ns3/mac48-address.h"
 
 #include <list>
@@ -41,17 +31,33 @@ enum WifiContainerQueueType
     WIFI_DATA_QUEUE = 3
 };
 
-/// enumeration of frame directions
-enum WifiReceiverAddressType : uint8_t
+/// enumeration of frame types based on receiver address
+enum class WifiRcvAddr : uint8_t
 {
-    WIFI_UNICAST = 0,
-    WIFI_BROADCAST
+    UNICAST = 0,
+    BROADCAST,
+    GROUPCAST,
+    COUNT
 };
+
+/**
+ * Deprecated frame types enums.
+ *
+ * Use `WifiRcvAddr` class enum values instead.
+ * @{
+ */
+NS_DEPRECATED_3_46("Use WifiRcvAddr::UNICAST instead")
+static constexpr auto WIFI_UNICAST = WifiRcvAddr::UNICAST;
+NS_DEPRECATED_3_46("Use WifiRcvAddr::BROADCAST instead")
+static constexpr auto WIFI_BROADCAST = WifiRcvAddr::BROADCAST;
+NS_DEPRECATED_3_46("Use WifiRcvAddr::GROUPCAST instead")
+static constexpr auto WIFI_GROUPCAST = WifiRcvAddr::GROUPCAST;
+/**@}*/
 
 /**
  * Tuple (queue type, receiver address type, Address, TID) identifying a container queue.
  *
- * \note that Address has a different meaning depending on container queue type:
+ * @note that Address has a different meaning depending on container queue type:
  *
  * - for container queue types holding unicast frames, Address is the Receiver Address (RA)
  *   of the frames stored in the queue. For 11be MLDs, it is expected that:
@@ -75,8 +81,8 @@ enum WifiReceiverAddressType : uint8_t
  *
  * The TID is only specified for container queue types holding QoS data frames.
  */
-using WifiContainerQueueId = std::
-    tuple<WifiContainerQueueType, WifiReceiverAddressType, Mac48Address, std::optional<uint8_t>>;
+using WifiContainerQueueId =
+    std::tuple<WifiContainerQueueType, WifiRcvAddr, Mac48Address, std::optional<uint8_t>>;
 
 } // namespace ns3
 
@@ -85,7 +91,7 @@ using WifiContainerQueueId = std::
  ***************************************************/
 
 /**
- * \ingroup wifi
+ * @ingroup wifi
  * Hashing functor taking a QueueId and returning a @c std::size_t.
  * For use with `unordered_map` and `unordered_set`.
  */
@@ -94,8 +100,8 @@ struct std::hash<ns3::WifiContainerQueueId>
 {
     /**
      * The functor.
-     * \param queueId The QueueId value to hash.
-     * \return the hash
+     * @param queueId The QueueId value to hash.
+     * @return the hash
      */
     std::size_t operator()(ns3::WifiContainerQueueId queueId) const;
 };
@@ -104,7 +110,7 @@ namespace ns3
 {
 
 /**
- * \ingroup wifi
+ * @ingroup wifi
  * Class for the container used by WifiMacQueue
  *
  * This container holds multiple container queues organized in an hash table
@@ -128,25 +134,25 @@ class WifiMacQueueContainer
     /**
      * Insert the given item at the specified location in the container.
      *
-     * \param pos iterator before which the item will be inserted
-     * \param item the item to insert in the container
-     * \return iterator pointing to the inserted item
+     * @param pos iterator before which the item will be inserted
+     * @param item the item to insert in the container
+     * @return iterator pointing to the inserted item
      */
     iterator insert(const_iterator pos, Ptr<WifiMpdu> item);
 
     /**
      * Erase the specified elements from the container.
      *
-     * \param pos iterator to the element to remove
-     * \return iterator following the removed element
+     * @param pos iterator to the element to remove
+     * @return iterator following the removed element
      */
     iterator erase(const_iterator pos);
 
     /**
      * Return the WifiMpdu included in the element pointed to by the given iterator.
      *
-     * \param it the given iterator
-     * \return the item included in the element pointed to by the given iterator
+     * @param it the given iterator
+     * @return the item included in the element pointed to by the given iterator
      */
     Ptr<WifiMpdu> GetItem(const const_iterator it) const;
 
@@ -154,8 +160,8 @@ class WifiMacQueueContainer
      * Return the QueueId identifying the container queue in which the given MPDU is
      * (or is to be) enqueued. Note that the given MPDU must not contain a control frame.
      *
-     * \param mpdu the given MPDU
-     * \return the QueueId identifying the container queue in which the given MPDU
+     * @param mpdu the given MPDU
+     * @return the QueueId identifying the container queue in which the given MPDU
      *         is (or is to be) enqueued
      */
     static WifiContainerQueueId GetQueueId(Ptr<const WifiMpdu> mpdu);
@@ -164,16 +170,16 @@ class WifiMacQueueContainer
      * Get a const reference to the container queue identified by the given QueueId.
      * The container queue is created if it does not exist.
      *
-     * \param queueId the given QueueId
-     * \return a const reference to the container queue identified by the given QueueId
+     * @param queueId the given QueueId
+     * @return a const reference to the container queue identified by the given QueueId
      */
     const ContainerQueue& GetQueue(const WifiContainerQueueId& queueId) const;
 
     /**
      * Get the total size of the MPDUs stored in the queue identified by the given QueueId.
      *
-     * \param queueId the given queue ID
-     * \return true if the given queue does not exist in the container or is empty,
+     * @param queueId the given queue ID
+     * @return true if the given queue does not exist in the container or is empty,
      *         false otherwise
      */
     uint32_t GetNBytes(const WifiContainerQueueId& queueId) const;
@@ -182,8 +188,8 @@ class WifiMacQueueContainer
      * Transfer non-inflight MPDUs with expired lifetime in the container queue identified by
      * the given QueueId to the container queue storing MPDUs with expired lifetime.
      *
-     * \param queueId the QueueId identifying the container queue
-     * \return the range [first, last) of iterators pointing to the MPDUs transferred
+     * @param queueId the QueueId identifying the container queue
+     * @return the range [first, last) of iterators pointing to the MPDUs transferred
      *         to the container queue storing MPDUs with expired lifetime
      */
     std::pair<iterator, iterator> ExtractExpiredMpdus(const WifiContainerQueueId& queueId) const;
@@ -191,7 +197,7 @@ class WifiMacQueueContainer
      * Transfer non-inflight MPDUs with expired lifetime in all the container queues to the
      * container queue storing MPDUs with expired lifetime.
      *
-     * \return the range [first, last) of iterators pointing to the MPDUs transferred
+     * @return the range [first, last) of iterators pointing to the MPDUs transferred
      *         to the container queue storing MPDUs with expired lifetime
      */
     std::pair<iterator, iterator> ExtractAllExpiredMpdus() const;
@@ -199,7 +205,7 @@ class WifiMacQueueContainer
      * Get the range [first, last) of iterators pointing to all the MPDUs queued
      * in the container queue storing MPDUs with expired lifetime.
      *
-     * \return the range [first, last) of iterators pointing to all the MPDUs queued
+     * @return the range [first, last) of iterators pointing to all the MPDUs queued
      *         in the container queue storing MPDUs with expired lifetime
      */
     std::pair<iterator, iterator> GetAllExpiredMpdus() const;
@@ -209,8 +215,8 @@ class WifiMacQueueContainer
      * Transfer non-inflight MPDUs with expired lifetime in the given container queue to the
      * container queue storing MPDUs with expired lifetime.
      *
-     * \param queue the given container queue
-     * \return the range [first, last) of iterators pointing to the MPDUs transferred
+     * @param queue the given container queue
+     * @return the range [first, last) of iterators pointing to the MPDUs transferred
      *         to the container queue storing MPDUs with expired lifetime
      */
     std::pair<iterator, iterator> DoExtractExpiredMpdus(ContainerQueue& queue) const;

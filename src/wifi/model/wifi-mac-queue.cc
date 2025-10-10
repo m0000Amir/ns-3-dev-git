@@ -2,18 +2,7 @@
  * Copyright (c) 2005, 2009 INRIA
  * Copyright (c) 2009 MIRKO BANCHI
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Authors: Mathieu Lacage <mathieu.lacage@sophia.inria.fr>
  *          Mirko Banchi <mk.banchi@gmail.com>
@@ -327,8 +316,11 @@ Ptr<WifiMpdu>
 WifiMacQueue::PeekByTidAndAddress(uint8_t tid, Mac48Address dest, Ptr<const WifiMpdu> item) const
 {
     NS_LOG_FUNCTION(this << +tid << dest << item);
-    NS_ABORT_IF(dest.IsGroup());
-    WifiContainerQueueId queueId(WIFI_QOSDATA_QUEUE, WIFI_UNICAST, dest, tid);
+    NS_ABORT_IF(dest.IsBroadcast());
+    WifiContainerQueueId queueId(WIFI_QOSDATA_QUEUE,
+                                 dest.IsGroup() ? WifiRcvAddr::GROUPCAST : WifiRcvAddr::UNICAST,
+                                 dest,
+                                 tid);
     return PeekByQueueId(queueId, item);
 }
 
@@ -395,7 +387,13 @@ WifiMacQueue::PeekFirstAvailable(uint8_t linkId, Ptr<const WifiMpdu> item) const
 Ptr<WifiMpdu>
 WifiMacQueue::Remove()
 {
-    return Remove(Peek());
+    if (auto queueId = m_scheduler->GetNext(m_ac, std::nullopt, false))
+    {
+        return Remove(GetContainer().GetQueue(queueId.value()).cbegin()->mpdu);
+    }
+
+    NS_LOG_DEBUG("The queue is empty");
+    return nullptr;
 }
 
 Ptr<WifiMpdu>

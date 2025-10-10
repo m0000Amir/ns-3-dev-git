@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2023 Tokushima University, Japan
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Author: Alberto Gallegos Ramonet <alramonet@is.tokushima-u.ac.jp>
  */
@@ -37,12 +26,12 @@
  *
  */
 
-#include <ns3/core-module.h>
-#include <ns3/energy-module.h>
-#include <ns3/internet-module.h>
-#include <ns3/mobility-module.h>
-#include <ns3/network-module.h>
-#include <ns3/wifi-module.h>
+#include "ns3/core-module.h"
+#include "ns3/energy-module.h"
+#include "ns3/internet-module.h"
+#include "ns3/mobility-module.h"
+#include "ns3/network-module.h"
+#include "ns3/wifi-module.h"
 
 #include <sstream>
 #include <string>
@@ -55,8 +44,8 @@ NS_LOG_COMPONENT_DEFINE("GenericBatteryWifiRadioExample");
 /**
  * Print a received packet
  *
- * \param from sender address
- * \return a string with the details of the packet: dst {IP, port}, time.
+ * @param from sender address
+ * @return a string with the details of the packet: dst {IP, port}, time.
  */
 inline std::string
 PrintReceivedPacket(Address& from)
@@ -71,7 +60,7 @@ PrintReceivedPacket(Address& from)
 }
 
 /**
- * \param socket Pointer to socket.
+ * @param socket Pointer to socket.
  *
  * Packet receiving sink.
  */
@@ -90,11 +79,11 @@ ReceivePacket(Ptr<Socket> socket)
 }
 
 /**
- * \param socket Pointer to socket.
- * \param pktSize Packet size.
- * \param n Pointer to node.
- * \param pktCount Number of packets to generate.
- * \param pktInterval Packet sending interval.
+ * @param socket Pointer to socket.
+ * @param pktSize Packet size.
+ * @param n Pointer to node.
+ * @param pktCount Number of packets to generate.
+ * @param pktInterval Packet sending interval.
  *
  * Generate Traffic
  */
@@ -125,8 +114,8 @@ GenerateTraffic(Ptr<Socket> socket,
 /**
  * Trace function for remaining energy at node.
  *
- * \param oldValue Old value
- * \param remainingEnergy New value
+ * @param oldValue Old value
+ * @param remainingEnergy New value
  */
 void
 RemainingEnergy(double oldValue, double remainingEnergy)
@@ -284,9 +273,8 @@ main(int argc, char* argv[])
     NS_LOG_DEBUG(" *Remaining Capacity * "
                  << "| Node 0: " << battery0->GetRemainingEnergy() << " J "
                  << "| Node 1: " << battery1->GetRemainingEnergy() << " J");
-    NS_LOG_DEBUG(" *SoC * "
-                 << "| Node 0: " << battery0->GetStateOfCharge() << " % "
-                 << "| Node 1: " << battery1->GetStateOfCharge() << " % ");
+    NS_LOG_DEBUG(" *SoC * | Node 0: " << battery0->GetStateOfCharge() << " % "
+                                      << "| Node 1: " << battery1->GetStateOfCharge() << " %");
 
     Simulator::Destroy();
 

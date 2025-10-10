@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2024 Universita' degli Studi di Napoli Federico II
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Author: Stefano Avallone <stavallo@unina.it>
  */
@@ -28,10 +17,10 @@ using namespace ns3;
 NS_LOG_COMPONENT_DEFINE("WifiHeInfoElemsTest");
 
 /**
- * \ingroup wifi-test
- * \ingroup tests
+ * @ingroup wifi-test
+ * @ingroup tests
  *
- * \brief Test HE Operation information element serialization and deserialization
+ * @brief Test HE Operation information element serialization and deserialization
  */
 class HeOperationElementTest : public HeaderSerializationTestCase
 {
@@ -82,10 +71,10 @@ HeOperationElementTest::DoRun()
 }
 
 /**
- * \ingroup wifi-test
- * \ingroup tests
+ * @ingroup wifi-test
+ * @ingroup tests
  *
- * \brief Test HE 6 GHz Band Capabilities information element serialization and deserialization
+ * @brief Test HE 6 GHz Band Capabilities information element serialization and deserialization
  */
 class He6GhzBandCapabilitiesTest : public HeaderSerializationTestCase
 {
@@ -119,10 +108,10 @@ He6GhzBandCapabilitiesTest::DoRun()
 }
 
 /**
- * \ingroup wifi-test
- * \ingroup tests
+ * @ingroup wifi-test
+ * @ingroup tests
  *
- * \brief wifi HE Information Elements Test Suite
+ * @brief wifi HE Information Elements Test Suite
  */
 class WifiHeInfoElemsTestSuite : public TestSuite
 {

@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2024
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Author: Rami Abdallah <abdallah.rami@gmail.com>
  */
@@ -26,7 +15,7 @@ namespace ns3
 {
 
 /**
- * \ingroup wifi
+ * @ingroup wifi
  *
  * The HE 6 GHz Band Capabilities (IEEE 802.11ax-2021 9.4.2.263)
  */
@@ -60,26 +49,26 @@ class He6GhzBandCapabilities : public WifiInformationElement
     /**
      * Set the maximum AMPDU length.
      *
-     * \param maxAmpduLength 2^(13 + x) - 1, x in the range 0 to 7
+     * @param maxAmpduLength 2^(13 + x) - 1, x in the range 0 to 7
      */
     void SetMaxAmpduLength(uint32_t maxAmpduLength);
     /**
      * Return the maximum A-MPDU length.
      *
-     * \return the maximum A-MPDU length in bytes
+     * @return the maximum A-MPDU length in bytes
      */
     uint32_t GetMaxAmpduLength() const;
 
     /**
      * Set the maximum MPDU length.
      *
-     * \param length the maximum MPDU length (3895, 7991 or 11454)
+     * @param length the maximum MPDU length (3895, 7991 or 11454)
      */
     void SetMaxMpduLength(uint16_t length);
     /**
      * Get the maximum MPDU length.
      *
-     * \return the maximum MPDU length in bytes
+     * @return the maximum MPDU length in bytes
      */
     uint16_t GetMaxMpduLength() const;
 

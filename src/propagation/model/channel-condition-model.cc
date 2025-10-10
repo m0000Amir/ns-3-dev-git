@@ -2,18 +2,7 @@
  * Copyright (c) 2019 SIGNET Lab, Department of Information Engineering,
  * University of Padova
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  */
 
 #include "channel-condition-model.h"
@@ -35,41 +24,41 @@ namespace
 
 /// NTN Dense Urban LOS probabilities from table 6.6.1-1 of 3GPP 38.811
 const std::map<int, double> DenseUrbanLOSProb{
-    {10, {28.2}},
-    {20, {33.1}},
-    {30, {39.8}},
-    {40, {46.8}},
-    {50, {53.7}},
-    {60, {61.2}},
-    {70, {73.8}},
-    {80, {82.0}},
-    {90, {98.1}},
+    {10, {0.282}},
+    {20, {0.331}},
+    {30, {0.398}},
+    {40, {0.468}},
+    {50, {0.537}},
+    {60, {0.612}},
+    {70, {0.738}},
+    {80, {0.820}},
+    {90, {0.981}},
 };
 
 /// NTN Urban LOS probabilities from table 6.6.1-1 of 3GPP 38.811
 const std::map<int, double> UrbanLOSProb{
-    {10, {24.6}},
-    {20, {38.6}},
-    {30, {49.3}},
-    {40, {61.3}},
-    {50, {72.6}},
-    {60, {80.5}},
-    {70, {91.9}},
-    {80, {96.8}},
-    {90, {99.2}},
+    {10, {0.246}},
+    {20, {0.386}},
+    {30, {0.493}},
+    {40, {0.613}},
+    {50, {0.726}},
+    {60, {0.805}},
+    {70, {0.919}},
+    {80, {0.968}},
+    {90, {0.992}},
 };
 
 /// NTN Suburban LOS probabilities from table 6.6.1-1 of 3GPP 38.811
 const std::map<int, double> SuburbanRuralLOSProb{
-    {10, {78.2}},
-    {20, {86.9}},
-    {30, {91.9}},
-    {40, {92.9}},
-    {50, {93.5}},
-    {60, {94.0}},
-    {70, {94.9}},
-    {80, {95.2}},
-    {90, {99.8}},
+    {10, {0.782}},
+    {20, {0.869}},
+    {30, {0.919}},
+    {40, {0.929}},
+    {50, {0.935}},
+    {60, {0.940}},
+    {70, {0.949}},
+    {80, {0.952}},
+    {90, {0.998}},
 };
 
 } // namespace
@@ -399,7 +388,7 @@ void
 ThreeGppChannelConditionModel::DoDispose()
 {
     m_channelConditionMap.clear();
-    m_updatePeriod = Seconds(0.0);
+    m_updatePeriod = Seconds(0);
 }
 
 Ptr<ChannelCondition>
@@ -604,7 +593,7 @@ ThreeGppChannelConditionModel::GetQuantizedElevationAngle(Ptr<const MobilityMode
                   "Invalid elevation angle!");
 
     return std::make_tuple(elevAngle, elevAngleQuantized);
-};
+}
 
 // ------------------------------------------------------------------------- //
 
@@ -994,4 +983,4 @@ ThreeGppNTNRuralChannelConditionModel::ComputePlos(Ptr<const MobilityModel> a,
     return SuburbanRuralLOSProb.at(quantizedElevAngle);
 }
 
-} // end namespace ns3
+} // namespace ns3

@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2009 University of Washington
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  */
 
@@ -108,7 +97,7 @@ NS_LOG_COMPONENT_DEFINE("WifiSimpleAdhocGrid");
 /**
  * Function called when a packet is received.
  *
- * \param socket The receiving socket.
+ * @param socket The receiving socket.
  */
 void
 ReceivePacket(Ptr<Socket> socket)
@@ -122,10 +111,10 @@ ReceivePacket(Ptr<Socket> socket)
 /**
  * Generate traffic.
  *
- * \param socket The sending socket.
- * \param pktSize The packet size.
- * \param pktCount The packet count.
- * \param pktInterval The interval between two packets.
+ * @param socket The sending socket.
+ * @param pktSize The packet size.
+ * @param pktCount The packet count.
+ * @param pktInterval The interval between two packets.
  */
 static void
 GenerateTraffic(Ptr<Socket> socket, uint32_t pktSize, uint32_t pktCount, Time pktInterval)
@@ -150,7 +139,7 @@ int
 main(int argc, char* argv[])
 {
     std::string phyMode{"DsssRate1Mbps"};
-    double distance{100};      // m
+    meter_u distance{100};
     uint32_t packetSize{1000}; // bytes
     uint32_t numPackets{1};
     uint32_t numNodes{25}; // by default, 5x5
@@ -270,7 +259,7 @@ main(int argc, char* argv[])
     }
 
     // Give OLSR time to converge-- 30 seconds perhaps
-    Simulator::Schedule(Seconds(30.0),
+    Simulator::Schedule(Seconds(30),
                         &GenerateTraffic,
                         source,
                         packetSize,
@@ -281,7 +270,7 @@ main(int argc, char* argv[])
     NS_LOG_UNCOND("Testing from node " << sourceNode << " to " << sinkNode << " with grid distance "
                                        << distance);
 
-    Simulator::Stop(Seconds(33.0));
+    Simulator::Stop(Seconds(33));
     Simulator::Run();
     Simulator::Destroy();
 

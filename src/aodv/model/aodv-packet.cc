@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2009 IITP RAS
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Based on
  *      NS-2 AODV model developed by the CMU/MONARCH group and optimized and
@@ -212,10 +201,10 @@ RreqHeader::Deserialize(Buffer::Iterator start)
 void
 RreqHeader::Print(std::ostream& os) const
 {
-    os << "RREQ ID " << m_requestID << " destination: ipv4 " << m_dst << " sequence number "
-       << m_dstSeqNo << " source: ipv4 " << m_origin << " sequence number " << m_originSeqNo
-       << " flags:"
-       << " Gratuitous RREP " << (*this).GetGratuitousRrep() << " Destination only "
+    os << "RREQ ID " << m_requestID;
+    os << " destination: ipv4 " << m_dst << " sequence number " << m_dstSeqNo;
+    os << " source: ipv4 " << m_origin << " sequence number " << m_originSeqNo;
+    os << " flags: Gratuitous RREP " << (*this).GetGratuitousRrep() << " Destination only "
        << (*this).GetDestinationOnly() << " Unknown sequence number " << (*this).GetUnknownSeqno();
 }
 

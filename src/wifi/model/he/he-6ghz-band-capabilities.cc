@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2024
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Author: Rami Abdallah <abdallah.rami@gmail.com>
  */
@@ -135,14 +124,14 @@ He6GhzBandCapabilities::DeserializeInformationField(Buffer::Iterator start, uint
 void
 He6GhzBandCapabilities::Print(std::ostream& os) const
 {
-    os << "HE 6GHz Band Capabilities=[Capabilities Information|"
-       << " Min MPDU start spacing: " << +m_capabilitiesInfo.m_minMpduStartSpacing
-       << " Max A-MPDU Length Exp: " << +m_capabilitiesInfo.m_maxAmpduLengthExponent
-       << " Max MPDU Length: " << +m_capabilitiesInfo.m_maxMpduLength
-       << " SM Power Save: " << +m_capabilitiesInfo.m_smPowerSave
-       << " RD Responder: " << +m_capabilitiesInfo.m_rdResponder
-       << " RX Antenna Pattern: " << +m_capabilitiesInfo.m_rxAntennaPatternConsistency
-       << " TX Antenna Pattern: " << +m_capabilitiesInfo.m_txAntennaPatternConsistency << "]";
+    os << "HE 6GHz Band Capabilities=["
+       << "Min MPDU start spacing: " << +m_capabilitiesInfo.m_minMpduStartSpacing
+       << ", Max A-MPDU Length Exp: " << +m_capabilitiesInfo.m_maxAmpduLengthExponent
+       << ", Max MPDU Length: " << +m_capabilitiesInfo.m_maxMpduLength
+       << ", SM Power Save: " << +m_capabilitiesInfo.m_smPowerSave
+       << ", RD Responder: " << +m_capabilitiesInfo.m_rdResponder
+       << ", RX Antenna Pattern: " << +m_capabilitiesInfo.m_rxAntennaPatternConsistency
+       << ", TX Antenna Pattern: " << +m_capabilitiesInfo.m_txAntennaPatternConsistency << "]";
 }
 
 } // namespace ns3

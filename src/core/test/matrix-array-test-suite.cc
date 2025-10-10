@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2022 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Author: Biljana Bojovic <bbojovic@cttc.es>
  */
@@ -21,15 +10,17 @@
 #include "ns3/matrix-array.h"
 #include "ns3/test.h"
 
+#include <algorithm>
+
 /**
- * \defgroup matrixArray-tests MatrixArray tests
- * \ingroup core-tests
- * \ingroup Matrices
+ * @defgroup matrixArray-tests MatrixArray tests
+ * @ingroup core-tests
+ * @ingroup Matrices
  */
 
 /**
- * \file
- * \ingroup matrixArray-tests
+ * @file
+ * @ingroup matrixArray-tests
  * MatrixArray test suite
  */
 namespace ns3
@@ -41,9 +32,9 @@ namespace tests
 NS_LOG_COMPONENT_DEFINE("MatrixArrayTest");
 
 /**
- * \brief Function casts an input valArray "in" (type IN) to an output valArray "out" (type T)
- * \param in Input valarray to be casted
- * \param out Output valarray to receive casted values
+ * @brief Function casts an input valArray "in" (type IN) to an output valArray "out" (type T)
+ * @param in Input valarray to be casted
+ * @param out Output valarray to receive casted values
  */
 template <typename IN, typename T>
 void
@@ -62,7 +53,7 @@ CastStdValarray(const std::valarray<IN>& in, std::valarray<T>& out)
 }
 
 /**
- * \ingroup matrixArray-tests
+ * @ingroup matrixArray-tests
  *  MatrixArray test case for testing constructors, operators and other functions
  */
 template <class T>
@@ -73,32 +64,32 @@ class MatrixArrayTestCase : public TestCase
     /**
      * Constructor
      *
-     * \param [in] name reference name
+     * @param [in] name reference name
      */
     MatrixArrayTestCase(const std::string& name);
 
     /** Destructor. */
     ~MatrixArrayTestCase() override;
     /**
-     * \brief Copy constructor.
+     * @brief Copy constructor.
      * Instruct the compiler to generate the implicitly declared copy constructor
      */
     MatrixArrayTestCase(const MatrixArrayTestCase<T>&) = default;
     /**
-     * \brief Copy assignment operator.
+     * @brief Copy assignment operator.
      * Instruct the compiler to generate the implicitly declared copy assignment operator.
-     * \return A reference to this MatrixArrayTestCase
+     * @return A reference to this MatrixArrayTestCase
      */
     MatrixArrayTestCase<T>& operator=(const MatrixArrayTestCase<T>&) = default;
     /**
-     * \brief Move constructor.
+     * @brief Move constructor.
      * Instruct the compiler to generate the implicitly declared move constructor
      */
     MatrixArrayTestCase(MatrixArrayTestCase<T>&&) = default;
     /**
-     * \brief Move assignment operator.
+     * @brief Move assignment operator.
      * Instruct the compiler to generate the implicitly declared copy constructor
-     * \return A reference to this MatrixArrayTestCase
+     * @return A reference to this MatrixArrayTestCase
      */
     MatrixArrayTestCase<T>& operator=(MatrixArrayTestCase<T>&&) = default;
 
@@ -496,34 +487,34 @@ MatrixArrayTestCase<T>::DoRun()
     }
     // clang-format off
     std::valarray<int> multiPageMatrixValues{
-            // page 0: identity matrix
-            1, 0, 0,
-            0, 1, 0,
-            0, 0, 1,
-            // page 1: permutation matrix
-            0, 0, 1,
-            0, 1, 0,
-            1, 0, 0,
-            // page 2: random matrix
-            1, 4, 6,
-            0, 2, 5,
-            7, 0, 3,
-            // page 3: upper triangular
-            5, -9, 2,
-            0, -4, -10,
-            0, 0, -3,
-            // page 4: lower triangular
-            -7, 0, 0,
-            -1, -9, 0,
-            -5, 6, -5,
-            // page 5: zero diagonal
-            0, 1, 2,
-            1, 0, 1,
-            2, 1, 0,
-            // page 6: zero bidiagonal
-            0, 1, 0,
-            1, 0, 1,
-            0, 1, 0
+        // page 0: identity matrix
+        1, 0, 0,
+        0, 1, 0,
+        0, 0, 1,
+        // page 1: permutation matrix
+        0, 0, 1,
+        0, 1, 0,
+        1, 0, 0,
+        // page 2: random matrix
+        1, 4, 6,
+        0, 2, 5,
+        7, 0, 3,
+        // page 3: upper triangular
+        5, -9, 2,
+        0, -4, -10,
+        0, 0, -3,
+        // page 4: lower triangular
+        -7, 0, 0,
+        -1, -9, 0,
+        -5, 6, -5,
+        // page 5: zero diagonal
+        0, 1, 2,
+        1, 0, 1,
+        2, 1, 0,
+        // page 6: zero bidiagonal
+        0, 1, 0,
+        1, 0, 1,
+        0, 1, 0
     };
     // clang-format on
     std::valarray<T> castMultiPageMatrixValues(multiPageMatrixValues.size());
@@ -615,7 +606,7 @@ MatrixArrayTestCase<T>::DoRun()
 }
 
 /**
- * \ingroup matrixArray-tests
+ * @ingroup matrixArray-tests
  *  Test for testing functions that apply to MatrixArrays that use complex numbers,
  *  such as HermitianTranspose that is only defined for complex type
  */
@@ -627,7 +618,7 @@ class ComplexMatrixArrayTestCase : public TestCase
     /**
      * Constructor
      *
-     * \param [in] name reference name
+     * @param [in] name reference name
      */
     ComplexMatrixArrayTestCase(const std::string& name);
     /** Destructor*/
@@ -692,7 +683,7 @@ ComplexMatrixArrayTestCase::DoRun()
 }
 
 /**
- * \ingroup matrixArray-tests
+ * @ingroup matrixArray-tests
  * MatrixArray test suite
  */
 class MatrixArrayTestSuite : public TestSuite
@@ -713,7 +704,7 @@ MatrixArrayTestSuite::MatrixArrayTestSuite()
 }
 
 /**
- * \ingroup matrixArray-tests
+ * @ingroup matrixArray-tests
  * MatrixArrayTestSuite instance variable.
  */
 static MatrixArrayTestSuite g_matrixArrayTestSuite;

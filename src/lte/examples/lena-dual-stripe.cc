@@ -1,32 +1,21 @@
 /*
  * Copyright (c) 2012 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Author: Nicola Baldo <nbaldo@cttc.es>
  */
 
-#include <ns3/applications-module.h>
-#include <ns3/buildings-module.h>
-#include <ns3/config-store-module.h>
-#include <ns3/core-module.h>
-#include <ns3/internet-module.h>
-#include <ns3/log.h>
-#include <ns3/lte-module.h>
-#include <ns3/mobility-module.h>
-#include <ns3/network-module.h>
-#include <ns3/point-to-point-helper.h>
+#include "ns3/applications-module.h"
+#include "ns3/buildings-module.h"
+#include "ns3/config-store-module.h"
+#include "ns3/core-module.h"
+#include "ns3/internet-module.h"
+#include "ns3/log.h"
+#include "ns3/lte-module.h"
+#include "ns3/mobility-module.h"
+#include "ns3/network-module.h"
+#include "ns3/point-to-point-helper.h"
 
 #include <iomanip>
 #include <ios>
@@ -37,6 +26,10 @@
 // 3GPP R4-092042, Section 4.2.1 Dual Stripe Model
 // note that the term "apartments" used in that document matches with
 // the term "room" used in the BuildingsMobilityModel
+//
+// A user can pass the command-line --ns3::LteHexGridEnbTopologyHelper::EnableWraparound=1
+// to setup and use the hexagonal wraparound model, which causes all cells to receive
+// similar interference, rather than central cells receiving a lot more than edge cells.
 
 using namespace ns3;
 
@@ -45,9 +38,9 @@ NS_LOG_COMPONENT_DEFINE("LenaDualStripe");
 /**
  * Check if two boxes are overlapping.
  *
- * \param a First box.
- * \param b Second box.
- * \return true if the boxes are overlapping, false otherwise.
+ * @param a First box.
+ * @param b Second box.
+ * @return true if the boxes are overlapping, false otherwise.
  */
 bool
 AreOverlapping(Box a, Box b)
@@ -65,14 +58,14 @@ class FemtocellBlockAllocator
   public:
     /**
      * Constructor
-     * \param area the total area
-     * \param nApartmentsX the number of apartments in the X direction
-     * \param nFloors the number of floors
+     * @param area the total area
+     * @param nApartmentsX the number of apartments in the X direction
+     * @param nFloors the number of floors
      */
     FemtocellBlockAllocator(Box area, uint32_t nApartmentsX, uint32_t nFloors);
     /**
      * Function that creates building blocks.
-     * \param n the number of blocks to create
+     * @param n the number of blocks to create
      */
     void Create(uint32_t n);
     /// Create function
@@ -82,8 +75,8 @@ class FemtocellBlockAllocator
     /**
      * Function that checks if the box area is overlapping with some of previously created building
      * blocks.
-     * \param box the area to check
-     * \returns true if there is an overlap
+     * @param box the area to check
+     * @returns true if there is an overlap
      */
     bool OverlapsWithAnyPrevious(Box box);
     Box m_area;                           ///< Area
@@ -171,7 +164,7 @@ FemtocellBlockAllocator::OverlapsWithAnyPrevious(Box box)
 /**
  * Print a list of buildings that can be plotted using Gnuplot.
  *
- * \param filename the output file name.
+ * @param filename the output file name.
  */
 void
 PrintGnuplottableBuildingListToFile(std::string filename)
@@ -196,7 +189,7 @@ PrintGnuplottableBuildingListToFile(std::string filename)
 /**
  * Print a list of UEs that can be plotted using Gnuplot.
  *
- * \param filename the output file name.
+ * @param filename the output file name.
  */
 void
 PrintGnuplottableUeListToFile(std::string filename)
@@ -230,7 +223,7 @@ PrintGnuplottableUeListToFile(std::string filename)
 /**
  * Print a list of ENBs that can be plotted using Gnuplot.
  *
- * \param filename the output file name.
+ * @param filename the output file name.
  */
 void
 PrintGnuplottableEnbListToFile(std::string filename)
@@ -283,7 +276,7 @@ static ns3::GlobalValue g_nFloors("nFloors",
 /// How many macro sites there are
 static ns3::GlobalValue g_nMacroEnbSites("nMacroEnbSites",
                                          "How many macro sites there are",
-                                         ns3::UintegerValue(3),
+                                         ns3::UintegerValue(7),
                                          ns3::MakeUintegerChecker<uint32_t>());
 
 /// (minimum) number of sites along the X-axis of the hex grid
@@ -649,7 +642,12 @@ main(int argc, char* argv[])
     lteHelper->SetEnbDeviceAttribute("UlBandwidth", UintegerValue(macroEnbBandwidth));
     NetDeviceContainer macroEnbDevs =
         lteHexGridEnbTopologyHelper->SetPositionAndInstallEnbDevice(macroEnbs);
-
+    Ptr<WraparoundModel> wraparoundModel = lteHexGridEnbTopologyHelper->GetWraparoundModel();
+    if (wraparoundModel)
+    {
+        lteHelper->GetDownlinkSpectrumChannel()->UnidirectionalAggregateObject(wraparoundModel);
+        lteHelper->GetUplinkSpectrumChannel()->UnidirectionalAggregateObject(wraparoundModel);
+    }
     if (epc)
     {
         // this enables handover for macro eNBs
@@ -907,7 +905,7 @@ main(int argc, char* argv[])
                             InetSocketAddress(Ipv4Address::GetAny(), ulPort));
                         serverApps.Add(ulPacketSinkHelper.Install(remoteHost));
                     }
-                } // end if (useUdp)
+                }
 
                 Ptr<EpcTft> tft = Create<EpcTft>();
                 if (epcDl)
@@ -933,8 +931,7 @@ main(int argc, char* argv[])
                 Time startTime = Seconds(startTimeSeconds->GetValue());
                 serverApps.Start(startTime);
                 clientApps.Start(startTime);
-
-            } // end for b
+            }
         }
     }
     else // (epc == false)

@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2020 Universita' degli Studi di Napoli Federico II
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Author: Stefano Avallone <stavallo@unina.it>
  */
@@ -37,7 +26,7 @@ namespace ns3
 class Mac48Address;
 
 /**
- * \ingroup wifi
+ * @ingroup wifi
  *
  * WifiAcknowledgment is an abstract base struct. Each derived struct defines an acknowledgment
  * method and stores the information needed to perform acknowledgment according to
@@ -46,8 +35,8 @@ class Mac48Address;
 struct WifiAcknowledgment
 {
     /**
-     * \enum Method
-     * \brief Available acknowledgment methods
+     * @enum Method
+     * @brief Available acknowledgment methods
      */
     enum Method
     {
@@ -64,14 +53,14 @@ struct WifiAcknowledgment
 
     /**
      * Constructor.
-     * \param m the acknowledgment method for this object
+     * @param m the acknowledgment method for this object
      */
     WifiAcknowledgment(Method m);
     virtual ~WifiAcknowledgment();
 
     /**
      * Clone this object.
-     * \return a pointer to the cloned object
+     * @return a pointer to the cloned object
      */
     virtual std::unique_ptr<WifiAcknowledgment> Copy() const = 0;
 
@@ -79,9 +68,9 @@ struct WifiAcknowledgment
      * Get the QoS Ack policy to use for the MPDUs addressed to the given receiver
      * and belonging to the given TID.
      *
-     * \param receiver the MAC address of the receiver
-     * \param tid the TID
-     * \return the QoS Ack policy to use
+     * @param receiver the MAC address of the receiver
+     * @param tid the TID
+     * @return the QoS Ack policy to use
      */
     WifiMacHeader::QosAckPolicy GetQosAckPolicy(Mac48Address receiver, uint8_t tid) const;
 
@@ -90,15 +79,15 @@ struct WifiAcknowledgment
      * and belonging to the given TID. If the pair (receiver, TID) already exists,
      * it is overwritten with the given QoS Ack policy.
      *
-     * \param receiver the MAC address of the receiver
-     * \param tid the TID
-     * \param ackPolicy the QoS Ack policy to use
+     * @param receiver the MAC address of the receiver
+     * @param tid the TID
+     * @param ackPolicy the QoS Ack policy to use
      */
     void SetQosAckPolicy(Mac48Address receiver, uint8_t tid, WifiMacHeader::QosAckPolicy ackPolicy);
 
     /**
-     * \brief Print the object contents.
-     * \param os output stream in which the data should be printed.
+     * @brief Print the object contents.
+     * @param os output stream in which the data should be printed.
      */
     virtual void Print(std::ostream& os) const = 0;
 
@@ -110,10 +99,10 @@ struct WifiAcknowledgment
      * Check whether the given QoS Ack policy can be used for the MPDUs addressed
      * to the given receiver and belonging to the given TID.
      *
-     * \param receiver the MAC address of the receiver
-     * \param tid the TID
-     * \param ackPolicy the QoS Ack policy to use
-     * \return true if the given QoS Ack policy can be used, false otherwise
+     * @param receiver the MAC address of the receiver
+     * @param tid the TID
+     * @param ackPolicy the QoS Ack policy to use
+     * @return true if the given QoS Ack policy can be used, false otherwise
      */
     virtual bool CheckQosAckPolicy(Mac48Address receiver,
                                    uint8_t tid,
@@ -124,7 +113,7 @@ struct WifiAcknowledgment
 };
 
 /**
- * \ingroup wifi
+ * @ingroup wifi
  *
  * WifiNoAck specifies that no acknowledgment is required.
  */
@@ -140,7 +129,7 @@ struct WifiNoAck : public WifiAcknowledgment
 };
 
 /**
- * \ingroup wifi
+ * @ingroup wifi
  *
  * WifiNormalAck specifies that acknowledgment via Normal Ack is required.
  */
@@ -158,7 +147,7 @@ struct WifiNormalAck : public WifiAcknowledgment
 };
 
 /**
- * \ingroup wifi
+ * @ingroup wifi
  *
  * WifiBlockAck specifies that acknowledgment via Block Ack is required.
  */
@@ -177,7 +166,7 @@ struct WifiBlockAck : public WifiAcknowledgment
 };
 
 /**
- * \ingroup wifi
+ * @ingroup wifi
  *
  * WifiBarBlockAck specifies that a BlockAckReq is sent to solicit a Block Ack response.
  */
@@ -198,7 +187,7 @@ struct WifiBarBlockAck : public WifiAcknowledgment
 };
 
 /**
- * \ingroup wifi
+ * @ingroup wifi
  *
  * WifiDlMuBarBaSequence specifies that a DL MU PPDU is acknowledged through a
  * sequence of BlockAckReq and BlockAck frames. Only one station may be allowed
@@ -245,7 +234,7 @@ struct WifiDlMuBarBaSequence : public WifiAcknowledgment
 };
 
 /**
- * \ingroup wifi
+ * @ingroup wifi
  *
  * WifiDlMuTfMuBar specifies that a DL MU PPDU is followed after a SIFS duration
  * by a MU-BAR Trigger Frame (sent as single user frame) soliciting BlockAck
@@ -277,7 +266,7 @@ struct WifiDlMuTfMuBar : public WifiAcknowledgment
 };
 
 /**
- * \ingroup wifi
+ * @ingroup wifi
  *
  * WifiDlMuAggregateTf specifies that a DL MU PPDU made of PSDUs including each
  * a MU-BAR Trigger Frame is acknowledged through BlockAck frames sent as
@@ -308,7 +297,7 @@ struct WifiDlMuAggregateTf : public WifiAcknowledgment
 };
 
 /**
- * \ingroup wifi
+ * @ingroup wifi
  *
  * WifiUlMuMultiStaBa specifies that a Basic Trigger Frame is being sent to
  * solicit TB PPDUs that will be acknowledged through a multi-STA BlockAck frame.
@@ -331,7 +320,7 @@ struct WifiUlMuMultiStaBa : public WifiAcknowledgment
 };
 
 /**
- * \ingroup wifi
+ * @ingroup wifi
  *
  * WifiAckAfterTbPpdu is used when a station prepares a TB PPDU to send in
  * response to a Basic Trigger Frame. The acknowledgment time must be
@@ -351,11 +340,11 @@ struct WifiAckAfterTbPpdu : public WifiAcknowledgment
 };
 
 /**
- * \brief Stream insertion operator.
+ * @brief Stream insertion operator.
  *
- * \param os the output stream
- * \param acknowledgment the acknowledgment method
- * \returns a reference to the stream
+ * @param os the output stream
+ * @param acknowledgment the acknowledgment method
+ * @returns a reference to the stream
  */
 std::ostream& operator<<(std::ostream& os, const WifiAcknowledgment* acknowledgment);
 

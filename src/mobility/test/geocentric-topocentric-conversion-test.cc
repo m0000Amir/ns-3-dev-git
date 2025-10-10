@@ -1,26 +1,15 @@
 /*
  * Copyright (c) 2024 University of Padova
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Author: Matteo Pagin <mattpagg@gmail.com>
  */
 
-#include <ns3/angles.h>
-#include <ns3/geographic-positions.h>
-#include <ns3/log.h>
-#include <ns3/test.h>
+#include "ns3/angles.h"
+#include "ns3/geographic-positions.h"
+#include "ns3/log.h"
+#include "ns3/test.h"
 
 NS_LOG_COMPONENT_DEFINE("GeocentricTopocentricConversionTest");
 
@@ -363,9 +352,9 @@ const std::vector<ns3::Vector> WGS_84_REFP_1 = {
 using namespace ns3;
 
 /**
- * \ingroup mobility-test
+ * @ingroup mobility-test
  *
- * \brief Geographic to/from Topocentric Test Case
+ * @brief Geographic to/from Topocentric Test Case
  *
  * This test verifies the accuracy of the GeographicToTopocentricCoordinates and
  * TopocentricToGeographicCoordinates methods in the GeographicPositions class,
@@ -529,9 +518,9 @@ GeoToAndFromTopocentricTestCase::CheckTestPass(double actual,
 }
 
 /**
- * \ingroup mobility-test
+ * @ingroup mobility-test
  *
- * \brief Geographic cartesian <--> Topocentric conversion test
+ * @brief Geographic cartesian <--> Topocentric conversion test
  */
 class GeoToAndFromTopocentricTestSuite : public TestSuite
 {
@@ -567,7 +556,7 @@ GeoToAndFromTopocentricTestSuite::GeoToAndFromTopocentricTestSuite()
 }
 
 /**
- * \ingroup mobility-test
+ * @ingroup mobility-test
  * Static variable for test initialization
  */
 static GeoToAndFromTopocentricTestSuite g_GeoToAndFromTopocentricTestSuite;

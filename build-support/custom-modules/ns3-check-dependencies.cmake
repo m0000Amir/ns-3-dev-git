@@ -1,17 +1,6 @@
 # Copyright (c) 2023 Universidade de Brasília
 #
-# This program is free software; you can redistribute it and/or modify it under
-# the terms of the GNU General Public License version 2 as published by the Free
-# Software Foundation;
-#
-# This program is distributed in the hope that it will be useful, but WITHOUT
-# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-# FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
-# details.
-#
-# You should have received a copy of the GNU General Public License along with
-# this program; if not, write to the Free Software Foundation, Inc., 59 Temple
-# Place, Suite 330, Boston, MA  02111-1307 USA
+# SPDX-License-Identifier: GPL-2.0-only
 #
 # Author: Gabriel Ferreira <gabrielcarvfer@gmail.com>
 
@@ -51,6 +40,27 @@ function(check_deps missing_deps)
     )
     if(NOT (${return_code} EQUAL 0))
       list(APPEND local_missing_deps ${package})
+    else()
+      # To make sure CMake import files can be found from venv site packages, we
+      # manually add them to CMAKE_PREFIX_PATH
+      execute_process(
+        COMMAND
+          ${Python3_EXECUTABLE} -c
+          "import os; import ${package}; print(os.path.abspath(os.path.dirname(${package}.__file__)))"
+        OUTPUT_VARIABLE venv_site_packages_path
+      )
+      # Remove newlines (\n, \r, \r\n)
+      string(REGEX REPLACE "[\r\n]+$" "" venv_site_packages_path
+                           "${venv_site_packages_path}"
+      )
+      if(EXISTS ${venv_site_packages_path})
+        if(NOT (DEFINED CMAKE_PREFIX_PATH))
+          set(CMAKE_PREFIX_PATH "" PARENT_SCOPE)
+        endif()
+        set(CMAKE_PREFIX_PATH "${CMAKE_PREFIX_PATH};${venv_site_packages_path}"
+            PARENT_SCOPE
+        )
+      endif()
     endif()
   endforeach()
 

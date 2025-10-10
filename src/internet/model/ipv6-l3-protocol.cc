@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2007-2009 Strasbourg University
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Author: Sebastien Vincent <vincent@clarinet.u-strasbg.fr>
  */
@@ -54,8 +43,6 @@ namespace ns3
 NS_LOG_COMPONENT_DEFINE("Ipv6L3Protocol");
 
 NS_OBJECT_ENSURE_REGISTERED(Ipv6L3Protocol);
-
-const uint16_t Ipv6L3Protocol::PROT_NUMBER = 0x86DD;
 
 TypeId
 Ipv6L3Protocol::GetTypeId()
@@ -1061,13 +1048,6 @@ Ipv6L3Protocol::Receive(Ptr<NetDevice> device,
         }
     }
 
-    /* forward up to IPv6 raw sockets */
-    for (auto it = m_sockets.begin(); it != m_sockets.end(); ++it)
-    {
-        Ptr<Ipv6RawSocketImpl> socket = *it;
-        socket->ForwardUp(packet, hdr, device);
-    }
-
     Ptr<Ipv6ExtensionDemux> ipv6ExtensionDemux = m_node->GetObject<Ipv6ExtensionDemux>();
     Ptr<Ipv6Extension> ipv6Extension = nullptr;
     uint8_t nextHeader = hdr.GetNextHeader();
@@ -1331,7 +1311,6 @@ Ipv6L3Protocol::IpForward(Ptr<const NetDevice> idev,
     // Forwarding
     Ipv6Header ipHeader = header;
     Ptr<Packet> packet = p->Copy();
-    ipHeader.SetHopLimit(ipHeader.GetHopLimit() - 1);
 
     if (ipHeader.GetSource().IsLinkLocal())
     {
@@ -1339,7 +1318,9 @@ Ipv6L3Protocol::IpForward(Ptr<const NetDevice> idev,
         return;
     }
 
-    if (ipHeader.GetHopLimit() == 0)
+    // RFC 8200: When forwarding, the packet is discarded if Hop
+    // Limit was zero when received or is decremented to zero.
+    if (ipHeader.GetHopLimit() <= 1)
     {
         NS_LOG_WARN("TTL exceeded.  Drop.");
         m_dropTrace(ipHeader, packet, DROP_TTL_EXPIRED, this, 0);
@@ -1353,6 +1334,7 @@ Ipv6L3Protocol::IpForward(Ptr<const NetDevice> idev,
         }
         return;
     }
+    ipHeader.SetHopLimit(ipHeader.GetHopLimit() - 1);
 
     /* ICMPv6 Redirect */
 
@@ -1453,6 +1435,7 @@ Ipv6L3Protocol::LocalDeliver(Ptr<const Packet> packet, const Ipv6Header& ip, uin
     bool isDropped = false;
     bool stopProcessing = false;
     DropReason dropReason;
+    Ptr<NetDevice> device = GetNetDevice(iif);
 
     // check for a malformed hop-by-hop extension
     // this is a common case when forging IPv6 raw packets
@@ -1544,6 +1527,12 @@ Ipv6L3Protocol::LocalDeliver(Ptr<const Packet> packet, const Ipv6Header& ip, uin
                 Ptr<Packet> copy = p->Copy();
 
                 m_localDeliverTrace(newIpHeader, p, iif);
+
+                for (auto& socket : m_sockets)
+                {
+                    NS_LOG_INFO("Delivering to raw socket " << socket);
+                    socket->ForwardUp(p, newIpHeader, device);
+                }
 
                 IpL4Protocol::RxStatus status =
                     protocol->Receive(p, newIpHeader, GetInterface(iif));

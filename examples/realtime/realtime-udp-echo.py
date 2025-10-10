@@ -1,16 +1,5 @@
 #
-# * This program is free software; you can redistribute it and/or modify
-# * it under the terms of the GNU General Public License version 2 as
-# * published by the Free Software Foundation;
-# *
-# * This program is distributed in the hope that it will be useful,
-# * but WITHOUT ANY WARRANTY; without even the implied warranty of
-# * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# * GNU General Public License for more details.
-# *
-# * You should have received a copy of the GNU General Public License
-# * along with this program; if not, write to the Free Software
-# * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+# * SPDX-License-Identifier: GPL-2.0-only
 
 # Network topology
 #
@@ -83,8 +72,8 @@ def main(argv):
     port = 9  # well-known echo port number
     server = ns.UdpEchoServerHelper(port)
     apps = server.Install(n.Get(1))
-    apps.Start(ns.Seconds(1.0))
-    apps.Stop(ns.Seconds(10.0))
+    apps.Start(ns.Seconds(1))
+    apps.Stop(ns.Seconds(10))
 
     #
     # Create a UdpEchoClient application to send UDP datagrams from node zero to
@@ -98,8 +87,8 @@ def main(argv):
     client.SetAttribute("Interval", ns.TimeValue(interPacketInterval))
     client.SetAttribute("PacketSize", ns.UintegerValue(packetSize))
     apps = client.Install(n.Get(0))
-    apps.Start(ns.Seconds(2.0))
-    apps.Stop(ns.Seconds(10.0))
+    apps.Start(ns.Seconds(2))
+    apps.Stop(ns.Seconds(10))
 
     ascii = ns.AsciiTraceHelper()
     csma.EnableAsciiAll(ascii.CreateFileStream("realtime-udp-echo.tr"))

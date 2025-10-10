@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2015 Natale Patriciello <natale.patriciello@gmail.com>
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  */
 
@@ -29,9 +18,9 @@ NS_LOG_COMPONENT_DEFINE("TcpRtoTest");
 using namespace ns3;
 
 /**
- * \ingroup internet-test
+ * @ingroup internet-test
  *
- * \brief Testing the moments after an RTO expiration
+ * @brief Testing the moments after an RTO expiration
  *
  * The scope of this test is to be sure that, after an RTO expiration,
  * the TCP implementation set the correct state in the ACK state machine,
@@ -44,9 +33,9 @@ class TcpRtoTest : public TcpGeneralTest
 {
   public:
     /**
-     * \brief Constructor.
-     * \param congControl Congestion control type.
-     * \param msg Test description.
+     * @brief Constructor.
+     * @param congControl Congestion control type.
+     * @param msg Test description.
      */
     TcpRtoTest(const TypeId& congControl, const std::string& msg);
 
@@ -165,9 +154,9 @@ TcpRtoTest::FinalChecks()
 }
 
 /**
- * \ingroup internet-test
+ * @ingroup internet-test
  *
- * \brief Testing the ssthresh behavior after the RTO expires
+ * @brief Testing the ssthresh behavior after the RTO expires
  *
  * The scope of this test is to be sure that, after an RTO expiration,
  * the TCP implementation sets the correct ssthresh value
@@ -177,11 +166,11 @@ class TcpSsThreshRtoTest : public TcpGeneralTest
 {
   public:
     /**
-     * \brief Constructor.
-     * \param congControl congestion control type
-     * \param seqToDrop sequence number to drop
-     * \param minRto minimum RTO
-     * \param msg test description
+     * @brief Constructor.
+     * @param congControl congestion control type
+     * @param seqToDrop sequence number to drop
+     * @param minRto minimum RTO
+     * @param msg test description
      */
     TcpSsThreshRtoTest(const TypeId& congControl,
                        uint32_t seqToDrop,
@@ -199,10 +188,10 @@ class TcpSsThreshRtoTest : public TcpGeneralTest
     void ConfigureEnvironment() override;
 
     /**
-     * \brief Called when a packet has been dropped.
-     * \param ipH IPv4 header.
-     * \param tcpH TCP header.
-     * \param p The packet.
+     * @brief Called when a packet has been dropped.
+     * @param ipH IPv4 header.
+     * @param tcpH TCP header.
+     * @param p The packet.
      */
     void PktDropped(const Ipv4Header& ipH, const TcpHeader& tcpH, Ptr<const Packet> p);
 
@@ -311,9 +300,9 @@ TcpSsThreshRtoTest::AfterRTOExpired(const Ptr<const TcpSocketState> tcb, SocketW
 }
 
 /**
- * \ingroup internet-test
+ * @ingroup internet-test
  *
- * \brief Testing the timing of RTO
+ * @brief Testing the timing of RTO
  *
  * Checking if RTO is doubled ONLY after a retransmission.
  */
@@ -321,9 +310,9 @@ class TcpTimeRtoTest : public TcpGeneralTest
 {
   public:
     /**
-     * \brief Constructor.
-     * \param congControl Congestion control type.
-     * \param msg Test description.
+     * @brief Constructor.
+     * @param congControl Congestion control type.
+     * @param msg Test description.
      */
     TcpTimeRtoTest(const TypeId& congControl, const std::string& msg);
 
@@ -338,10 +327,10 @@ class TcpTimeRtoTest : public TcpGeneralTest
     void ConfigureEnvironment() override;
 
     /**
-     * \brief Called when a packet has been dropped.
-     * \param ipH IPv4 header.
-     * \param tcpH TCP header.
-     * \param p The packet.
+     * @brief Called when a packet has been dropped.
+     * @param ipH IPv4 header.
+     * @param tcpH TCP header.
+     * @param p The packet.
      */
     void PktDropped(const Ipv4Header& ipH, const TcpHeader& tcpH, Ptr<const Packet> p);
 
@@ -506,9 +495,9 @@ TcpTimeRtoTest::FinalChecks()
 }
 
 /**
- * \ingroup internet-test
+ * @ingroup internet-test
  *
- * \brief TCP RTO TestSuite
+ * @brief TCP RTO TestSuite
  */
 class TcpRtoTestSuite : public TestSuite
 {

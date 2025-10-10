@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2005,2006 INRIA
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Author: Mathieu Lacage <mathieu.lacage@sophia.inria.fr>
  */
@@ -23,6 +12,7 @@
 #include "sta-wifi-mac.h"
 #include "wifi-phy.h"
 
+#include "ns3/boolean.h"
 #include "ns3/channel.h"
 #include "ns3/eht-configuration.h"
 #include "ns3/he-configuration.h"
@@ -55,19 +45,11 @@ WifiNetDevice::GetTypeId()
                           UintegerValue(MAX_MSDU_SIZE - LLC_SNAP_HEADER_LENGTH),
                           MakeUintegerAccessor(&WifiNetDevice::SetMtu, &WifiNetDevice::GetMtu),
                           MakeUintegerChecker<uint16_t>(1, MAX_MSDU_SIZE - LLC_SNAP_HEADER_LENGTH))
-            .AddAttribute("Channel",
-                          "The channel attached to this device",
-                          PointerValue(),
-                          MakePointerAccessor(&WifiNetDevice::GetChannel),
-                          MakePointerChecker<Channel>(),
-                          TypeId::DEPRECATED,
-                          "class WifiNetDevice; use the Channel "
-                          "attribute of WifiPhy")
             .AddAttribute("Phy",
                           "The PHY layer attached to this device.",
                           PointerValue(),
-                          MakePointerAccessor((Ptr<WifiPhy>(WifiNetDevice::*)() const) &
-                                                  WifiNetDevice::GetPhy,
+                          MakePointerAccessor(static_cast<Ptr<WifiPhy> (WifiNetDevice::*)() const>(
+                                                  &WifiNetDevice::GetPhy),
                                               &WifiNetDevice::SetPhy),
                           MakePointerChecker<WifiPhy>())
             .AddAttribute(
@@ -81,14 +63,14 @@ WifiNetDevice::GetTypeId()
                           PointerValue(),
                           MakePointerAccessor(&WifiNetDevice::GetMac, &WifiNetDevice::SetMac),
                           MakePointerChecker<WifiMac>())
-            .AddAttribute(
-                "RemoteStationManager",
-                "The station manager attached to this device.",
-                PointerValue(),
-                MakePointerAccessor(&WifiNetDevice::SetRemoteStationManager,
-                                    (Ptr<WifiRemoteStationManager>(WifiNetDevice::*)() const) &
-                                        WifiNetDevice::GetRemoteStationManager),
-                MakePointerChecker<WifiRemoteStationManager>())
+            .AddAttribute("RemoteStationManager",
+                          "The station manager attached to this device.",
+                          PointerValue(),
+                          MakePointerAccessor(
+                              &WifiNetDevice::SetRemoteStationManager,
+                              static_cast<Ptr<WifiRemoteStationManager> (WifiNetDevice::*)() const>(
+                                  &WifiNetDevice::GetRemoteStationManager)),
+                          MakePointerChecker<WifiRemoteStationManager>())
             .AddAttribute("RemoteStationManagers",
                           "The remote station managers attached to this device (11be multi-link "
                           "devices only).",
@@ -672,6 +654,22 @@ Ptr<EhtConfiguration>
 WifiNetDevice::GetEhtConfiguration() const
 {
     return (m_standard >= WIFI_STANDARD_80211be ? m_ehtConfiguration : nullptr);
+}
+
+bool
+WifiNetDevice::IsEmlsrActivated() const
+{
+    if (!m_ehtConfiguration)
+    {
+        return false;
+    }
+
+    BooleanValue emlsrActivated;
+    if (!m_ehtConfiguration->GetAttributeFailSafe("EmlsrActivated", emlsrActivated))
+    {
+        return false;
+    }
+    return emlsrActivated.Get();
 }
 
 } // namespace ns3

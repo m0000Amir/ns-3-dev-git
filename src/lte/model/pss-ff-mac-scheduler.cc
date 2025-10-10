@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2011 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Author: Marco Miozzo <marco.miozzo@cttc.es>
  * Modification: Dizhi Zhou <dizhi.zhou@gmail.com>    // modify codes related to downlink scheduler
@@ -23,12 +12,12 @@
 #include "lte-amc.h"
 #include "lte-vendor-specific-parameters.h"
 
-#include <ns3/boolean.h>
-#include <ns3/log.h>
-#include <ns3/math.h>
-#include <ns3/pointer.h>
-#include <ns3/simulator.h>
-#include <ns3/string.h>
+#include "ns3/boolean.h"
+#include "ns3/log.h"
+#include "ns3/math.h"
+#include "ns3/pointer.h"
+#include "ns3/simulator.h"
+#include "ns3/string.h"
 
 #include <algorithm>
 #include <cfloat>
@@ -39,13 +28,13 @@ namespace ns3
 
 NS_LOG_COMPONENT_DEFINE("PssFfMacScheduler");
 
-/// PSS type 0 allocation RBG
+/// PSS type 0 allocation RBG (see table 7.1.6.1-1 of 36.213)
 static const int PssType0AllocationRbg[4] = {
     10,  // RBG size 1
     26,  // RBG size 2
     63,  // RBG size 3
     110, // RBG size 4
-};       // see table 7.1.6.1-1 of 36.213
+};
 
 NS_OBJECT_ENSURE_REGISTERED(PssFfMacScheduler);
 
@@ -1048,9 +1037,9 @@ PssFfMacScheduler::DoSchedDlTriggerReq(
                         metric = achievableRate / (*it).second.lastAveragedThroughput;
                     }
                     ueSet2.emplace_back(metric, (*it).first);
-                } // end of wbCqi
+                }
             }
-        } // end of ueSet
+        }
 
         if (!ueSet1.empty() || !ueSet2.empty())
         {
@@ -1143,11 +1132,11 @@ PssFfMacScheduler::DoSchedDlTriggerReq(
                                 }
                                 sum += sbCqi;
                             }
-                        } // end if cqi
-                    }     // end of rbgNum
+                        }
+                    }
 
                     sbCqiSum[(*it).first] = sum;
-                } // end tdUeSet
+                }
 
                 for (int i = 0; i < rbgNum; i++)
                 {
@@ -1218,7 +1207,7 @@ PssFfMacScheduler::DoSchedDlTriggerReq(
                                 }
                                 colMetric += (double)sbCqi / (double)(*itSbCqiSum).second;
                             }
-                        } // end if cqi
+                        }
 
                         double metric = 0.0;
                         if (colMetric != 0)
@@ -1235,7 +1224,7 @@ PssFfMacScheduler::DoSchedDlTriggerReq(
                             metricMax = metric;
                             itMax = it;
                         }
-                    } // end of tdUeSet
+                    }
 
                     if (itMax == tdUeSet.end())
                     {
@@ -1246,9 +1235,8 @@ PssFfMacScheduler::DoSchedDlTriggerReq(
                         allocationMap[(*itMax).first].push_back(i);
                         rbgMap.at(i) = true;
                     }
-                } // end of rbgNum
-
-            } // end of CoIta
+                }
+            }
 
             if (m_fdSchedulerType == "PFsch")
             {
@@ -1322,7 +1310,7 @@ PssFfMacScheduler::DoSchedDlTriggerReq(
                                                    0.001); // = TB size / TTI
                             }
                             schMetric = achievableRate / (*it).second.secondLastAveragedThroughput;
-                        } // end if cqi
+                        }
 
                         double metric = 0.0;
                         metric = weight * schMetric;
@@ -1332,7 +1320,7 @@ PssFfMacScheduler::DoSchedDlTriggerReq(
                             metricMax = metric;
                             itMax = it;
                         }
-                    } // end of tdUeSet
+                    }
 
                     if (itMax == tdUeSet.end())
                     {
@@ -1343,14 +1331,10 @@ PssFfMacScheduler::DoSchedDlTriggerReq(
                         allocationMap[(*itMax).first].push_back(i);
                         rbgMap.at(i) = true;
                     }
-
-                } // end of rbgNum
-
-            } // end of PFsch
-
-        } // end if ueSet1 || ueSet2
-
-    } // end if ueSet
+                }
+            }
+        }
+    }
 
     // reset TTI stats of users
     for (auto itStats = m_flowStatsDl.begin(); itStats != m_flowStatsDl.end(); itStats++)
@@ -1548,7 +1532,7 @@ PssFfMacScheduler::DoSchedDlTriggerReq(
         }
 
         itMap++;
-    }                               // end while allocation
+    }
     ret.m_nrOfPdcchOfdmSymbols = 1; /// \todo check correct value according the DCIs txed
 
     // update UEs stats

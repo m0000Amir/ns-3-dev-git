@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2015
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Authors: Ghada Badawy <gbadawy@rim.com>
  *          Sébastien Deronne <sebastien.deronne@gmail.com>
@@ -66,7 +55,10 @@ VhtCapabilities::ElementId() const
 void
 VhtCapabilities::Print(std::ostream& os) const
 {
-    os << "VHT Capabilities=" << GetVhtCapabilitiesInfo() << "|" << GetSupportedMcsAndNssSet();
+    os << "VHT Capabilities=[Supported Channel Width Set: " << +m_supportedChannelWidthSet
+       << ", SGI 80 MHz: " << +m_shortGuardIntervalFor80Mhz
+       << ", SGI 160 MHz: " << +m_shortGuardIntervalFor160Mhz
+       << ", Max MPDU Length: " << m_maxMpduLength << "]";
 }
 
 uint16_t

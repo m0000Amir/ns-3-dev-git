@@ -2,18 +2,7 @@
  * Copyright (c) 2007 INRIA
  *               2009,2010 Contributors
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Author: Mathieu Lacage <mathieu.lacage@sophia.inria.fr>
  * Contributors: Thomas Waldecker <twaldecker@rocketmail.com>
@@ -75,9 +64,9 @@ AreVectorsEqual(const Vector& actual, const Vector& limit, double tol)
 }
 
 /**
- * \ingroup mobility-test
+ * @ingroup mobility-test
  *
- * \brief Every test case is supposed to:
+ * @brief Every test case is supposed to:
  *  1. Generate short mobility trace file
  *  2. Read it back using Ns2MobilityHelper
  *  3. Check initial node positions and speeds.
@@ -98,10 +87,10 @@ class Ns2MobilityHelperTest : public TestCase
         /**
          * Constructor
          *
-         * \param id reference ID
-         * \param t time
-         * \param p position
-         * \param v velocity
+         * @param id reference ID
+         * @param t time
+         * @param p position
+         * @param v velocity
          */
         ReferencePoint(const std::string& id, Time t, const Vector& p, const Vector& v)
             : node(id),
@@ -113,8 +102,8 @@ class Ns2MobilityHelperTest : public TestCase
 
         /**
          * Less-than operator - used to sort by timestamp
-         * \param o object to compare to
-         * \returns true if the timestamp of the 1st operand is less than the other one's
+         * @param o object to compare to
+         * @returns true if the timestamp of the 1st operand is less than the other one's
          */
         bool operator<(const ReferencePoint& o) const
         {
@@ -125,9 +114,9 @@ class Ns2MobilityHelperTest : public TestCase
     /**
      * Create new test case. To make it useful SetTrace () and AddReferencePoint () must be called
      *
-     * \param name        Short description
-     * \param timeLimit   Test time limit
-     * \param nodes       Number of nodes used in the test trace, 1 by default
+     * @param name        Short description
+     * @param timeLimit   Test time limit
+     * @param nodes       Number of nodes used in the test trace, 1 by default
      */
     Ns2MobilityHelperTest(const std::string& name, Time timeLimit, uint32_t nodes = 1)
         : TestCase(name),
@@ -144,7 +133,7 @@ class Ns2MobilityHelperTest : public TestCase
 
     /**
      * Set NS-2 trace to read as single large string (don't forget to add \\n and quote \"'s)
-     * \param trace the mobility trace
+     * @param trace the mobility trace
      */
     void SetTrace(const std::string& trace)
     {
@@ -153,7 +142,7 @@ class Ns2MobilityHelperTest : public TestCase
 
     /**
      * Add next reference point
-     * \param r reference point to add
+     * @param r reference point to add
      */
     void AddReferencePoint(const ReferencePoint& r)
     {
@@ -162,10 +151,10 @@ class Ns2MobilityHelperTest : public TestCase
 
     /**
      * Add next reference point
-     * \param id reference point id
-     * \param sec reference point ime (in seconds)
-     * \param p reference point position
-     * \param v reference point velocity
+     * @param id reference point id
+     * @param sec reference point ime (in seconds)
+     * @param p reference point position
+     * @param v reference point velocity
      */
     void AddReferencePoint(const char* id, double sec, const Vector& p, const Vector& v)
     {
@@ -189,7 +178,7 @@ class Ns2MobilityHelperTest : public TestCase
   private:
     /**
      * Dump NS-2 trace to tmp file
-     * \return true on error.
+     * @return true on error.
      */
     bool WriteTrace()
     {
@@ -216,13 +205,12 @@ class Ns2MobilityHelperTest : public TestCase
 
     /**
      * Check that all initial positions are correct
-     * \return true on error.
+     * @return true on error.
      */
     bool CheckInitialPositions()
     {
         std::stable_sort(m_reference.begin(), m_reference.end());
-        while (m_nextRefPoint < m_reference.size() &&
-               m_reference[m_nextRefPoint].time == Seconds(0))
+        while (m_nextRefPoint < m_reference.size() && m_reference[m_nextRefPoint].time.IsZero())
         {
             const ReferencePoint& rp = m_reference[m_nextRefPoint];
             Ptr<Node> node = Names::Find<Node>(rp.node);
@@ -249,8 +237,8 @@ class Ns2MobilityHelperTest : public TestCase
 
     /**
      * Listen for course change events
-     * \param context event context
-     * \param mobility a pointer to the mobility model
+     * @param context event context
+     * @param mobility a pointer to the mobility model
      */
     void CourseChange(std::string context, Ptr<const MobilityModel> mobility)
     {
@@ -320,9 +308,9 @@ class Ns2MobilityHelperTest : public TestCase
 };
 
 /**
- * \ingroup mobility-test
+ * @ingroup mobility-test
  *
- * \brief The test suite
+ * @brief The test suite
  */
 class Ns2MobilityHelperTestSuite : public TestSuite
 {

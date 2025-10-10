@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2007 Emmanuelle Laprise
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Author: Emmanuelle Laprise <emmanuelle.laprise@bluekazoo.ca>
  */
@@ -130,28 +119,25 @@ CsmaChannel::Detach(uint32_t deviceId)
 {
     NS_LOG_FUNCTION(this << deviceId);
 
-    if (deviceId < m_deviceList.size())
-    {
-        if (!m_deviceList[deviceId].active)
-        {
-            NS_LOG_WARN("CsmaChannel::Detach(): Device is already detached (" << deviceId << ")");
-            return false;
-        }
-
-        m_deviceList[deviceId].active = false;
-
-        if ((m_state == TRANSMITTING) && (m_currentSrc == deviceId))
-        {
-            NS_LOG_WARN("CsmaChannel::Detach(): Device is currently"
-                        << "transmitting (" << deviceId << ")");
-        }
-
-        return true;
-    }
-    else
+    if (deviceId >= m_deviceList.size())
     {
         return false;
     }
+
+    if (!m_deviceList[deviceId].active)
+    {
+        NS_LOG_WARN("CsmaChannel::Detach(): Device is already detached (" << deviceId << ")");
+        return false;
+    }
+
+    m_deviceList[deviceId].active = false;
+
+    if ((m_state == TRANSMITTING) && (m_currentSrc == deviceId))
+    {
+        NS_LOG_WARN("CsmaChannel::Detach(): Device is currently transmitting (" << deviceId << ")");
+    }
+
+    return true;
 }
 
 bool

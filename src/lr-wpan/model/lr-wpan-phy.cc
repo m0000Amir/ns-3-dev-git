@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2011 The Boeing Company
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Author:
  *  Gary Pei <guangyu.pei@boeing.com>
@@ -27,21 +16,21 @@
 #include "lr-wpan-spectrum-signal-parameters.h"
 #include "lr-wpan-spectrum-value-helper.h"
 
-#include <ns3/abort.h>
-#include <ns3/antenna-model.h>
-#include <ns3/double.h>
-#include <ns3/error-model.h>
-#include <ns3/log.h>
-#include <ns3/mobility-model.h>
-#include <ns3/net-device.h>
-#include <ns3/node.h>
-#include <ns3/packet-burst.h>
-#include <ns3/packet.h>
-#include <ns3/pointer.h>
-#include <ns3/random-variable-stream.h>
-#include <ns3/simulator.h>
-#include <ns3/spectrum-channel.h>
-#include <ns3/spectrum-value.h>
+#include "ns3/abort.h"
+#include "ns3/antenna-model.h"
+#include "ns3/double.h"
+#include "ns3/error-model.h"
+#include "ns3/log.h"
+#include "ns3/mobility-model.h"
+#include "ns3/net-device.h"
+#include "ns3/node.h"
+#include "ns3/packet-burst.h"
+#include "ns3/packet.h"
+#include "ns3/pointer.h"
+#include "ns3/random-variable-stream.h"
+#include "ns3/simulator.h"
+#include "ns3/spectrum-channel.h"
+#include "ns3/spectrum-value.h"
 
 namespace ns3
 {
@@ -134,20 +123,21 @@ operator<<(std::ostream& os, const PhyEnumeration& state)
         break;
     }
     return os;
-};
+}
 
 std::ostream&
 operator<<(std::ostream& os, const TracedValue<PhyEnumeration>& state)
 {
     PhyEnumeration s = state;
     return os << s;
-};
+}
 
 TypeId
 LrWpanPhy::GetTypeId()
 {
     static TypeId tid =
-        TypeId("ns3::LrWpanPhy")
+        TypeId("ns3::lrwpan::LrWpanPhy")
+            .AddDeprecatedName("ns3::LrWpanPhy")
             .SetParent<SpectrumPhy>()
             .SetGroupName("LrWpan")
             .AddConstructor<LrWpanPhy>()
@@ -166,7 +156,7 @@ LrWpanPhy::GetTypeId()
             .AddTraceSource("TrxState",
                             "The state of the transceiver",
                             MakeTraceSourceAccessor(&LrWpanPhy::m_trxStateLogger),
-                            "ns3::LrWpanPhy::StateTracedCallback")
+                            "ns3::lrwpan::LrWpanPhy::StateTracedCallback")
             .AddTraceSource("PhyTxBegin",
                             "Trace source indicating a packet has "
                             "begun transmitting over the channel medium",
@@ -1715,8 +1705,8 @@ LrWpanPhy::SetPhyOption(PhyOption phyOption)
     }
 
     m_edPower.averagePower = 0.0;
-    m_edPower.lastUpdate = Seconds(0.0);
-    m_edPower.measurementLength = Seconds(0.0);
+    m_edPower.lastUpdate = Seconds(0);
+    m_edPower.measurementLength = Seconds(0);
 
     // TODO: Change the limits  Rx sensitivity when other modulations are supported
     // Currently, only O-QPSK 250kbps is supported and its maximum possible sensitivity is

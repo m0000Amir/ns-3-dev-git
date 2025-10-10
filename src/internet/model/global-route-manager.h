@@ -1,18 +1,7 @@
 /*
  * Copyright 2007 University of Washington
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Authors:  Craig Dowell (craigdo@ee.washington.edu)
  *           Tom Henderson (tomhend@u.washington.edu)
@@ -27,7 +16,7 @@ namespace ns3
 {
 
 /**
- * \ingroup globalrouting
+ * @ingroup globalrouting
  *
  * @brief A global global router
  *
@@ -70,6 +59,16 @@ class GlobalRouteManager
      * per-node forwarding tables
      */
     static void InitializeRoutes();
+
+    /**
+     * @brief Reset the router ID counter to zero. This should only be called by tests to reset the
+     * router ID counter between simulations within the same program. This function should not be
+     * called In typical simulations or when using the GlobalRouting helper.
+     */
+    static void ResetRouterId();
+
+  private:
+    static uint32_t routerId; //!< Router ID counter
 };
 
 } // namespace ns3

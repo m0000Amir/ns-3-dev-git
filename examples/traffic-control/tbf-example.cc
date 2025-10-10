@@ -2,18 +2,7 @@
  * Copyright (c) 2015 Universita' degli Studi di Napoli "Federico II"
  *               2017 Kungliga Tekniska Högskolan
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Author: Pasquale Imputato <p.imputato@gmail.com>
  * Author: Stefano Avallone <stefano.avallone@unina.it>
@@ -119,7 +108,7 @@ main(int argc, char* argv[])
     PacketSinkHelper packetSinkHelper("ns3::TcpSocketFactory", localAddress);
     ApplicationContainer sinkApp = packetSinkHelper.Install(nodes.Get(0));
 
-    sinkApp.Start(Seconds(0.0));
+    sinkApp.Start(Seconds(0));
     sinkApp.Stop(Seconds(simulationTime + 0.1));
 
     uint32_t payloadSize = 1448;
@@ -137,7 +126,7 @@ main(int argc, char* argv[])
     onoff.SetAttribute("Tos", UintegerValue(0xb8));
 
     apps.Add(onoff.Install(nodes.Get(1)));
-    apps.Start(Seconds(1.0));
+    apps.Start(Seconds(1));
     apps.Stop(Seconds(simulationTime + 0.1));
 
     Simulator::Stop(Seconds(simulationTime + 5));

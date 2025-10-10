@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2016 Sébastien Deronne
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Author: Sébastien Deronne <sebastien.deronne@gmail.com>
  */
@@ -65,18 +54,20 @@ HtOperation::ElementId() const
 void
 HtOperation::Print(std::ostream& os) const
 {
-    os << "HT Operation=" << bool(GetPrimaryChannel()) << "|" << +GetSecondaryChannelOffset() << "|"
-       << bool(GetStaChannelWidth()) << "|" << bool(GetRifsMode()) << "|" << +GetHtProtection()
-       << "|" << bool(GetNonGfHtStasPresent()) << "|" << bool(GetObssNonHtStasPresent()) << "|"
-       << bool(GetDualBeacon()) << "|" << bool(GetDualCtsProtection()) << "|"
-       << bool(GetStbcBeacon()) << "|" << bool(GetLSigTxopProtectionFullSupport()) << "|"
-       << bool(GetPcoActive()) << "|" << bool(GetPhase()) << "|" << GetRxHighestSupportedDataRate()
-       << "|" << bool(GetTxMcsSetDefined()) << "|" << bool(GetTxRxMcsSetUnequal()) << "|"
-       << +GetTxMaxNSpatialStreams() << "|" << bool(GetTxUnequalModulation()) << "|";
+    os << "HT Operation=[Primary Channel: " << +m_primaryChannel
+       << ", Secondary Channel Offset: " << +m_secondaryChannelOffset
+       << ", STA Channel Width: " << +m_staChannelWidth << ", HT Protection: " << +m_htProtection
+       << ", OBSS NON HT STAs Present: " << +m_obssNonHtStasPresent
+       << ", L-SIG TXOP Protection Full Support: " << +m_lSigTxopProtectionFullSupport
+       << ", RX Highest Supported Data Rate: " << m_rxHighestSupportedDataRate << ", MCS Set: {";
     for (uint8_t i = 0; i < MAX_SUPPORTED_MCS; i++)
     {
-        os << IsSupportedMcs(i) << " ";
+        if (IsSupportedMcs(i))
+        {
+            os << +i << " ";
+        }
     }
+    os << "}]";
 }
 
 uint16_t

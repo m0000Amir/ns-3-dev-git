@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2013 Budiarto Herman
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Author: Budiarto Herman <budiarto.herman@magister.fi>
  *
@@ -20,25 +9,25 @@
 
 #include "lte-test-cell-selection.h"
 
-#include <ns3/boolean.h>
-#include <ns3/double.h>
-#include <ns3/integer.h>
-#include <ns3/internet-stack-helper.h>
-#include <ns3/ipv4-address-helper.h>
-#include <ns3/ipv4-interface-container.h>
-#include <ns3/ipv4-static-routing-helper.h>
-#include <ns3/log.h>
-#include <ns3/lte-enb-net-device.h>
-#include <ns3/lte-helper.h>
-#include <ns3/lte-ue-net-device.h>
-#include <ns3/lte-ue-rrc.h>
-#include <ns3/mobility-helper.h>
-#include <ns3/net-device-container.h>
-#include <ns3/node-container.h>
-#include <ns3/point-to-point-epc-helper.h>
-#include <ns3/point-to-point-helper.h>
-#include <ns3/rng-seed-manager.h>
-#include <ns3/simulator.h>
+#include "ns3/boolean.h"
+#include "ns3/double.h"
+#include "ns3/integer.h"
+#include "ns3/internet-stack-helper.h"
+#include "ns3/ipv4-address-helper.h"
+#include "ns3/ipv4-interface-container.h"
+#include "ns3/ipv4-static-routing-helper.h"
+#include "ns3/log.h"
+#include "ns3/lte-enb-net-device.h"
+#include "ns3/lte-helper.h"
+#include "ns3/lte-ue-net-device.h"
+#include "ns3/lte-ue-rrc.h"
+#include "ns3/mobility-helper.h"
+#include "ns3/net-device-container.h"
+#include "ns3/node-container.h"
+#include "ns3/point-to-point-epc-helper.h"
+#include "ns3/point-to-point-helper.h"
+#include "ns3/rng-seed-manager.h"
+#include "ns3/simulator.h"
 
 using namespace ns3;
 
@@ -97,7 +86,7 @@ LteCellSelectionTestSuite::LteCellSelectionTestSuite()
 } // end of LteCellSelectionTestSuite::LteCellSelectionTestSuite ()
 
 /**
- * \ingroup lte-test
+ * @ingroup lte-test
  * Static variable for test initialization
  */
 static LteCellSelectionTestSuite g_lteCellSelectionTestSuite;
@@ -237,7 +226,7 @@ LteCellSelectionTestCase::DoRun()
     enbDevs.Add(lteHelper->InstallEnbDevice(enbNodes.Get(3)));
 
     NetDeviceContainer ueDevs;
-    Time lastCheckPoint = MilliSeconds(0);
+    Time lastCheckPoint;
     NS_ASSERT(m_ueSetupList.size() == ueNodes.GetN());
     NodeContainer::Iterator itNode;
     for (itSetup = m_ueSetupList.begin(), itNode = ueNodes.Begin();
@@ -327,8 +316,7 @@ LteCellSelectionTestCase::DoRun()
                 ipv4RoutingHelper.GetStaticRouting(ueNode->GetObject<Ipv4>());
             ueStaticRouting->SetDefaultRoute(epcHelper->GetUeDefaultGatewayAddress(), 1);
         }
-
-    } // end of if (m_isEpcMode)
+    }
     else
     {
         NS_FATAL_ERROR("No support yet for LTE-only simulations");
@@ -359,8 +347,7 @@ LteCellSelectionTestCase::DoRun()
     // Restore the seed and run number that were in effect before this test
     Config::SetGlobal("RngSeed", UintegerValue(previousSeed));
     Config::SetGlobal("RngRun", UintegerValue(previousRun));
-
-} // end of void LteCellSelectionTestCase::DoRun ()
+}
 
 void
 LteCellSelectionTestCase::CheckPoint(Ptr<LteUeNetDevice> ueDev,

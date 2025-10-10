@@ -1,34 +1,23 @@
 /*
  * Copyright (c) 2018 Caliola Engineering, LLC.
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Author: Jared Dulmage <jared.dulmage@caliola.com>
  */
 
-#include <ns3/attribute-container.h>
-#include <ns3/double.h>
-#include <ns3/integer.h>
-#include <ns3/log.h>
-#include <ns3/object.h>
-#include <ns3/pair.h>
-#include <ns3/ptr.h>
-#include <ns3/string.h>
-#include <ns3/test.h>
-#include <ns3/tuple.h>
-#include <ns3/type-id.h>
-#include <ns3/uinteger.h>
+#include "ns3/attribute-container.h"
+#include "ns3/double.h"
+#include "ns3/integer.h"
+#include "ns3/log.h"
+#include "ns3/object.h"
+#include "ns3/pair.h"
+#include "ns3/ptr.h"
+#include "ns3/string.h"
+#include "ns3/test.h"
+#include "ns3/tuple.h"
+#include "ns3/type-id.h"
+#include "ns3/uinteger.h"
 
 #include <algorithm>
 #include <iterator>
@@ -42,13 +31,13 @@ using namespace ns3;
 NS_LOG_COMPONENT_DEFINE("AttributeContainerTestSuite");
 
 /**
- * \file
- * \ingroup attribute-tests
+ * @file
+ * @ingroup attribute-tests
  * Attribute container test suite
  */
 
 /**
- * \ingroup attribute-tests
+ * @ingroup attribute-tests
  * Attribute container object.
  */
 class AttributeContainerObject : public Object
@@ -63,34 +52,34 @@ class AttributeContainerObject : public Object
     void ReverseDoubleList();
 
     /**
-     * \brief Get the type ID.
-     * \return The object TypeId.
+     * @brief Get the type ID.
+     * @return The object TypeId.
      */
     static TypeId GetTypeId();
 
     /**
      * Set the list of doubles to the given list
      *
-     * \param doubleList the given list
+     * @param doubleList the given list
      */
     void SetDoubleList(const std::list<double>& doubleList);
     /**
      * Get the list of doubles
      *
-     * \return the list of doubles
+     * @return the list of doubles
      */
     std::list<double> GetDoubleList() const;
 
     /**
      * Set the vector of ints to the given vector
      *
-     * \param vec the given vector
+     * @param vec the given vector
      */
     void SetIntVec(std::vector<int> vec);
     /**
      * Get the vector of ints
      *
-     * \return the vector of ints
+     * @return the vector of ints
      */
     std::vector<int> GetIntVec() const;
 
@@ -196,7 +185,7 @@ AttributeContainerObject::GetIntVec() const
 }
 
 /**
- * \ingroup attribute-tests
+ * @ingroup attribute-tests
  *
  * Test AttributeContainer instantiation, initialization, access
  */
@@ -303,7 +292,7 @@ AttributeContainerTestCase::DoRun()
 }
 
 /**
- * \ingroup attribute-tests
+ * @ingroup attribute-tests
  *
  * Attribute serialization and deserialization TestCase.
  */
@@ -419,7 +408,7 @@ AttributeContainerSerializationTestCase::DoRun()
 }
 
 /**
- * \ingroup attribute-tests
+ * @ingroup attribute-tests
  *
  * Attribute set and get TestCase.
  */
@@ -556,7 +545,7 @@ AttributeContainerSetGetTestCase::DoRun()
 }
 
 /**
- * \ingroup attribute-tests
+ * @ingroup attribute-tests
  *
  * Attribute attribute container TestCase.
  */

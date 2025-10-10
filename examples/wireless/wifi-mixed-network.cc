@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2016 Sébastien Deronne
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Author: Sébastien Deronne <sebastien.deronne@gmail.com>
  */
@@ -90,8 +79,8 @@ class Experiment
     Experiment();
     /**
      * Run an experiment with the given parameters
-     * \param params the given parameters
-     * \return the throughput
+     * @param params the given parameters
+     * @return the throughput
      */
     double Run(Parameters params);
 };
@@ -276,8 +265,8 @@ Experiment::Run(Parameters params)
         uint16_t port = 9;
         UdpServerHelper server(port);
         ApplicationContainer serverApp = server.Install(wifiApNode);
-        serverApp.Start(Seconds(0.0));
-        serverApp.Stop(simulationTime + Seconds(1.0));
+        serverApp.Start(Seconds(0));
+        serverApp.Stop(simulationTime + Seconds(1));
 
         UdpClientHelper client(ApInterface.GetAddress(0), port);
         client.SetAttribute("MaxPackets", UintegerValue(4294967295U));
@@ -297,10 +286,10 @@ Experiment::Run(Parameters params)
         {
             clientApps.Add(client.Install(wifiNStaNodes));
         }
-        clientApps.Start(Seconds(1.0));
-        clientApps.Stop(simulationTime + Seconds(1.0));
+        clientApps.Start(Seconds(1));
+        clientApps.Stop(simulationTime + Seconds(1));
 
-        Simulator::Stop(simulationTime + Seconds(1.0));
+        Simulator::Stop(simulationTime + Seconds(1));
         Simulator::Run();
 
         double totalPacketsThrough = DynamicCast<UdpServer>(serverApp.Get(0))->GetReceived();
@@ -313,8 +302,8 @@ Experiment::Run(Parameters params)
         PacketSinkHelper packetSinkHelper("ns3::TcpSocketFactory", localAddress);
 
         ApplicationContainer serverApp = packetSinkHelper.Install(wifiApNode.Get(0));
-        serverApp.Start(Seconds(0.0));
-        serverApp.Stop(simulationTime + Seconds(1.0));
+        serverApp.Start(Seconds(0));
+        serverApp.Stop(simulationTime + Seconds(1));
 
         OnOffHelper onoff("ns3::TcpSocketFactory", Ipv4Address::GetAny());
         onoff.SetAttribute("OnTime", StringValue("ns3::ConstantRandomVariable[Constant=1]"));
@@ -338,10 +327,10 @@ Experiment::Run(Parameters params)
         {
             clientApps.Add(onoff.Install(wifiNStaNodes));
         }
-        clientApps.Start(Seconds(1.0));
-        clientApps.Stop(simulationTime + Seconds(1.0));
+        clientApps.Start(Seconds(1));
+        clientApps.Stop(simulationTime + Seconds(1));
 
-        Simulator::Stop(simulationTime + Seconds(1.0));
+        Simulator::Stop(simulationTime + Seconds(1));
         Simulator::Run();
 
         double totalPacketsThrough = DynamicCast<PacketSink>(serverApp.Get(0))->GetTotalRx();

@@ -2,18 +2,7 @@
  * Copyright (c) 2009 MIRKO BANCHI
  * Copyright (c) 2015 University of Washington
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Authors: Mirko Banchi <mk.banchi@gmail.com>
  *          Sebastien Deronne <sebastien.deronne@gmail.com>
@@ -102,12 +91,12 @@ uint32_t g_samples;    //!< Number of samples
 /**
  * Monitor sniffer Rx trace
  *
- * \param packet The sensed packet.
- * \param channelFreqMhz The channel frequency [MHz].
- * \param txVector The Tx vector.
- * \param aMpdu The aMPDU.
- * \param signalNoise The signal and noise dBm.
- * \param staId The STA ID.
+ * @param packet The sensed packet.
+ * @param channelFreqMhz The channel frequency [MHz].
+ * @param txVector The Tx vector.
+ * @param aMpdu The aMPDU.
+ * @param signalNoise The signal and noise dBm.
+ * @param staId The STA ID.
  */
 void
 MonitorSniffRx(Ptr<const Packet> packet,
@@ -129,7 +118,7 @@ int
 main(int argc, char* argv[])
 {
     bool udp{true};
-    double distance{50};
+    meter_u distance{50};
     Time simulationTime{"10s"};
     uint16_t index{256};
     std::string wifiType{"ns3::SpectrumWifiPhy"};
@@ -454,8 +443,8 @@ main(int argc, char* argv[])
             uint16_t port = 9;
             UdpServerHelper server(port);
             serverApp = server.Install(wifiStaNode.Get(0));
-            serverApp.Start(Seconds(0.0));
-            serverApp.Stop(simulationTime + Seconds(1.0));
+            serverApp.Start(Seconds(0));
+            serverApp.Stop(simulationTime + Seconds(1));
             const auto packetInterval = payloadSize * 8.0 / (datarate * 1e6);
 
             UdpClientHelper client(staNodeInterface.GetAddress(0), port);
@@ -463,8 +452,8 @@ main(int argc, char* argv[])
             client.SetAttribute("Interval", TimeValue(Seconds(packetInterval)));
             client.SetAttribute("PacketSize", UintegerValue(payloadSize));
             ApplicationContainer clientApp = client.Install(wifiApNode.Get(0));
-            clientApp.Start(Seconds(1.0));
-            clientApp.Stop(simulationTime + Seconds(1.0));
+            clientApp.Start(Seconds(1));
+            clientApp.Stop(simulationTime + Seconds(1));
         }
         else
         {
@@ -473,8 +462,8 @@ main(int argc, char* argv[])
             Address localAddress(InetSocketAddress(Ipv4Address::GetAny(), port));
             PacketSinkHelper packetSinkHelper("ns3::TcpSocketFactory", localAddress);
             serverApp = packetSinkHelper.Install(wifiStaNode.Get(0));
-            serverApp.Start(Seconds(0.0));
-            serverApp.Stop(simulationTime + Seconds(1.0));
+            serverApp.Start(Seconds(0));
+            serverApp.Stop(simulationTime + Seconds(1));
 
             OnOffHelper onoff("ns3::TcpSocketFactory", Ipv4Address::GetAny());
             onoff.SetAttribute("OnTime", StringValue("ns3::ConstantRandomVariable[Constant=1]"));
@@ -484,8 +473,8 @@ main(int argc, char* argv[])
             AddressValue remoteAddress(InetSocketAddress(staNodeInterface.GetAddress(0), port));
             onoff.SetAttribute("Remote", remoteAddress);
             ApplicationContainer clientApp = onoff.Install(wifiApNode.Get(0));
-            clientApp.Start(Seconds(1.0));
-            clientApp.Stop(simulationTime + Seconds(1.0));
+            clientApp.Start(Seconds(1));
+            clientApp.Stop(simulationTime + Seconds(1));
         }
 
         Config::ConnectWithoutContext("/NodeList/0/DeviceList/*/Phy/MonitorSnifferRx",
@@ -506,11 +495,11 @@ main(int argc, char* argv[])
         g_noiseDbmAvg = 0;
         g_samples = 0;
 
-        Simulator::Stop(simulationTime + Seconds(1.0));
+        Simulator::Stop(simulationTime + Seconds(1));
         Simulator::Run();
 
         auto throughput = 0.0;
-        auto totalPacketsThrough = 0.0;
+        uint64_t totalPacketsThrough = 0;
         if (udp)
         {
             // UDP
@@ -522,7 +511,7 @@ main(int argc, char* argv[])
         {
             // TCP
             auto totalBytesRx = DynamicCast<PacketSink>(serverApp.Get(0))->GetTotalRx();
-            totalPacketsThrough = totalBytesRx / tcpPacketSize;
+            totalPacketsThrough = static_cast<uint64_t>(totalBytesRx / tcpPacketSize);
             throughput = totalBytesRx * 8 / simulationTime.GetMicroSeconds(); // Mbit/s
         }
         std::cout << std::setw(5) << i << std::setw(6) << (i % 8) << std::setprecision(2)

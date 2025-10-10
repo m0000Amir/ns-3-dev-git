@@ -1,17 +1,6 @@
 /*
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Authors: Lalith Suresh <suresh.lalith@gmail.com>
  *
@@ -248,7 +237,7 @@ main(int argc, char* argv[])
     {
         // Create a special Ipv4StaticRouting instance for RoutingTableAssociation
         // Even the Ipv4StaticRouting instance added to list may be used
-        Ptr<Ipv4StaticRouting> hnaEntries = Create<Ipv4StaticRouting>();
+        Ptr<Ipv4StaticRouting> hnaEntries = CreateObject<Ipv4StaticRouting>();
 
         // Add the required routes into the Ipv4StaticRouting Protocol instance
         // and have the node generate HNA messages for all these routes
@@ -284,7 +273,7 @@ main(int argc, char* argv[])
     csma.EnableAsciiAll(ascii.CreateFileStream("olsr-hna-csma.tr"));
 
     Simulator::ScheduleWithContext(source->GetNode()->GetId(),
-                                   Seconds(15.0),
+                                   Seconds(15),
                                    &GenerateTraffic,
                                    source,
                                    packetSize,
@@ -295,7 +284,7 @@ main(int argc, char* argv[])
         Create<OutputStreamWrapper>("olsr-hna.routes", std::ios::out);
     Ipv4RoutingHelper::PrintRoutingTableAllAt(Seconds(15), routingStream);
 
-    Simulator::Stop(Seconds(20.0));
+    Simulator::Stop(Seconds(20));
     Simulator::Run();
     Simulator::Destroy();
 

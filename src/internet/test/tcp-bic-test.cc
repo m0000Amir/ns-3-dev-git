@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2015 Natale Patriciello, <natale.patriciello@gmail.com>
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  */
 
@@ -27,21 +16,21 @@ using namespace ns3;
 NS_LOG_COMPONENT_DEFINE("TcpBicTestSuite");
 
 /**
- * \ingroup internet-test
+ * @ingroup internet-test
  *
- * \brief Testing the congestion avoidance increment on TcpBic
+ * @brief Testing the congestion avoidance increment on TcpBic
  */
 class TcpBicIncrementTest : public TestCase
 {
   public:
     /**
-     * \brief Constructor.
-     * \param cWnd Congestion window.
-     * \param segmentSize Segment size.
-     * \param ssThresh Slow Start Threshold.
-     * \param segmentsAcked Number of segments acked.
-     * \param lastMaxCwnd Last max Cwnd.
-     * \param name Test description.
+     * @brief Constructor.
+     * @param cWnd Congestion window.
+     * @param segmentSize Segment size.
+     * @param ssThresh Slow Start Threshold.
+     * @param segmentsAcked Number of segments acked.
+     * @param lastMaxCwnd Last max Cwnd.
+     * @param name Test description.
      */
     TcpBicIncrementTest(uint32_t cWnd,
                         uint32_t segmentSize,
@@ -54,14 +43,14 @@ class TcpBicIncrementTest : public TestCase
     void DoRun() override;
 
     /**
-     * \brief Update the TCP socket state.
-     * \param tcb The TCP socket state.
-     * \returns The ack counter.
+     * @brief Update the TCP socket state.
+     * @param tcb The TCP socket state.
+     * @returns The ack counter.
      */
     uint32_t Update(Ptr<TcpSocketState> tcb);
 
     /**
-     * \brief Execute the test.
+     * @brief Execute the test.
      */
     void ExecuteTest();
 
@@ -97,7 +86,7 @@ TcpBicIncrementTest::DoRun()
     m_state->m_segmentSize = m_segmentSize;
     m_state->m_ssThresh = m_ssThresh;
 
-    Simulator::Schedule(Seconds(0.0), &TcpBicIncrementTest::ExecuteTest, this);
+    Simulator::Schedule(Seconds(0), &TcpBicIncrementTest::ExecuteTest, this);
     Simulator::Run();
     Simulator::Destroy();
 }
@@ -189,20 +178,20 @@ TcpBicIncrementTest::Update(Ptr<TcpSocketState> tcb)
 }
 
 /**
- * \ingroup internet-test
+ * @ingroup internet-test
  *
- * \brief Testing the congestion avoidance decrement on TcpBic
+ * @brief Testing the congestion avoidance decrement on TcpBic
  */
 class TcpBicDecrementTest : public TestCase
 {
   public:
     /**
-     * \brief Constructor.
-     * \param cWnd Congestion window.
-     * \param segmentSize Segment size.
-     * \param fastConvergence Fast convergence.
-     * \param lastMaxCwnd Last max Cwnd.
-     * \param name Test description.
+     * @brief Constructor.
+     * @param cWnd Congestion window.
+     * @param segmentSize Segment size.
+     * @param fastConvergence Fast convergence.
+     * @param lastMaxCwnd Last max Cwnd.
+     * @param name Test description.
      */
     TcpBicDecrementTest(uint32_t cWnd,
                         uint32_t segmentSize,
@@ -214,7 +203,7 @@ class TcpBicDecrementTest : public TestCase
     void DoRun() override;
 
     /**
-     * \brief Execute the test.
+     * @brief Execute the test.
      */
     void ExecuteTest();
 
@@ -246,7 +235,7 @@ TcpBicDecrementTest::DoRun()
     m_state->m_cWnd = m_cWnd;
     m_state->m_segmentSize = m_segmentSize;
 
-    Simulator::Schedule(Seconds(0.0), &TcpBicDecrementTest::ExecuteTest, this);
+    Simulator::Schedule(Seconds(0), &TcpBicDecrementTest::ExecuteTest, this);
     Simulator::Run();
     Simulator::Destroy();
 }
@@ -302,9 +291,9 @@ TcpBicDecrementTest::ExecuteTest()
 }
 
 /**
- * \ingroup internet-test
+ * @ingroup internet-test
  *
- * \brief TCP Bic TestSuite
+ * @brief TCP Bic TestSuite
  */
 class TcpBicTestSuite : public TestSuite
 {

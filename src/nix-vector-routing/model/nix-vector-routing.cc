@@ -2,18 +2,7 @@
  * Copyright (c) 2009 The Georgia Institute of Technology
  * Copyright (c) 2021 NITK Surathkal
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * This file is adapted from the old ipv4-nix-vector-routing.cc.
  *
@@ -41,16 +30,19 @@ NS_LOG_COMPONENT_DEFINE("NixVectorRouting");
 NS_OBJECT_TEMPLATE_CLASS_DEFINE(NixVectorRouting, Ipv4RoutingProtocol);
 NS_OBJECT_TEMPLATE_CLASS_DEFINE(NixVectorRouting, Ipv6RoutingProtocol);
 
+/// Flag to mark when caches are dirty and need to be flushed
 template <typename T>
 bool NixVectorRouting<T>::g_isCacheDirty = false;
 
-// Epoch starts from one to make it easier to spot an uninitialized NixVector during debug.
+/// Epoch starts from one to make it easier to spot an uninitialized NixVector during debug.
 template <typename T>
 uint32_t NixVectorRouting<T>::g_epoch = 1;
 
+/// Mapping of IP address to ns-3 node
 template <typename T>
 typename NixVectorRouting<T>::IpAddressToNodeMap NixVectorRouting<T>::g_ipAddressToNodeMap;
 
+/// Mapping of Ptr<NetDevice> to Ptr<IpInterface>.
 template <typename T>
 typename NixVectorRouting<T>::NetDeviceToIpInterfaceMap
     NixVectorRouting<T>::g_netdeviceToIpInterfaceMap;
@@ -206,7 +198,7 @@ NixVectorRouting<T>::GetNixVector(Ptr<Node> source, IpAddress dest, Ptr<NetDevic
     }
 
     // if source == dest, then we have a special case
-    /// \internal
+    /// @internal
     /// Do not process packets to self (see \bugid{1308})
     if (source == destNode)
     {
@@ -1009,9 +1001,8 @@ NixVectorRouting<T>::PrintRoutingTable(Ptr<OutputStreamWrapper> stream, Time::Un
 
     *os << std::resetiosflags(std::ios::adjustfield) << std::setiosflags(std::ios::left);
 
-    *os << "Node: " << m_ip->template GetObject<Node>()->GetId() << ", Time: " << Now().As(unit)
-        << ", Local time: " << m_ip->template GetObject<Node>()->GetLocalTime().As(unit)
-        << ", Nix Routing" << std::endl;
+    *os << "Node: " << m_node->GetId() << ", Time: " << Now().As(unit)
+        << ", Local time: " << m_node->GetLocalTime().As(unit) << ", Nix Routing" << std::endl;
 
     *os << "NixCache:" << std::endl;
     if (m_nixCache.size() > 0)

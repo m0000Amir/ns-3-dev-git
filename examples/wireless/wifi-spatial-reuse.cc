@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2019 University of Washington
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Author: Sébastien Deronne <sebastien.deronne@gmail.com>
  */
@@ -157,24 +146,24 @@ int
 main(int argc, char* argv[])
 {
     Time duration{"10s"};
-    double d1{30.0};            // meters
-    double d2{30.0};            // meters
-    double d3{150.0};           // meters
-    double powSta1{10.0};       // dBm
-    double powSta2{10.0};       // dBm
-    double powAp1{21.0};        // dBm
-    double powAp2{21.0};        // dBm
-    double ccaEdTrSta1{-62};    // dBm
-    double ccaEdTrSta2{-62};    // dBm
-    double ccaEdTrAp1{-62};     // dBm
-    double ccaEdTrAp2{-62};     // dBm
-    double minimumRssi{-82};    // dBm
+    meter_u d1{30.0};
+    meter_u d2{30.0};
+    meter_u d3{150.0};
+    dBm_u powSta1{10.0};
+    dBm_u powSta2{10.0};
+    dBm_u powAp1{21.0};
+    dBm_u powAp2{21.0};
+    dBm_u ccaEdTrSta1{-62};
+    dBm_u ccaEdTrSta2{-62};
+    dBm_u ccaEdTrAp1{-62};
+    dBm_u ccaEdTrAp2{-62};
+    dBm_u minimumRssi{-82};
     int channelWidth{20};       // MHz
     uint32_t payloadSize{1500}; // bytes
     uint32_t mcs{0};            // MCS value
     Time interval{"1ms"};
     bool enableObssPd{true};
-    double obssPdThreshold{-72.0}; // dBm
+    dBm_u obssPdThreshold{-72.0};
 
     CommandLine cmd(__FILE__);
     cmd.AddValue("duration", "Duration of simulation", duration);
@@ -356,17 +345,22 @@ main(int argc, char* argv[])
     Config::Connect("/NodeList/*/ApplicationList/*/$ns3::PacketSocketServer/Rx",
                     MakeCallback(&SocketRx));
 
-    // Obtain pointers to the ObssPdAlgorithm objects and hook trace sinks
-    // to the Reset trace source on each STA.  Note that this trace connection
-    // cannot be done through the Config path system, so pointers are used.
-    auto deviceA = staDeviceA.Get(0)->GetObject<WifiNetDevice>();
-    auto hePhyA = DynamicCast<HePhy>(deviceA->GetPhy()->GetPhyEntity(WIFI_MOD_CLASS_HE));
-    // Pass in the context string "1" to allow the trace to distinguish objects
-    hePhyA->GetObssPdAlgorithm()->TraceConnect("Reset", "1", MakeCallback(&ResetTrace));
-    auto deviceB = staDeviceB.Get(0)->GetObject<WifiNetDevice>();
-    auto hePhyB = DynamicCast<HePhy>(deviceB->GetPhy()->GetPhyEntity(WIFI_MOD_CLASS_HE));
-    // Pass in the context string "2" to allow the trace to distinguish objects
-    hePhyB->GetObssPdAlgorithm()->TraceConnect("Reset", "2", MakeCallback(&ResetTrace));
+    if (enableObssPd)
+    {
+        // Obtain pointers to the ObssPdAlgorithm objects and hook trace sinks
+        // to the Reset trace source on each STA.  Note that this trace connection
+        // cannot be done through the Config path system, so pointers are used.
+        auto deviceA = staDeviceA.Get(0)->GetObject<WifiNetDevice>();
+        auto hePhyA =
+            std::dynamic_pointer_cast<HePhy>(deviceA->GetPhy()->GetPhyEntity(WIFI_MOD_CLASS_HE));
+        // Pass in the context string "1" to allow the trace to distinguish objects
+        hePhyA->GetObssPdAlgorithm()->TraceConnect("Reset", "1", MakeCallback(&ResetTrace));
+        auto deviceB = staDeviceB.Get(0)->GetObject<WifiNetDevice>();
+        auto hePhyB =
+            std::dynamic_pointer_cast<HePhy>(deviceB->GetPhy()->GetPhyEntity(WIFI_MOD_CLASS_HE));
+        // Pass in the context string "2" to allow the trace to distinguish objects
+        hePhyB->GetObssPdAlgorithm()->TraceConnect("Reset", "2", MakeCallback(&ResetTrace));
+    }
 
     Simulator::Stop(duration);
     Simulator::Run();

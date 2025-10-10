@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2011-2018 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Authors:
  *   Nicola Baldo <nbaldo@cttc.es>
@@ -39,9 +28,9 @@ using namespace ns3;
 NS_LOG_COMPONENT_DEFINE("TestEpcTftClassifier");
 
 /**
- * \ingroup lte-test
+ * @ingroup lte-test
  *
- * \brief Test case to check the functionality of the Tft Classifier. Test
+ * @brief Test case to check the functionality of the Tft Classifier. Test
  * consist of defining different TFT configurations, i.e. direction, ports,
  * address, and it is checking if the clasiffication of UDP packets is
  * done correctly.
@@ -52,15 +41,15 @@ class EpcTftClassifierTestCase : public TestCase
     /**
      * Constructor
      *
-     * \param c the EPC TFT classifier
-     * \param d the EPC TFT direction
-     * \param sa the source address (in IPv4 format)
-     * \param da the destination address (in IPv4 format)
-     * \param sp the source port
-     * \param dp the destination port
-     * \param tos the TOS
-     * \param tftId the TFT ID
-     * \param useIpv6 use IPv6 or IPv4 addresses. If set, addresses will be used as IPv4 mapped
+     * @param c the EPC TFT classifier
+     * @param d the EPC TFT direction
+     * @param sa the source address (in IPv4 format)
+     * @param da the destination address (in IPv4 format)
+     * @param sp the source port
+     * @param dp the destination port
+     * @param tos the TOS
+     * @param tftId the TFT ID
+     * @param useIpv6 use IPv6 or IPv4 addresses. If set, addresses will be used as IPv4 mapped
      * addresses
      */
     EpcTftClassifierTestCase(Ptr<EpcTftClassifier> c,
@@ -87,17 +76,17 @@ class EpcTftClassifierTestCase : public TestCase
 
     /**
      * Build name string
-     * \param c the EPC TFT classifier
-     * \param d the EPC TFT direction
-     * \param sa the source address
-     * \param da the destination address
-     * \param sp the source port
-     * \param dp the destination port
-     * \param tos the TOS
-     * \param tftId the TFT ID
-     * \param useIpv6 use IPv6 or IPv4 addresses. If set, addresses will be used as IPv4
+     * @param c the EPC TFT classifier
+     * @param d the EPC TFT direction
+     * @param sa the source address
+     * @param da the destination address
+     * @param sp the source port
+     * @param dp the destination port
+     * @param tos the TOS
+     * @param tftId the TFT ID
+     * @param useIpv6 use IPv6 or IPv4 addresses. If set, addresses will be used as IPv4
      * mapped addresses
-     * \returns the name string
+     * @returns the name string
      */
     static std::string BuildNameString(Ptr<EpcTftClassifier> c,
                                        EpcTft::Direction d,
@@ -205,9 +194,9 @@ EpcTftClassifierTestCase::DoRun()
 }
 
 /**
- * \ingroup lte-test
+ * @ingroup lte-test
  *
- * \brief Epc Tft Classifier Test Suite
+ * @brief Epc Tft Classifier Test Suite
  */
 class EpcTftClassifierTestSuite : public TestSuite
 {
@@ -216,7 +205,7 @@ class EpcTftClassifierTestSuite : public TestSuite
 };
 
 /**
- * \ingroup lte-test
+ * @ingroup lte-test
  * Static variable for test initialization
  */
 static EpcTftClassifierTestSuite g_lteTftClassifierTestSuite;

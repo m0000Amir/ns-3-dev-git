@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2018 Natale Patriciello <natale.patriciello@gmail.com>
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  */
 #include "tcp-rate-ops.h"
@@ -80,7 +69,7 @@ TcpRateLinux::GenerateSample(uint32_t delivered,
      * a SACK reneging event may overestimate bw by including packets that
      * were SACKed before the reneg.
      */
-    if (m_rateSample.m_priorTime == Seconds(0) || is_sack_reneg)
+    if (m_rateSample.m_priorTime.IsZero() || is_sack_reneg)
     {
         NS_LOG_INFO("PriorTime is zero, invalidating sample");
         m_rateSample.m_delivered = -1;
@@ -155,8 +144,7 @@ TcpRateLinux::CalculateAppLimited(uint32_t cWnd,
         && in_flight < cWnd                   // We are not limited by CWND.
         && lostOut <= retransOut)             // All lost packets have been retransmitted.
     {
-        m_rate.m_appLimited = std::max<uint32_t>(m_rate.m_delivered + in_flight, 1);
-        m_rateTrace(m_rate);
+        SetAppLimited(in_flight);
     }
 
     // m_appLimited will be reset once in GenerateSample, if it has to be.
@@ -164,6 +152,13 @@ TcpRateLinux::CalculateAppLimited(uint32_t cWnd,
     //  {
     //    m_rate.m_appLimited = 0;
     //  }
+}
+
+void
+TcpRateLinux::SetAppLimited(uint32_t in_flight)
+{
+    m_rate.m_appLimited = std::max<uint32_t>(m_rate.m_delivered + in_flight, 1);
+    m_rateTrace(m_rate);
 }
 
 void

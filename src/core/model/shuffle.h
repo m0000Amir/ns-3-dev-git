@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2024 Universita' degli Studi di Napoli Federico II
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Author: Stefano Avallone <stavallo@unina.it>
  */
@@ -21,8 +10,8 @@
 #define SHUFFLE_H
 
 /**
- * \file
- * \ingroup randomvariable
+ * @file
+ * @ingroup randomvariable
  * Function to shuffle elements in a given range.
  */
 
@@ -49,10 +38,10 @@ namespace ns3
  * we can still achieve a linear complexity by copying the elements in a vector and shuffling the
  * elements of the vector.
  *
- * \tparam RND_ACCESS_ITER \deduced the iterator type (must be a random access iterator)
- * \param first an iterator pointing to the first element in the range to shuffle
- * \param last an iterator pointing to past-the-last element in the range to shuffle
- * \param rv pointer to a uniform random variable
+ * @tparam RND_ACCESS_ITER \deduced the iterator type (must be a random access iterator)
+ * @param first an iterator pointing to the first element in the range to shuffle
+ * @param last an iterator pointing to past-the-last element in the range to shuffle
+ * @param rv pointer to a uniform random variable
  */
 template <typename RND_ACCESS_ITER>
 void

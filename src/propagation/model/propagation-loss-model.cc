@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2005,2006,2007 INRIA
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Author: Mathieu Lacage <mathieu.lacage@sophia.inria.fr>
  * Contributions: Timo Bingmann <timo.bingmann@student.kit.edu>
@@ -26,6 +15,7 @@
 #include "ns3/double.h"
 #include "ns3/log.h"
 #include "ns3/mobility-model.h"
+#include "ns3/node.h"
 #include "ns3/pointer.h"
 #include "ns3/string.h"
 
@@ -874,7 +864,8 @@ MatrixPropagationLossModel::SetLoss(Ptr<MobilityModel> ma,
 {
     NS_ASSERT(ma && mb);
 
-    MobilityPair p = std::make_pair(ma, mb);
+    uint64_t p = ((uint64_t)ma->GetObject<Node>()->GetId()) << 32 |
+                 ((uint64_t)mb->GetObject<Node>()->GetId());
     auto i = m_loss.find(p);
 
     if (i == m_loss.end())
@@ -897,7 +888,9 @@ MatrixPropagationLossModel::DoCalcRxPower(double txPowerDbm,
                                           Ptr<MobilityModel> a,
                                           Ptr<MobilityModel> b) const
 {
-    auto i = m_loss.find(std::make_pair(a, b));
+    uint64_t p =
+        ((uint64_t)a->GetObject<Node>()->GetId()) << 32 | ((uint64_t)b->GetObject<Node>()->GetId());
+    auto i = m_loss.find(p);
 
     if (i != m_loss.end())
     {

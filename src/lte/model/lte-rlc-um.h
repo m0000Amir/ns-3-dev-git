@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2011 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Author: Manuel Requena <manuel.requena@cttc.es>
  */
@@ -23,7 +12,7 @@
 #include "lte-rlc-sequence-number.h"
 #include "lte-rlc.h"
 
-#include <ns3/event-id.h>
+#include "ns3/event-id.h"
 
 #include <deque>
 #include <map>
@@ -40,8 +29,8 @@ class LteRlcUm : public LteRlc
     LteRlcUm();
     ~LteRlcUm() override;
     /**
-     * \brief Get the type ID.
-     * \return the object TypeId
+     * @brief Get the type ID.
+     * @return the object TypeId
      */
     static TypeId GetTypeId();
     void DoDispose() override;
@@ -49,14 +38,14 @@ class LteRlcUm : public LteRlc
     /**
      * RLC SAP
      *
-     * \param p packet
+     * @param p packet
      */
     void DoTransmitPdcpPdu(Ptr<Packet> p) override;
 
     /**
      * MAC SAP
      *
-     * \param txOpParams the LteMacSapUser::TxOpportunityParameters
+     * @param txOpParams the LteMacSapUser::TxOpportunityParameters
      */
     void DoNotifyTxOpportunity(LteMacSapUser::TxOpportunityParameters txOpParams) override;
     void DoNotifyHarqDeliveryFailure() override;
@@ -71,8 +60,8 @@ class LteRlcUm : public LteRlc
     /**
      * Is inside reordering window function
      *
-     * \param seqNumber the sequence number
-     * \returns true if inside the window
+     * @param seqNumber the sequence number
+     * @returns true if inside the window
      */
     bool IsInsideReorderingWindow(SequenceNumber10 seqNumber);
 
@@ -81,15 +70,15 @@ class LteRlcUm : public LteRlc
     /**
      * Reassemble SN interval function
      *
-     * \param lowSeqNumber the low sequence number
-     * \param highSeqNumber the high sequence number
+     * @param lowSeqNumber the low sequence number
+     * @param highSeqNumber the high sequence number
      */
     void ReassembleSnInterval(SequenceNumber10 lowSeqNumber, SequenceNumber10 highSeqNumber);
 
     /**
      * Reassemble and deliver function
      *
-     * \param packet the packet
+     * @param packet the packet
      */
     void ReassembleAndDeliver(Ptr<Packet> packet);
 
@@ -101,14 +90,14 @@ class LteRlcUm : public LteRlc
     uint32_t m_txBufferSize;    ///< transmit buffer size
 
     /**
-     * \brief Store an incoming (from layer above us) PDU, waiting to transmit it
+     * @brief Store an incoming (from layer above us) PDU, waiting to transmit it
      */
     struct TxPdu
     {
         /**
-         * \brief TxPdu default constructor
-         * \param pdu the PDU
-         * \param time the arrival time
+         * @brief TxPdu default constructor
+         * @param pdu the PDU
+         * @param time the arrival time
          */
         TxPdu(const Ptr<Packet>& pdu, const Time& time)
             : m_pdu(pdu),

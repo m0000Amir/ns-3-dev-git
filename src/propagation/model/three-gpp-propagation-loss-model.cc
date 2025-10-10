@@ -2,18 +2,7 @@
  * Copyright (c) 2019 SIGNET Lab, Department of Information Engineering,
  * University of Padova
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  */
 
 #include "three-gpp-propagation-loss-model.h"
@@ -151,7 +140,7 @@ GetBsUtDistancesAndHeights(ns3::Ptr<const ns3::MobilityModel> a,
     double hBs = std::max(aPos.z, bPos.z);
     double hUt = std::min(aPos.z, bPos.z);
     return std::make_tuple(distance2D, distance3D, hBs, hUt);
-};
+}
 
 /**
  * @brief Get the base station and user terminal heights for the UmiStreetCanyon scenario
@@ -167,7 +156,7 @@ GetBsUtHeightsUmiStreetCanyon(double heightA, double heightB)
     double hBs = (heightA == 10) ? heightA : heightB;
     double hUt = (heightA == 10) ? heightB : heightA;
     return std::make_tuple(hBs, hUt);
-};
+}
 
 /**
  * @brief Computes the free-space path loss using the formula described in 3GPP TR 38.811,
@@ -182,7 +171,7 @@ double
 ComputeNtnPathloss(double freq, double dist3d)
 {
     return 32.45 + 20 * log10(freq / 1e9) + 20 * log10(dist3d);
-};
+}
 
 /**
  * @brief Computes the atmospheric absorption loss using the formula described in 3GPP TR 38.811,
@@ -204,7 +193,7 @@ ComputeAtmosphericAbsorptionLoss(double freq, double elevAngle)
     }
 
     return loss;
-};
+}
 
 /**
  * @brief Computes the ionospheric plus tropospheric scintillation loss using the formulas
@@ -230,7 +219,7 @@ ComputeIonosphericPlusTroposphericScintillationLoss(double freq, double elevAngl
         loss = troposphericScintillationLoss.at(elevAngleQuantized);
     }
     return loss;
-};
+}
 
 /**
  * @brief Computes the clutter loss using the formula
@@ -261,7 +250,7 @@ ComputeClutterLoss(double freq,
     }
 
     return loss;
-};
+}
 
 constexpr double M_C = 3.0e8; //!< propagation velocity in free space
 

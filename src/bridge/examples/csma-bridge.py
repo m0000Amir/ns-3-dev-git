@@ -1,16 +1,5 @@
 #
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License version 2 as
-# published by the Free Software Foundation
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+# SPDX-License-Identifier: GPL-2.0-only
 #
 
 # Network topology
@@ -107,14 +96,14 @@ def main(argv):
 
     app = onoff.Install(ns.NodeContainer(terminals.Get(0)))
     # Start the application
-    app.Start(ns.Seconds(1.0))
-    app.Stop(ns.Seconds(10.0))
+    app.Start(ns.Seconds(1))
+    app.Stop(ns.Seconds(10))
 
     # Create an optional packet sink to receive these packets
     inet_address = ns.InetSocketAddress(ns.Ipv4Address.GetAny(), port)
     sink = ns.PacketSinkHelper("ns3::UdpSocketFactory", inet_address.ConvertTo())
     app = sink.Install(ns.NodeContainer(terminals.Get(1)))
-    app.Start(ns.Seconds(0.0))
+    app.Start(ns.Seconds(0))
 
     #
     # Create a similar flow from n3 to n0, starting at time 1.1 seconds
@@ -123,10 +112,10 @@ def main(argv):
     onoff.SetAttribute("Remote", ns.AddressValue(inet_address.ConvertTo()))
     app = onoff.Install(ns.NodeContainer(terminals.Get(3)))
     app.Start(ns.Seconds(1.1))
-    app.Stop(ns.Seconds(10.0))
+    app.Stop(ns.Seconds(10))
 
     app = sink.Install(ns.NodeContainer(terminals.Get(0)))
-    app.Start(ns.Seconds(0.0))
+    app.Start(ns.Seconds(0))
 
     #
     # Configure tracing of all enqueue, dequeue, and NetDevice receive events.

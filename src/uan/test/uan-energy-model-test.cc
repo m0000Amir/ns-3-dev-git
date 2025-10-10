@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2010 Andrea Sacco
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Author: Andrea Sacco <andrea.sacco85@gmail.com>
  */
@@ -41,15 +30,15 @@ using namespace ns3::energy;
 NS_LOG_COMPONENT_DEFINE("UanEnergyModelTestSuite");
 
 /**
- * \ingroup uan
- * \defgroup uan-test uan module tests
+ * @ingroup uan
+ * @defgroup uan-test uan module tests
  */
 
 /**
- * \ingroup uan-test
- * \ingroup tests
+ * @ingroup uan-test
+ * @ingroup tests
  *
- * \brief Acoustic Modem Energy Test Case
+ * @brief Acoustic Modem Energy Test Case
  */
 class AcousticModemEnergyTestCase : public TestCase
 {
@@ -59,16 +48,16 @@ class AcousticModemEnergyTestCase : public TestCase
 
     /**
      * Receive packet function
-     * \param dev the device
-     * \param pkt the packet
-     * \param mode the mode
-     * \param sender the address of the sender
-     * \returns true if successful
+     * @param dev the device
+     * @param pkt the packet
+     * @param mode the mode
+     * @param sender the address of the sender
+     * @returns true if successful
      */
     bool RxPacket(Ptr<NetDevice> dev, Ptr<const Packet> pkt, uint16_t mode, const Address& sender);
     /**
      * Send one packet function
-     * \param node the node to send to
+     * @param node the node to send to
      */
     void SendOnePacket(Ptr<Node> node);
 
@@ -212,10 +201,10 @@ AcousticModemEnergyTestCase::DoRun()
 }
 
 /**
- * \ingroup uan-test
- * \ingroup tests
+ * @ingroup uan-test
+ * @ingroup tests
  *
- * \brief Acoustic Modem Energy Depletion Test Case
+ * @brief Acoustic Modem Energy Depletion Test Case
  */
 class AcousticModemEnergyDepletionTestCase : public TestCase
 {
@@ -227,7 +216,7 @@ class AcousticModemEnergyDepletionTestCase : public TestCase
     void DepletionHandler();
     /**
      * Send one packet function
-     * \param node the node to send to
+     * @param node the node to send to
      */
     void SendOnePacket(Ptr<Node> node);
 
@@ -322,10 +311,10 @@ AcousticModemEnergyDepletionTestCase::DoRun()
 // -------------------------------------------------------------------------- //
 
 /**
- * \ingroup uan-test
- * \ingroup tests
+ * @ingroup uan-test
+ * @ingroup tests
  *
- * \brief Unit test suite for underwater energy model. Include test on acoustic modem,
+ * @brief Unit test suite for underwater energy model. Include test on acoustic modem,
  * acoustic modem energy depletion.
  */
 class UanEnergyModelTestSuite : public TestSuite

@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2018-20 NITK Surathkal
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Authors: Aarti Nandagiri <aarti.nandagiri@gmail.com>
  *          Vivek Jain <jain.vivek.anand@gmail.com>
@@ -70,7 +59,7 @@ std::ofstream throughput;
 std::ofstream queueSize;
 
 uint32_t prev = 0;
-Time prevTime = Seconds(0);
+Time prevTime;
 
 // Calculate throughput
 static void
@@ -232,7 +221,7 @@ main(int argc, char* argv[])
     // Install application on the receiver
     PacketSinkHelper sink("ns3::TcpSocketFactory", InetSocketAddress(Ipv4Address::GetAny(), port));
     ApplicationContainer sinkApps = sink.Install(receiver.Get(0));
-    sinkApps.Start(Seconds(0.0));
+    sinkApps.Start(Seconds(0));
     sinkApps.Stop(stopTime);
 
     // Create a new directory to store the output of the program

@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2021 Universita' degli Studi di Napoli Federico II
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Author: Stefano Avallone <stavallo@unina.it>
  */
@@ -81,8 +70,23 @@ WifiMacQueueContainer::GetQueueId(Ptr<const WifiMpdu> mpdu)
 {
     const WifiMacHeader& hdr = mpdu->GetHeader();
 
-    auto addrType = hdr.GetAddr1().IsGroup() ? WIFI_BROADCAST : WIFI_UNICAST;
-    auto address = hdr.GetAddr1().IsGroup() ? hdr.GetAddr2() : hdr.GetAddr1();
+    WifiRcvAddr addrType;
+    Mac48Address address;
+    if (hdr.GetAddr1().IsBroadcast())
+    {
+        addrType = WifiRcvAddr::BROADCAST;
+        address = hdr.GetAddr2();
+    }
+    else if (hdr.GetAddr1().IsGroup())
+    {
+        addrType = WifiRcvAddr::GROUPCAST;
+        address = hdr.IsQosAmsdu() ? mpdu->begin()->second.GetDestinationAddr() : hdr.GetAddr1();
+    }
+    else
+    {
+        addrType = WifiRcvAddr::UNICAST;
+        address = hdr.GetAddr1();
+    }
 
     if (hdr.IsCtl())
     {
@@ -162,14 +166,16 @@ WifiMacQueueContainer::DoExtractExpiredMpdus(ContainerQueue& queue) const
             ++lastExpiredIt;
         }
 
-        if (lastExpiredIt != firstExpiredIt)
+        if (lastExpiredIt == firstExpiredIt)
         {
-            // transfer non-inflight MPDUs with expired lifetime to the tail of m_expiredQueue
-            m_expiredQueue.splice(m_expiredQueue.end(), queue, firstExpiredIt, lastExpiredIt);
-            ret->second = m_expiredQueue.end();
+            break;
         }
 
-    } while (lastExpiredIt != firstExpiredIt);
+        // transfer non-inflight MPDUs with expired lifetime to the tail of m_expiredQueue
+        m_expiredQueue.splice(m_expiredQueue.end(), queue, firstExpiredIt, lastExpiredIt);
+        ret->second = m_expiredQueue.end();
+
+    } while (true);
 
     return *ret;
 }

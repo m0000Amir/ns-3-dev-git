@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2009 IITP RAS
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Authors: Pavel Boyko <boyko@iitp.ru>
  */
@@ -28,17 +17,19 @@
 using namespace ns3;
 
 /**
- * \ingroup aodv
+ * @ingroup aodv
  *
- * \brief AODV chain regression test
+ * @brief AODV chain regression test
  *
  * This script creates 1-dimensional grid topology and then ping last node from the first one:
  */
+
 // clang-format off
 /**
  *     [10.1.1.1] <-- step --> [10.1.1.2] <-- step --> [10.1.1.3] <-- step --> [10.1.1.4] <-- step --> [10.1.1.5]
  */
 // clang-format on
+
 /**
  * Each node can hear only his right and his left neighbor, if they exist.
  * When one third of total time expired, central node moves away.

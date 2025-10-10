@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2013
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Authors: Ghada Badawy <gbadawy@rim.com>
  *          Sébastien Deronne <sebastien.deronne@gmail.com>
@@ -100,12 +89,18 @@ HtCapabilities::ElementId() const
 void
 HtCapabilities::Print(std::ostream& os) const
 {
-    os << "HT Capabilities=" << bool(GetLdpc()) << "|" << bool(GetSupportedChannelWidth()) << "|"
-       << bool(GetShortGuardInterval20()) << "|";
+    os << "HT Capabilities=[LDPC: " << +m_ldpc
+       << ", Supported Channel Width: " << +m_supportedChannelWidth
+       << ", SGI 20MHz: " << +m_shortGuardInterval20 << ", SGI 40MHz: " << +m_shortGuardInterval40
+       << ", Supported MCS Set: {";
     for (uint8_t i = 0; i < MAX_SUPPORTED_MCS; i++)
     {
-        os << IsSupportedMcs(i) << " ";
+        if (IsSupportedMcs(i))
+        {
+            os << +i << " ";
+        }
     }
+    os << "}]";
 }
 
 void

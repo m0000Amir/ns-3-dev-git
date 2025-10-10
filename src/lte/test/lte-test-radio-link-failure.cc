@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2018 Fraunhofer ESK
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Author: Vignesh Babu <ns3-dev@esk.fraunhofer.de>
  *
@@ -115,7 +104,7 @@ LteRadioLinkFailureTestSuite::LteRadioLinkFailureTestSuite()
 } // end of LteRadioLinkFailureTestSuite::LteRadioLinkFailureTestSuite ()
 
 /**
- * \ingroup lte-test
+ * @ingroup lte-test
  * Static variable for test initialization
  */
 static LteRadioLinkFailureTestSuite g_lteRadioLinkFailureTestSuite;
@@ -178,6 +167,7 @@ LteRadioLinkFailureTestCase::DoRun()
     // LogComponentEnable ("LteUeRrc", logLevel);
     // LogComponentEnable ("LteEnbRrc", logLevel);
     // LogComponentEnable ("LteRadioLinkFailureTest", logLevel);
+    SetDataDir(NS_TEST_SOURCEDIR);
 
     Config::SetDefault("ns3::MacStatsCalculator::DlOutputFilename",
                        StringValue(CreateTempDirFilename("DlMacStats.txt")));
@@ -386,8 +376,7 @@ LteRadioLinkFailureTestCase::DoRun()
             dlClientApps.Start(Seconds(0.27));
             ulServerApps.Start(Seconds(0.27));
             ulClientApps.Start(Seconds(0.27));
-
-        } // end for b
+        }
     }
 
     lteHelper->EnableTraces();
@@ -435,7 +424,7 @@ LteRadioLinkFailureTestCase::DoRun()
         CheckIdle(ueDevs.Get(u), enbDevs);
     }
     Simulator::Destroy();
-} // end of void LteRadioLinkFailureTestCase::DoRun ()
+}
 
 void
 LteRadioLinkFailureTestCase::JumpAway(Vector UeJumpAwayPosition)

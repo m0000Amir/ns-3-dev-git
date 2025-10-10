@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2011 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Author: Marco Miozzo <marco.miozzo@cttc.es>,
  *         Nicola Baldo <nbaldo@cttc.es>
@@ -21,31 +10,31 @@
 
 #include "lte-test-tdmt-ff-mac-scheduler.h"
 
+#include "ns3/boolean.h"
+#include "ns3/constant-position-mobility-model.h"
 #include "ns3/double.h"
+#include "ns3/enum.h"
+#include "ns3/eps-bearer.h"
+#include "ns3/ff-mac-scheduler.h"
+#include "ns3/log.h"
+#include "ns3/lte-enb-net-device.h"
+#include "ns3/lte-enb-phy.h"
+#include "ns3/lte-helper.h"
+#include "ns3/lte-ue-net-device.h"
+#include "ns3/lte-ue-phy.h"
+#include "ns3/lte-ue-rrc.h"
+#include "ns3/mobility-helper.h"
+#include "ns3/net-device-container.h"
+#include "ns3/node-container.h"
+#include "ns3/object.h"
+#include "ns3/packet.h"
+#include "ns3/ptr.h"
 #include "ns3/radio-bearer-stats-calculator.h"
+#include "ns3/simulator.h"
+#include "ns3/spectrum-error-model.h"
+#include "ns3/spectrum-interference.h"
 #include "ns3/string.h"
-#include <ns3/boolean.h>
-#include <ns3/constant-position-mobility-model.h>
-#include <ns3/enum.h>
-#include <ns3/eps-bearer.h>
-#include <ns3/ff-mac-scheduler.h>
-#include <ns3/log.h>
-#include <ns3/lte-enb-net-device.h>
-#include <ns3/lte-enb-phy.h>
-#include <ns3/lte-helper.h>
-#include <ns3/lte-ue-net-device.h>
-#include <ns3/lte-ue-phy.h>
-#include <ns3/lte-ue-rrc.h>
-#include <ns3/mobility-helper.h>
-#include <ns3/net-device-container.h>
-#include <ns3/node-container.h>
-#include <ns3/object.h>
-#include <ns3/packet.h>
-#include <ns3/ptr.h>
-#include <ns3/simulator.h>
-#include <ns3/spectrum-error-model.h>
-#include <ns3/spectrum-interference.h>
-#include <ns3/test.h>
+#include "ns3/test.h"
 
 #include <iostream>
 #include <sstream>
@@ -171,7 +160,7 @@ LenaTestTdMtFfMacSchedulerSuite::LenaTestTdMtFfMacSchedulerSuite()
 }
 
 /**
- * \ingroup lte-test
+ * @ingroup lte-test
  * Static variable for test initialization
  */
 static LenaTestTdMtFfMacSchedulerSuite lenaTestTdMtFfMacSchedulerSuite;
@@ -208,7 +197,7 @@ void
 LenaTdMtFfMacSchedulerTestCase::DoRun()
 {
     NS_LOG_FUNCTION(this << m_nUser << m_dist);
-
+    SetDataDir(NS_TEST_SOURCEDIR);
     if (!m_errorModelEnabled)
     {
         Config::SetDefault("ns3::LteSpectrumPhy::CtrlErrorModelEnabled", BooleanValue(false));

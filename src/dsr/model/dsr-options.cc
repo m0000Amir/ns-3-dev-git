@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2011 Yufei Cheng
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Author: Yufei Cheng   <yfcheng@ittc.ku.edu>
  *
@@ -488,12 +477,6 @@ DsrOptionRreq::GetTypeId()
     return tid;
 }
 
-TypeId
-DsrOptionRreq::GetInstanceTypeId() const
-{
-    return GetTypeId();
-}
-
 DsrOptionRreq::DsrOptionRreq()
 {
     NS_LOG_FUNCTION_NOARGS();
@@ -546,8 +529,8 @@ DsrOptionRreq::Process(Ptr<Packet> packet,
     Ptr<Packet> p =
         packet->Copy(); // Note: The packet here doesn't contain the fixed size dsr header
     /*
-     * \brief Get the number of routers' address field before removing the header
-     * \peek the packet and get the value
+     * @brief Get the number of routers' address field before removing the header
+     * @peek the packet and get the value
      */
     uint8_t buf[2];
     p->CopyData(buf, sizeof(buf));
@@ -1029,12 +1012,6 @@ DsrOptionRrep::~DsrOptionRrep()
     NS_LOG_FUNCTION_NOARGS();
 }
 
-TypeId
-DsrOptionRrep::GetInstanceTypeId() const
-{
-    return GetTypeId();
-}
-
 uint8_t
 DsrOptionRrep::GetOptionNumber() const
 {
@@ -1250,12 +1227,6 @@ DsrOptionSR::DsrOptionSR()
 DsrOptionSR::~DsrOptionSR()
 {
     NS_LOG_FUNCTION_NOARGS();
-}
-
-TypeId
-DsrOptionSR::GetInstanceTypeId() const
-{
-    return GetTypeId();
 }
 
 uint8_t
@@ -1530,12 +1501,6 @@ DsrOptionRerr::~DsrOptionRerr()
     NS_LOG_FUNCTION_NOARGS();
 }
 
-TypeId
-DsrOptionRerr::GetInstanceTypeId() const
-{
-    return GetTypeId();
-}
-
 uint8_t
 DsrOptionRerr::GetOptionNumber() const
 {
@@ -1608,7 +1573,7 @@ DsrOptionRerr::Process(Ptr<Packet> packet,
         DsrOptionRerrUnsupportedHeader rerrUnsupported;
         p->RemoveHeader(rerrUnsupported);
 
-        /// \todo This is for the other two error options, not supporting for now
+        /// @todo This is for the other two error options, not supporting for now
         // uint32_t rerrSize = rerrUnsupported.GetSerializedSize();
         // uint32_t serialized = DoSendError (p, rerrUnsupported, rerrSize, ipv4Address, protocol);
         uint32_t serialized = 0;
@@ -1723,12 +1688,6 @@ DsrOptionAckReq::~DsrOptionAckReq()
     NS_LOG_FUNCTION_NOARGS();
 }
 
-TypeId
-DsrOptionAckReq::GetInstanceTypeId() const
-{
-    return GetTypeId();
-}
-
 uint8_t
 DsrOptionAckReq::GetOptionNumber() const
 {
@@ -1789,12 +1748,6 @@ DsrOptionAck::DsrOptionAck()
 DsrOptionAck::~DsrOptionAck()
 {
     NS_LOG_FUNCTION_NOARGS();
-}
-
-TypeId
-DsrOptionAck::GetInstanceTypeId() const
-{
-    return GetTypeId();
 }
 
 uint8_t

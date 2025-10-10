@@ -1,18 +1,7 @@
 //
 // Copyright (c) 2008-2010 INESC Porto
 //
-// This program is free software; you can redistribute it and/or modify
-// it under the terms of the GNU General Public License version 2 as
-// published by the Free Software Foundation;
-//
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+// SPDX-License-Identifier: GPL-2.0-only
 //
 // Author: Gustavo J. A. M. Carneiro  <gjc@inescporto.pt> <gjcarneiro@gmail.com>
 //
@@ -29,12 +18,12 @@ namespace
 {
 
 /**
- * \ingroup network-test
- * \ingroup tests
+ * @ingroup network-test
+ * @ingroup tests
  *
- * \brief Test object using sequence numbers
+ * @brief Test object using sequence numbers
  *
- * \note Class internal to sequence-number-test-suite.cc
+ * @note Class internal to sequence-number-test-suite.cc
  */
 class SequenceNumberTestObj : public Object
 {
@@ -48,8 +37,8 @@ class SequenceNumberTestObj : public Object
     }
 
     /**
-     * \brief Get the type ID.
-     * \return The object TypeId.
+     * @brief Get the type ID.
+     * @return The object TypeId.
      */
     static TypeId GetTypeId()
     {
@@ -65,11 +54,6 @@ class SequenceNumberTestObj : public Object
         return tid;
     }
 
-    TypeId GetInstanceTypeId() const override
-    {
-        return GetTypeId();
-    }
-
     /// Increment the sequence number.
     void IncSequenceNumber()
     {
@@ -80,10 +64,10 @@ class SequenceNumberTestObj : public Object
 } // namespace
 
 /**
- * \ingroup network-test
- * \ingroup tests
+ * @ingroup network-test
+ * @ingroup tests
  *
- * \brief Sequence Number Unit Test
+ * @brief Sequence Number Unit Test
  */
 class SequenceNumberTestCase : public TestCase
 {
@@ -92,8 +76,8 @@ class SequenceNumberTestCase : public TestCase
 
     /**
      * Sequence number tracker
-     * \param oldval Old value
-     * \param newval New value
+     * @param oldval Old value
+     * @param newval New value
      */
     void SequenceNumberTracer(SequenceNumber32 oldval, SequenceNumber32 newval);
 
@@ -217,10 +201,10 @@ SequenceNumberTestCase::DoRun()
 }
 
 /**
- * \ingroup network-test
- * \ingroup tests
+ * @ingroup network-test
+ * @ingroup tests
  *
- * \brief Sequence Number TestSuite
+ * @brief Sequence Number TestSuite
  */
 class SequenceNumberTestSuite : public TestSuite
 {

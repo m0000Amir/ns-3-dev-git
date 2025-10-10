@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2011, 2012, 2013 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Author: Lluis Parcerisa <lparcerisa@cttc.cat> (TestUtils from test-asn1-encoding.cc)
  *         Nicola Baldo <nbaldo@cttc.es> (actual test)
@@ -35,17 +24,17 @@ namespace ns3
 {
 
 /**
- * \ingroup lte-test
+ * @ingroup lte-test
  *
- * \brief Test Utils
+ * @brief Test Utils
  */
 class TestUtils
 {
   public:
     /**
      * Function to convert packet contents in hex format
-     * \param pkt the packet
-     * \returns a text string
+     * @param pkt the packet
+     * @returns a text string
      */
     static std::string sprintPacketContentsHex(Ptr<Packet> pkt)
     {
@@ -61,8 +50,8 @@ class TestUtils
 
     /**
      * Function to convert packet contents in binary format
-     * \param pkt the packet
-     * \returns a text string
+     * @param pkt the packet
+     * @returns a text string
      */
     static std::string sprintPacketContentsBin(Ptr<Packet> pkt)
     {
@@ -78,7 +67,7 @@ class TestUtils
 
     /**
      * Function to log packet contents
-     * \param pkt the packet
+     * @param pkt the packet
      */
     static void LogPacketContents(Ptr<Packet> pkt)
     {
@@ -89,8 +78,8 @@ class TestUtils
 
     /**
      * Log packet info function
-     * \param source T
-     * \param s text string to log
+     * @param source T
+     * @param s text string to log
      */
     template <class T>
     static void LogPacketInfo(T source, std::string s)
@@ -103,9 +92,9 @@ class TestUtils
 };
 
 /**
- * \ingroup lte-test
+ * @ingroup lte-test
  *
- * \brief Rlc Am Status Pdu Test Case
+ * @brief Rlc Am Status Pdu Test Case
  */
 class RlcAmStatusPduTestCase : public TestCase
 {
@@ -113,9 +102,9 @@ class RlcAmStatusPduTestCase : public TestCase
     /**
      * Constructor
      *
-     * \param ackSn the sequence number
-     * \param nackSnList list of nack sequence numbers
-     * \param hex string
+     * @param ackSn the sequence number
+     * @param nackSnList list of nack sequence numbers
+     * @param hex string
      */
     RlcAmStatusPduTestCase(SequenceNumber10 ackSn,
                            std::list<SequenceNumber10> nackSnList,
@@ -181,9 +170,9 @@ RlcAmStatusPduTestCase::DoRun()
 }
 
 /**
- * \ingroup lte-test
+ * @ingroup lte-test
  *
- * \brief Lte Rlc Header Test Suite
+ * @brief Lte Rlc Header Test Suite
  */
 class LteRlcHeaderTestSuite : public TestSuite
 {

@@ -1,26 +1,15 @@
 /*
  *  Copyright 2013. Lawrence Livermore National Security, LLC.
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Author: Steven Smith <smith84@llnl.gov>
  *
  */
 
 /**
- * \file
- * \ingroup mpi
+ * @file
+ * @ingroup mpi
  * Implementation of class ns3::RemoteChannelBundleManager.
  */
 
@@ -59,7 +48,7 @@ RemoteChannelBundleManager::Add(uint32_t systemId)
     NS_ASSERT(!g_initialized);
     NS_ASSERT(g_remoteChannelBundles.find(systemId) == g_remoteChannelBundles.end());
 
-    Ptr<RemoteChannelBundle> remoteChannelBundle = Create<RemoteChannelBundle>(systemId);
+    auto remoteChannelBundle = CreateObject<RemoteChannelBundle>(systemId);
 
     g_remoteChannelBundles[systemId] = remoteChannelBundle;
 

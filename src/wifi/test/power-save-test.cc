@@ -1,18 +1,7 @@
 /*
  * Copyright (c) 2022 Universita' degli Studi di Napoli Federico II
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  * Author: Davide Magrin <davide@magr.in>
  */
@@ -34,16 +23,16 @@ using namespace ns3;
 NS_LOG_COMPONENT_DEFINE("PowerSaveTest");
 
 /**
- * \ingroup wifi-test
- * \ingroup tests
+ * @ingroup wifi-test
+ * @ingroup tests
  *
- * \brief Test TIM Information element serialization and deserialization
+ * @brief Test TIM Information element serialization and deserialization
  */
 class TimInformationElementTest : public HeaderSerializationTestCase
 {
   public:
     /**
-     * \brief Constructor
+     * @brief Constructor
      */
     TimInformationElementTest();
 
@@ -51,11 +40,11 @@ class TimInformationElementTest : public HeaderSerializationTestCase
     /**
      * Reset the passed TIM to have the provided parameters.
      *
-     * \param tim the TIM element to set
-     * \param dtimCount the DTIM count value
-     * \param dtimPeriod the DTIM period value
-     * \param multicastPending whether group addressed frames are queued
-     * \param aidValues the AID values to set
+     * @param tim the TIM element to set
+     * @param dtimCount the DTIM count value
+     * @param dtimPeriod the DTIM period value
+     * @param multicastPending whether group addressed frames are queued
+     * @param aidValues the AID values to set
      */
     void SetTim(Tim& tim,
                 uint8_t dtimCount,
@@ -67,17 +56,17 @@ class TimInformationElementTest : public HeaderSerializationTestCase
      * Test that the Bitmap Control and the Partial Virtual Bitmap
      * fields of the provided TIM match the passed bufferContents.
      *
-     * \param tim the provided TIM
-     * \param bufferContents the expected content of the buffer
+     * @param tim the provided TIM
+     * @param bufferContents the expected content of the buffer
      */
     void CheckSerializationAgainstBuffer(Tim& tim, const std::vector<uint8_t>& bufferContents);
 
     /**
      * Test that the GetAidSet() method return the expected set of AID values.
      *
-     * \param tim the TIM element
-     * \param aid the AID value passed to GetAidSet()
-     * \param expectedSet the expected set of AID values returned by GetAidSet()
+     * @param tim the TIM element
+     * @param aid the AID value passed to GetAidSet()
+     * @param expectedSet the expected set of AID values returned by GetAidSet()
      */
     void CheckAidSet(const Tim& tim, uint16_t aid, const std::set<uint16_t>& expectedSet);
 };
@@ -257,10 +246,10 @@ TimInformationElementTest::DoRun()
 }
 
 /**
- * \ingroup wifi-test
- * \ingroup tests
+ * @ingroup wifi-test
+ * @ingroup tests
  *
- * \brief Power Save Test Suite
+ * @brief Power Save Test Suite
  */
 class PowerSaveTestSuite : public TestSuite
 {

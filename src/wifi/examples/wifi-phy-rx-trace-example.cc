@@ -2,18 +2,7 @@
  * Copyright (c) 2009 The Boeing Company
  * Copyright (c) 2024 University of Washington (updated to 802.11ax standard)
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * SPDX-License-Identifier: GPL-2.0-only
  *
  */
 
@@ -80,7 +69,7 @@ NS_LOG_COMPONENT_DEFINE("WifiPhyRxTraceExample");
 /**
  * Function called when a packet is received.
  *
- * \param socket The receiving socket.
+ * @param socket The receiving socket.
  */
 void
 ReceivePacket(Ptr<Socket> socket)
@@ -105,10 +94,10 @@ ReceiveObssPacket(Ptr<Socket> socket)
 /**
  * Generate traffic.
  *
- * \param socket The sending socket.
- * \param pktSize The packet size.
- * \param pktCount The packet count.
- * \param pktInterval The interval between two packets.
+ * @param socket The sending socket.
+ * @param pktSize The packet size.
+ * @param pktCount The packet count.
+ * @param pktInterval The interval between two packets.
  */
 static void
 GeneratePacket(Ptr<Socket> socket, uint32_t pktSize, uint32_t pktCount, Time pktInterval)
@@ -145,7 +134,7 @@ main(int argc, char* argv[])
     double distance = 1;        // meters
     bool enableTwoBss = false;  // whether to enable a second (non-traced) BSS
     double distanceTwoBss = 10; // meters (distance between APs if enableTwoBss is true)
-    Time interval = Seconds(1.0);
+    Time interval = Seconds(1);
     bool verbose = true;
     bool logging = false;
 
@@ -314,7 +303,7 @@ main(int argc, char* argv[])
     rxTraceHelper.Stop(stopTime);
 
     Simulator::ScheduleWithContext(source->GetNode()->GetId(),
-                                   Seconds(1.0),
+                                   Seconds(1),
                                    &GeneratePacket,
                                    source,
                                    packetSize,
